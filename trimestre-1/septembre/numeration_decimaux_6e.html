@@ -1,7 +1,1047 @@
-<!-- Page interactive de numération et décimaux (placeholder). Le contenu complet sera ajouté prochainement. -->
-<html>
-<head><title>Numération & Décimaux 6è</title></head>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <!-- Métadonnées de base -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>6e (avec renfort CM2) – Numération & Décimaux • Page interactive</title>
+
+  <!-- Styles internes (thème sombre, boutons animés, lisibilité élevée) -->
+  <style>
+    :root {
+      --bg: #0f1116;
+      --panel: #151922;
+      --muted: #98a2b3;
+      --text: #e6ebef;
+      --accent: #7dd3fc;
+      --accent-2: #34d399;
+      --accent-3: #f59e0b;
+      --danger: #f87171;
+      --shadow: rgba(0,0,0,0.45);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans"; }
+    .wrap { max-width: 1100px; margin: 24px auto; padding: 16px; }
+    header { display: grid; gap: 8px; margin-bottom: 16px; }
+    h1 { margin: 0; font-size: clamp(22px, 3.5vw, 36px); letter-spacing: 0.2px; }
+    p.lead { margin: 0; color: var(--muted); }
+    .card { background: var(--panel); border: 1px solid #1e2633; border-radius: 16px; padding: 16px; box-shadow: 0 10px 24px var(--shadow); }
+    .card + .card { margin-top: 16px; }
+    .grid { display: grid; gap: 12px; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    @media (max-width: 860px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+    label { display: block; font-weight: 600; margin-bottom: 6px; }
+    input[type="text"], input[type="number"], select, textarea { width: 100%; padding: 10px 12px; background: #0b0e14; border: 1px solid #263247; color: var(--text); border-radius: 12px; outline: none; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+    input::placeholder { color: #6b7280; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 12px; border: 1px solid #1e293b; color: var(--text); background: linear-gradient(180deg, #1f2937, #111827); cursor: pointer; transition: transform .08s ease, box-shadow .2s ease, filter .2s ease; text-decoration: none; }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 20px var(--shadow); filter: brightness(1.06); }
+    .btn:disabled { opacity: .55; cursor: not-allowed; }
+    .btn-accent { background: linear-gradient(180deg, #0ea5e9, #0369a1); border-color: #0ea5e9; }
+    .btn-green  { background: linear-gradient(180deg, #10b981, #065f46); border-color: #10b981; }
+    .btn-orange { background: linear-gradient(180deg, #f59e0b, #b45309); border-color: #f59e0b; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(125, 211, 252, 0.5); } 70% { box-shadow: 0 0 0 16px rgba(125, 211, 252, 0); } 100% { box-shadow: 0 0 0 0 rgba(125, 211, 252, 0); } }
+    .btn-correction { position: relative; animation: pulse 2s infinite; }
+    h2 { margin: 0 0 8px; font-size: clamp(18px, 2.4vw, 26px); }
+    h3 { margin: 0 0 8px; font-size: 18px; color: var(--accent); }
+    .badge { display: inline-block; padding: 4px 8px; border-radius: 999px; border: 1px solid #1f2937; background: #0b0f17; color: var(--muted); font-size: 12px; }
+    details { background: #0b0f17; border: 1px solid #1f2937; border-radius: 12px; padding: 10px 12px; }
+    details[open] { border-color: #334155; }
+    summary { cursor: pointer; color: var(--accent-3); font-weight: 600; }
+    .assoc { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .assoc-col { background: #0b0e14; border: 1px dashed #2b3a55; border-radius: 12px; padding: 12px; min-height: 220px; }
+    .chip { background: #111827; border: 1px solid #334155; border-radius: 10px; padding: 8px 10px; margin: 6px 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .chip.dragging { opacity: .6; }
+    .dropzone { background: #0c1018; border: 1px dashed #334155; border-radius: 10px; padding: 8px; min-height: 44px; display: flex; flex-direction: column; align-items: stretch; gap: 8px; margin: 6px 0; }
+    .target-label { color: var(--muted); font-size: 14px; }
+    .slot { background: #0b0e14; border: 1px dashed #2b3a55; border-radius: 8px; min-height: 36px; padding: 6px; display: flex; align-items: center; gap: 8px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #223049; padding: 8px; text-align: left; }
+    th { background: #0b0e14; color: var(--accent); }
+    .toast { position: fixed; right: 16px; bottom: 16px; background: #0b0f17; border: 1px solid #1f2937; padding: 10px 14px; border-radius: 12px; box-shadow: 0 10px 24px var(--shadow); display: none; }
+    .info { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .info strong { color: var(--accent); }
+    a.link { color: var(--accent); text-decoration: none; border-bottom: 1px dashed #334155; }
+    a.link:hover { filter: brightness(1.1); }
+  </style>
+  <style media="print">
+    body * { visibility: hidden !important; }
+    #printSummary, #printSummary * { visibility: visible !important; }
+    #printSummary { position:absolute; inset:0; background:#fff; color:#000; padding:24px; }
+    #printSummary h1, #printSummary h2 { color:#000; margin:0 0 8px; }
+    #printSummary table { width:100%; border-collapse:collapse; }
+    #printSummary th, #printSummary td { border:1px solid #000; padding:6px 8px; text-align:left; }
+  </style>
+</head>
 <body>
-<p>Cette page contiendra les exercices interactifs de numération et décimaux pour la classe de 6è. Elle sera publiée ultérieurement.</p>
+  <div class="wrap">
+    <header class="card">
+      <div class="info">
+        <h1>Numération & Décimaux – 6<sup>e</sup> (avec renfort CM2)</h1>
+        <span class="badge">Thème : Cours + Exercices + Évaluation</span>
+      </div>
+      <p class="lead">Saisis ton identité, lance le chrono et réponds aux questions. Tu disposes de <strong id="maxTries">5</strong> essais par exercice. À la fin, enregistre tes réponses.</p>
+      <div class="grid grid-3">
+        <div>
+          <label for="eleveNom">Nom</label>
+          <input id="eleveNom" type="text" placeholder="DUPONT" />
+        </div>
+        <div>
+          <label for="elevePrenom">Prénom</label>
+          <input id="elevePrenom" type="text" placeholder="Camille" />
+        </div>
+        <div>
+          <label for="eleveClasse">Classe</label>
+          <input id="eleveClasse" type="text" placeholder="6e A" />
+        </div>
+      </div>
+      <div class="info" style="margin-top:10px;">
+        <button id="btnStart" class="btn btn-accent" type="button">▶️ Démarrer le chrono</button>
+        <button id="btnStop" class="btn btn-orange" type="button" disabled>⏸️ Arrêter</button>
+        <button id="btnReset" class="btn" type="button">🔁 Réinitialiser</button>
+        <span class="badge">⏱️ Temps : <strong id="timer">00:00</strong></span>
+        <span class="badge">Score total : <strong id="totalScore">0</strong> / <span id="totalMax">0</span></span>
+      </div>
+    </header>
+
+    <section class="card">
+      <h2>Rappel de cours</h2>
+      <details open>
+        <summary>Voir/masquer le rappel</summary>
+        <div style="margin-top:8px;" class="grid grid-2">
+          <div>
+            <h3>Lire et écrire les grands nombres</h3>
+            <ul>
+              <li>On regroupe les chiffres par <strong>classes</strong> de trois : unités, milliers, millions, etc.</li>
+              <li>On espace les classes : exemple <code>68 956</code> ; on <strong>supprime les zéros inutiles</strong>.</li>
+              <li>Écriture en lettres : respecter les traits d'union (ex. <em>quatre-vingt-dix-neuf-mille-neuf-cent-neuf</em>).</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Décimaux & abscisses</h3>
+            <ul>
+              <li>Sur une demi-droite graduée, on précise l'<strong>origine</strong> (O) et l'<strong>unité</strong> (ex. 1 ou 0,1).</li>
+              <li>Un point est repéré par son <strong>abscisse</strong>.</li>
+              <li>Entre <code>4,2</code> et <code>4,3</code> avec pas 0,01 → <strong>10 sous-intervalles</strong>.</li>
+            </ul>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section id="ex1" class="card" data-max="6">
+      <div class="info">
+        <h2>Exercice 1 – Associer le nombre à son écriture en lettres</h2>
+        <span class="badge">Objectif : Lire/écrire des grands nombres</span>
+        <span class="badge">Essais restants : <strong id="tries-ex1">5</strong></span>
+        <span class="badge">Score : <strong id="score-ex1">0</strong>/6</span>
+      </div>
+      <p class="lead">Glisse chaque <strong>nombre</strong> (colonne gauche) sur son <strong>écriture en lettres</strong> (colonne droite).</p>
+      <div class="assoc">
+        <div class="assoc-col" id="ex1-left">
+          <div class="chip" draggable="true" data-id="n1">2 584</div>
+          <div class="chip" draggable="true" data-id="n2">2 508</div>
+          <div class="chip" draggable="true" data-id="n3">4 187</div>
+          <div class="chip" draggable="true" data-id="n4">3 339</div>
+          <div class="chip" draggable="true" data-id="n5">4 087</div>
+          <div class="chip" draggable="true" data-id="n6">3 039</div>
+        </div>
+        <div class="assoc-col" id="ex1-right">
+          <div class="dropzone" data-accept="n1"><span class="target-label">deux-mille-cinq-cent-quatre-vingt-quatre</span><div class="slot"></div></div>
+          <div class="dropzone" data-accept="n2"><span class="target-label">deux-mille-cinq-cent-huit</span><div class="slot"></div></div>
+          <div class="dropzone" data-accept="n3"><span class="target-label">quatre-mille-cent-quatre-vingt-sept</span><div class="slot"></div></div>
+          <div class="dropzone" data-accept="n4"><span class="target-label">trois-mille-trois-cent-trente-neuf</span><div class="slot"></div></div>
+          <div class="dropzone" data-accept="n5"><span class="target-label">quatre-mille-quatre-vingt-sept</span><div class="slot"></div></div>
+          <div class="dropzone" data-accept="n6"><span class="target-label">trois-mille-trente-neuf</span><div class="slot"></div></div>
+        </div>
+      </div>
+      <details style="margin-top:10px;"><summary>💡 Aide</summary>
+        <ul>
+          <li>Lis <em>mille</em> en regroupant par classes : 3 039 = <em>trois-mille-trente-neuf</em>.</li>
+          <li>Repère les centaines : 4 187 = 4 000 + 100 + 80 + 7.</li>
+        </ul>
+      </details>
+      <div class="info" style="margin-top:10px;">
+        <button class="btn btn-green" type="button" onclick="corrigerEx1(false)">✅ Vérifier</button>
+        <button id="btn-corr-ex1" class="btn btn-accent btn-correction" type="button" onclick="corrigerEx1(true)">🧠 Correction</button>
+        <button class="btn" type="button" onclick="reinitialiserEx1()">🔁 Recommencer</button>
+      </div>
+      <p id="msg-ex1" class="lead" style="margin-top:6px;"></p>
+    </section>
+
+    <section id="ex2" class="card" data-max="6">
+      <div class="info">
+        <h2>Exercice 2 – Saisies rapides</h2>
+        <span class="badge">Objectif : Écrire en lettres / chiffres / repérer une position</span>
+        <span class="badge">Essais restants : <strong id="tries-ex2">5</strong></span>
+        <span class="badge">Score : <strong id="score-ex2">0</strong>/6</span>
+      </div>
+      <div class="grid grid-2">
+        <div>
+          <label for="q21">Écrire en lettres : <strong>15 084</strong></label>
+          <input id="q21" type="text" placeholder="réponse en toutes lettres" />
+        </div>
+        <div>
+          <label for="q22">Écrire en chiffres : <em>quatre-vingt-dix-neuf mille neuf cent neuf</em></label>
+          <input id="q22" type="text" placeholder="réponse en chiffres" />
+        </div>
+        <div>
+          <label for="q23">Dans <strong>8 910 052</strong>, quel est le <em>chiffre des dizaines</em> ?</label>
+          <input id="q23" type="number" inputmode="numeric" placeholder="0-9" />
+        </div>
+        <div>
+          <label for="q24">Recopier correctement : <code>001263</code></label>
+          <input id="q24" type="text" placeholder="sans zéros inutiles" />
+        </div>
+        <div>
+          <label for="q25">Écrire en lettres : <strong>3 620</strong></label>
+          <input id="q25" type="text" placeholder="réponse en toutes lettres" />
+        </div>
+        <div>
+          <label for="q26">Écrire en chiffres : <em>trois millions sept cent mille</em></label>
+          <input id="q26" type="text" placeholder="réponse en chiffres" />
+        </div>
+      </div>
+      <details style="margin-top:10px;"><summary>💡 Aide</summary>
+        <ul>
+          <li>Pense aux espaces entre les <strong>classes</strong> (unités / milliers / millions).</li>
+          <li>Les <em>zéros non significatifs</em> en tête s'enlèvent : <code>001263 → 1 263</code>.</li>
+        </ul>
+      </details>
+      <div class="info" style="margin-top:10px;">
+        <button class="btn btn-green" type="button" onclick="corrigerEx2(false)">✅ Vérifier</button>
+        <button id="btn-corr-ex2" class="btn btn-accent btn-correction" type="button" onclick="corrigerEx2(true)">🧠 Correction</button>
+        <button class="btn" type="button" onclick="reinitialiserEx2()">🔁 Recommencer</button>
+      </div>
+      <p id="msg-ex2" class="lead" style="margin-top:6px;"></p>
+    </section>
+
+    <section id="ex3" class="card" data-max="4">
+      <div class="info">
+        <h2>Exercice 3 – Décimaux & repérage</h2>
+        <span class="badge">Objectif : Comprendre les graduations et abscisses</span>
+        <span class="badge">Essais restants : <strong id="tries-ex3">5</strong></span>
+        <span class="badge">Score : <strong id="score-ex3">0</strong>/4</span>
+      </div>
+      <div class="grid grid-2">
+        <div>
+          <label for="q31">Entre 4,2 et 4,3 avec un pas de 0,01 : combien de sous-intervalles ?</label>
+          <input id="q31" type="number" inputmode="numeric" placeholder="nombre" />
+        </div>
+        <div>
+          <label for="q32">Sur une demi-droite graduée, comment s'appelle le point de départ ?</label>
+          <input id="q32" type="text" placeholder="réponse (un mot)" />
+        </div>
+        <div>
+          <label for="q33">Le nombre qui repère un point s'appelle son ... ?</label>
+          <input id="q33" type="text" placeholder="réponse (un mot)" />
+        </div>
+        <div>
+          <label for="q34">Si l'unité vaut 1, quelle est l'abscisse du point au milieu entre 0 et 1 ?</label>
+          <input id="q34" type="text" placeholder="réponse (ex. 0,2)" />
+        </div>
+      </div>
+      <details style="margin-top:10px;"><summary>💡 Aide</summary>
+        <ul>
+          <li>Vérifie l'<strong>unité</strong> de graduation avant de compter les petits traits.</li>
+          <li>Le milieu entre 0 et 1 avec unité 1 est la <em>moitié</em>.</li>
+        </ul>
+      </details>
+      <div class="info" style="margin-top:10px;">
+        <button class="btn btn-green" type="button" onclick="corrigerEx3(false)">✅ Vérifier</button>
+        <button id="btn-corr-ex3" class="btn btn-accent btn-correction" type="button" onclick="corrigerEx3(true)">🧠 Correction</button>
+        <button class="btn" type="button" onclick="reinitialiserEx3()">🔁 Recommencer</button>
+      </div>
+      <p id="msg-ex3" class="lead" style="margin-top:6px;"></p>
+    </section>
+
+    <!-- ========================= -->
+    <!-- APPROFONDISSEMENT        -->
+    <!-- ========================= -->
+    <section id="approfondissement" class="card" data-max="24">
+      <div class="info">
+        <h2>Approfondissement – Exercices</h2>
+        <span class="badge">Essais restants : <strong id="tries-deep">5</strong></span>
+        <span class="badge">Score : <strong id="score-deep">0</strong>/24</span>
+      </div>
+
+      <!-- EXERCICE A : Planètes -->
+      <h3>🪐 Ex. A – Les planètes du système solaire</h3>
+      <p>Voici un tableau donnant le diamètre des planètes et leur distance au Soleil :</p>
+      <div class="grid grid-2">
+        <div>
+          <table>
+            <thead><tr><th>Planète</th><th>Diamètre (km)</th><th>Distance au Soleil (km)</th></tr></thead>
+            <tbody>
+              <tr><td>Uranus</td><td>50 800</td><td>2 869 000 000</td></tr>
+              <tr><td>Mercure</td><td>4 880</td><td>57 900 000</td></tr>
+              <tr><td>Jupiter</td><td>140 000</td><td>778 300 000</td></tr>
+              <tr><td>Terre</td><td>12 750</td><td>149 600 000</td></tr>
+              <tr><td>Vénus</td><td>12 100</td><td>108 200 000</td></tr>
+              <tr><td>Saturne</td><td>120 600</td><td>1 427 000 000</td></tr>
+              <tr><td>Mars</td><td>6 800</td><td>227 900 000</td></tr>
+              <tr><td>Neptune</td><td>48 600</td><td>4 490 000 000</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <ol>
+            <li>Quelle est la plus grande planète du système solaire ? <input id="pa1" type="text" placeholder="nom" /></li>
+            <li>Quelle est la planète la plus éloignée du Soleil ? <input id="pa2" type="text" placeholder="nom" /></li>
+            <li>Écris en toutes lettres la distance de cette planète au Soleil (la plus éloignée) : <input id="pa3" type="text" placeholder="..." /></li>
+            <li>Range les planètes par ordre croissant de leur diamètre (sépare par ",") : <input id="pa4" type="text" placeholder="Mercure, ... , Jupiter" /></li>
+            <li>Range les planètes par ordre décroissant de leur distance au Soleil (sépare par ",") : <input id="pa5" type="text" placeholder="Vénus, ... , Jupiter" /></li>
+            <li>Quelle planète est à environ 150 millions de km du Soleil ? Planète ≈ 150 millions km : <input id="pa6" type="text" placeholder="nom" /></li>
+          </ol>
+        </div>
+      </div>
+      <details style="margin-top:6px;"><summary>💡 Aide Ex. A</summary>
+        <p>Compare les <em>plus grands nombres</em> dans chaque colonne. 150 millions = 150&nbsp;000&nbsp;000.</p>
+      </details>
+      <div class="info" style="margin-top:8px;">
+        <button class="btn btn-green" type="button" onclick="corrigerDeepA(false)">✅ Vérifier A</button>
+        <button class="btn btn-accent btn-correction" type="button" onclick="corrigerDeepA(true)">🧠 Correction A</button>
+        <button class="btn" type="button" onclick="resetDeepA()">🔁 Recommencer A</button>
+      </div>
+      <hr/>
+
+      <!-- EXERCICE B : Lecture/écriture grands nombres -->
+      <h3>🔢 Ex. B – Lecture & écriture des grands nombres</h3>
+      <p>Consignes :</p>
+<p>1. Réécris les nombres en plaçant les espaces correctement.</p>
+<p>2. Lis chaque nombre à haute voix.</p>
+
+      
+      <div class="grid grid-2">
+        <div>
+          <label>10 254 985 — en lettres</label>
+          <input id="pb1" type="text" placeholder="réponse en lettres" />
+        </div>
+        <div>
+          <label>200 504 — en lettres</label>
+          <input id="pb2" type="text" placeholder="réponse en lettres" />
+        </div>
+        <div>
+          <label>En chiffres : cinq millions six cent quatre-vingt-dix-huit mille cinq cent quarante et un</label>
+          <input id="pb3" type="text" placeholder="réponse en chiffres" />
+        </div>
+        <div>
+          <label>En chiffres : quatre-vingt-seize millions cinq cent quatre-vingt-quatre mille cent vingt-sept</label>
+          <input id="pb4" type="text" placeholder="réponse en chiffres" />
+        </div>
+        <div>
+          <label>523 658 002 — en lettres</label>
+          <input id="pb5" type="text" placeholder="réponse en lettres" />
+        </div>
+        <div>
+          <label>15 480 001 740 — en lettres</label>
+          <input id="pb6" type="text" placeholder="réponse en lettres" />
+        </div>
+      </div>
+      <details style="margin-top:6px;"><summary>💡 Aide Ex. B</summary>
+        <p>Place les espaces entre <em>classes</em> et respecte les traits d'union en français.</p>
+      </details>
+      <div class="info" style="margin-top:8px;">
+        <button class="btn btn-green" type="button" onclick="corrigerDeepB(false)">✅ Vérifier B</button>
+        <button class="btn btn-accent btn-correction" type="button" onclick="corrigerDeepB(true)">🧠 Correction B</button>
+        <button class="btn" type="button" onclick="resetDeepB()">🔁 Recommencer B</button>
+      </div>
+      <hr/>
+
+      <!-- EXERCICE C : Identifier des chiffres et groupes -->
+      <h3>🔍 Ex. C – Identifier des chiffres et des groupes</h3>
+      <p>Écris ce qu’on te demande dans chaque nombre :</p>
+      <table>
+        <thead><tr><th>Nombre</th><th>Consigne</th><th>Réponse</th></tr></thead>
+        <tbody>
+          <tr><td>245 600</td><td>chiffre des dizaines de mille</td><td><input id="pc1" type="text"/></td></tr>
+          <tr><td>16 204 189</td><td>nombre de dizaines de millions</td><td><input id="pc2" type="text"/></td></tr>
+          <tr><td>8 250 430</td><td>nombre des centaines de mille</td><td><input id="pc3" type="text"/></td></tr>
+          <tr><td>54 177 697</td><td>chiffre des dizaines de millions</td><td><input id="pc4" type="text"/></td></tr>
+          <tr><td>378 280</td><td>chiffre des dizaines de mille</td><td><input id="pc5" type="text"/></td></tr>
+          <tr><td>44 248 743</td><td>nombre des milliers</td><td><input id="pc6" type="text"/></td></tr>
+        </tbody>
+      </table>
+      <div class="info" style="margin-top:8px;">
+        <button class="btn btn-green" type="button" onclick="corrigerDeepC(false)">✅ Vérifier C</button>
+        <button class="btn btn-accent btn-correction" type="button" onclick="corrigerDeepC(true)">🧠 Correction C</button>
+        <button class="btn" type="button" onclick="resetDeepC()">🔁 Recommencer C</button>
+      </div>
+      <hr/>
+
+      <!-- EXERCICE D : Suites -->
+      <h3>➕ Ex. D – Compléter les suites numériques</h3>
+      <p>Complète ce tableau avec des nombres qui conviennent :</p>
+      <table>
+        <thead><tr><th>Nombre qui précède</th><th>Nombre donné</th><th>Nombre qui suit</th></tr></thead>
+        <tbody>
+          <tr><td><input id="pd1p"/></td><td>853 089</td><td><input id="pd1s"/></td></tr>
+          <tr><td>999</td><td><input id="pd2d"/></td><td><input id="pd2s"/></td></tr>
+          <tr><td><input id="pd3p"/></td><td><input id="pd3d"/></td><td>950 654</td></tr>
+          <tr><td><input id="pd4p"/></td><td>900 099</td><td><input id="pd4s"/></td></tr>
+          <tr><td><input id="pd5p"/></td><td><input id="pd5d"/></td><td>801 000</td></tr>
+          <tr><td><input id="pd6p"/></td><td>69 999</td><td><input id="pd6s"/></td></tr>
+        </tbody>
+      </table>
+      <div class="info" style="margin-top:8px;">
+        <button class="btn btn-green" type="button" onclick="corrigerDeepD(false)">✅ Vérifier D</button>
+        <button class="btn btn-accent btn-correction" type="button" onclick="corrigerDeepD(true)">🧠 Correction D</button>
+        <button class="btn" type="button" onclick="resetDeepD()">🔁 Recommencer D</button>
+      </div>
+      <hr/>
+
+      <!-- EXERCICE E : Statistiques sportives -->
+      <h3>⚽ Ex. E – Statistiques sportives</h3>
+      <p>Le tableau suivant donne les sports pratiqués par les élèves d’un collège.</p>
+      
+      <table>
+        <thead><tr><th>Niveau</th><th>Football</th><th>Tennis</th><th>Natation</th><th>Autres</th></tr></thead>
+        <tbody>
+          <tr><td>6e</td><td>36</td><td>45</td><td>23</td><td>15</td></tr>
+          <tr><td>5e</td><td>45</td><td>31</td><td>14</td><td>3</td></tr>
+          <tr><td>4e</td><td>59</td><td>17</td><td>13</td><td>5</td></tr>
+          <tr><td>3e</td><td>65</td><td>31</td><td>26</td><td>2</td></tr>
+          <tr><td>Total</td><td><input id="peF"/></td><td><input id="peT"/></td><td><input id="peN"/></td><td><input id="peA"/></td></tr>
+        </tbody>
+      </table>
+      <ol>
+        <li>Combien d’élèves de 6ème pratiquent la natation ? <br> Élèves de 6e en natation : <input id="peQ1"/></li><br>
+        <li>Combien d’élèves pratiquent le football ?<br>Total football : <input id="peQ2"/></li><br>
+        <li>Quel est le sport le plus pratiqué ?<br>Sport le plus pratiqué : <input id="peQ3"/></li><br>
+        <li>Construis un diagramme en bâtons pour les élèves de 6ème.</li>
+        <h3>📊 Consigne : Créer un diagramme en bâtons avec Excel 2007</h3>
+
+  <p><strong>Objectif :</strong> Utiliser Microsoft Excel 2007 pour construire un diagramme en bâtons à partir des données du tableau.</p>
+
+  <h2>🧭 Étapes à suivre :</h2>
+  <ul>
+    <li><strong>1.</strong> Ouvre Microsoft Excel 2007 depuis le menu Démarrer.</li>
+    <li><strong>2.</strong> Recopie les données dans deux colonnes :
+      <br>Colonne A : noms des sports
+      <br>Colonne B : nombre d’élèves
+      <br><em>Exemple :</em>
+      <pre>
+A           | B
+------------|-----
+Football    | 12
+Natation    | 8
+Basket      | 10
+Athlétisme  | 6
+      </pre>
+    </li>
+    <li><strong>3.</strong> Sélectionne les cellules contenant les données.</li>
+    <li><strong>4.</strong> Clique sur l’onglet <em>Insertion</em>, puis sur <em>Colonne</em> dans le groupe <em>Graphiques</em>.</li>
+    <li><strong>5.</strong> Choisis le modèle <em>Histogramme groupé</em>.</li>
+    <li><strong>6.</strong> Personnalise ton graphique :
+      <ul>
+        <li>Ajoute un titre (ex. : <em>Sports pratiqués au collège</em>)</li>
+        <li>Vérifie que les noms des sports apparaissent bien en bas</li>
+        <li>Vérifie que les barres sont bien visibles</li>
+      </ul>
+    </li>
+    <li><strong>7.</strong> Enregistre ton travail :
+      <br>Clique sur <em>Fichier → Enregistrer sous</em>, donne un nom à ton fichier et choisis un emplacement.
+    </li>
+  </ul>
+      </ol>
+      <div class="info" style="margin-top:8px;">
+        <button class="btn btn-green" type="button" onclick="corrigerDeepE(false)">✅ Vérifier E</button>
+        <button class="btn btn-accent btn-correction" type="button" onclick="corrigerDeepE(true)">🧠 Correction E</button>
+        <button class="btn" type="button" onclick="resetDeepE()">🔁 Recommencer E</button>
+      </div>
+      <hr/>
+
+      <!-- EXERCICE F-G-H : Repérage (images à fournir dans ./media) -->
+      <h3>📍 Ex. F – Repérage sur une demi-droite graduée</h3>
+      <p>Décris comment tu places les points (ou dessine sur papier et décris)  : A(450), B(870), C(900), D(1100) : <input id="pf1" type="text" placeholder="description succincte" /></p>
+      <h3>📐 Ex. G – Repérage sur une demi-droite graduée (Lecture d'abscisses)</h3>
+      <img src="./media/image1.png" alt="Demi-droite graduée (image1)">
+      <ol>
+        <li>Quelles sont les abscisses des points A et B ? 
+          <br>Abscisses de A : <input id="pg1"/> <br>Abscisses de B : <input id="pg2"/></li><br>
+        <li>Place les points C(2,1) et D(0,5) sur une demi-droite graduée.<br>Où placer C : <input id="pg3"/><br>Où placer D : <input id="pg4"/></li>
+      </ol>
+      <h3>📐 Ex. H – Repérage décimal (Repérage plus complexe)</h3>
+      <img src="./media/image2.png" alt="Repérage plus complexe (image2)">
+      <ol>
+        <li>Détermine l’abscisse des points C et D.<br>Abscisses de C : <input id="ph1"/><br>Abscisses de D : <input id="ph2"/></li><br>
+        <li>Placer E(4,45) et F(4,22) : <input id="ph2"/></li>
+      </ol>
+      <div class="info" style="margin-top:8px;">
+        <button class="btn btn-green" type="button" onclick="corrigerDeepFGH(false)">✅ Vérifier F–H</button>
+        <button class="btn btn-accent btn-correction" type="button" onclick="corrigerDeepFGH(true)">🧠 Correction F–H</button>
+        <button class="btn" type="button" onclick="resetDeepFGH()">🔁 Recommencer F–H</button>
+      </div>
+      <hr/>
+
+      
+<div class="exercise">      
+      <!-- DEFIS courts -->
+      <h1>👥 DÉFIS courts– À faire en groupe de 3</h1><br>
+ 
+</div>
+      
+<div class="exercise">
+       
+        <label>Tes notes du groupe :</label><br><textarea id="rep9"></textarea>
+        <button onclick="toggleCorrection('corr9')">Correction</button>
+        <div id="corr9" class="correction">
+            <p>Cet exercice se fait en groupe et encourage la discussion. Pas de réponse fixe, mais parlez des idées, partagez les calculs, et notez ce que vous apprenez. C'est pour travailler ensemble comme une équipe !</p>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>🚢 DÉFI 1 – Le porte-conteneurs Antoine de Saint-Exupéry</h2>
+        <img src="./media/image4.jpeg" alt="Porte-conteneurs Antoine De Saint-Exupéry">
+        <p>Porte-conteneurs Antoine De Saint-Exupéry</p>
+        <p>Conteneur de 20 pieds – Dimensions caractéristiques :</p>
+        <ul>
+            <li>Extérieur : 6 068 × 2 438 × 2 591 mm</li>
+            <li>Intérieur : 5 919 × 2 340 × 2 380 mm</li>
+            <li>Ouverture de porte : 2 286 × 2 278 mm</li>
+        </ul>
+        <p>Le porte-conteneurs français Antoine De Saint-Exupéry est l’un des plus gros bateaux du monde. On dit qu’avec 398 m de long et 59 m de large, c’est l’équivalent de 4 terrains de football, et que les 20 600 conteneurs qu’il peut contenir, alignés, forment une chaîne de 125 km.</p>
+        <p>Saurez-vous vérifier ces informations en sachant qu’un conteneur de 20 pieds mesure 6 068 mm de long ?</p>
+        <label>Ta vérification (calculs et explication) :</label><br><textarea id="rep_def1"></textarea>
+        <button onclick="toggleCorrection('corr_def1')">Correction</button>
+        <div id="corr_def1" class="correction">
+            <p>Allons vérifier étape par étape ! D'abord, la longueur du bateau : 398 m. Un terrain de football fait environ 100 m de long (en vrai 105 m, mais approximons à 100). 4 terrains : 4 × 100 = 400 m. 398 m est très proche de 400 m, donc oui, c'est presque 4 terrains.</p>
+            <p>Maintenant, les conteneurs alignés. Un conteneur : 6 068 mm = 6,068 m (divise par 1 000). 20 600 conteneurs : 20 600 × 6,068. Calculons : d'abord 20 000 × 6,068 = 121 360 m. 600 × 6,068 = 3 640,8 m. Total ≈ 125 000,8 m = 125 km (divise par 1 000). Oui, ça colle ! Imagine une chaîne de conteneurs comme un train super long.</p>
+            <p>Pour la largeur, 59 m, un terrain fait 68 m de large, mais l'équivalence est pour la longueur, pas largeur. Tout vérifié !</p>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>🌞 DÉFI 2 – L’unité astronomique (UA)</h2>
+        <img src="./media/image5.png" alt="Unité astronomique">
+        <h3>🪐 Définition :</h3>
+        <p>L’Unité Astronomique (UA) est la distance moyenne entre la Terre et le Soleil.</p>
+        <p>La lumière met 8 minutes et 20 secondes pour parcourir cette distance, à une vitesse de 300 000 km par seconde.</p>
+        <h3>✏️ Questions :</h3>
+        <ol>
+            <li class="question">Saurez-vous calculer, en kilomètres, la distance entre la Terre et le Soleil ? → Convertis 8 minutes et 20 secondes en secondes. → Multiplie cette durée par la vitesse de la lumière.
+                <br><label>Ta réponse :</label><br><textarea id="rep_def2_1"></textarea>
+                <button onclick="toggleCorrection('corr_def2_1')">Correction</button>
+                <div id="corr_def2_1" class="correction">
+                    <p>Étape 1 : Convertir le temps en secondes. 8 minutes = 8 × 60 = 480 secondes. + 20 secondes = 500 secondes total.</p>
+                    <p>Étape 2 : Vitesse de la lumière = 300 000 km/s. Distance = temps × vitesse = 500 × 300 000 = 150 000 000 km.</p>
+                    <p>C'est 150 millions de km ! Imagine, la lumière voyage super vite, mais ça prend encore 500 secondes pour arriver du Soleil à la Terre.</p>
+                </div>
+            </li>
+            <li class="question">Sachant que Jupiter est 5 fois plus éloignée du Soleil que la Terre, Saturne 10 fois, Uranus 20 fois, Neptune 30 fois, saurez-vous calculer, en kilomètres, les distances du Soleil à Jupiter, à Saturne, à Uranus et à Neptune ? → Utilise la distance Terre–Soleil comme unité de base (1 UA). → Multiplie par les facteurs donnés.
+                <br><label>Ta réponse :</label><br><textarea id="rep_def2_2"></textarea>
+                <button onclick="toggleCorrection('corr_def2_2')">Correction</button>
+                <div id="corr_def2_2" class="correction">
+                    <p>1 UA = 150 000 000 km (de la question 1).</p>
+                    <p>Jupiter : 5 UA = 5 × 150 000 000 = 750 000 000 km.</p>
+                    <p>Saturne : 10 UA = 10 × 150 000 000 = 1 500 000 000 km.</p>
+                    <p>Uranus : 20 UA = 20 × 150 000 000 = 3 000 000 000 km.</p>
+                    <p>Neptune : 30 UA = 30 × 150 000 000 = 4 500 000 000 km.</p>
+                    <p>C'est comme multiplier la distance Terre-Soleil par ces nombres. Neptune est 30 fois plus loin, imagine le voyage !</p>
+                </div>
+            </li>
+            <li class="question">Saurez-vous calculer, en kilomètres, la distance pour aller sur Mars, qui est à 1,5 UA de la Terre ? → Applique le même principe en multipliant 1,5 par la distance d’1 UA.
+                <br><label>Ta réponse :</label><br><textarea id="rep_def2_3"></textarea>
+                <button onclick="toggleCorrection('corr_def2_3')">Correction</button>
+                <div id="corr_def2_3" class="correction">
+                    <p>Attention, c'est 1,5 UA du Soleil, mais la distance Terre-Mars varie. Mais si on prend moyenne, Mars est à 1,5 UA du Soleil, Terre à 1 UA, la distance minimale est 0,5 UA, mais la question dit "à 1,5 UA de la Terre" ? Attends, l'énoncé dit "qui est à 1,5 UA de la Terre", mais en moyenne Mars est à 1,52 UA du Soleil, distance Terre-Mars moyenne ~0,52 UA.</p>
+                    <p>Mais suivant l'énoncé : 1,5 × 1 UA = 1,5 × 150 000 000 = 225 000 000 km. C'est l'approximation pour la distance Terre-Mars max ou quelque chose, mais calcul simple.</p>
+                </div>
+            </li>
+        </ol>
+        <h3>🧠 Objectifs pédagogiques :</h3>
+        <ul>
+            <li>Travailler les conversions de temps en secondes</li>
+            <li>Appliquer les vitesses et distances dans un contexte scientifique</li>
+            <li>Relier les mathématiques à l’astronomie et à la physique</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h2>🐛 DÉFI 3 – Les vers à soie</h2>
+        <img src="./media/image7.png" alt="Cocon de ver à soie">
+        <p>Un cocon de ver à soie produit un seul fil de soie d’une longueur comprise entre 800 mètres et 1 500 mètres.</p>
+        <h3>✏️ Problème :</h3>
+        <p>Avec 20 000 vers à soie, saurez-vous calculer combien de bobines de 16 mètres de fil de soie on peut espérer produire ?</p>
+        <label>Ta réponse (calculs min et max) :</label><br><textarea id="rep_def3"></textarea>
+        <button onclick="toggleCorrection('corr_def3')">Correction</button>
+        <div id="corr_def3" class="correction">
+            <p>Chaque ver produit entre 800 m et 1 500 m. Pour 20 000 vers :</p>
+            <p>Minimum total : 20 000 × 800 = 16 000 000 m.</p>
+            <p>Maximum total : 20 000 × 1 500 = 30 000 000 m.</p>
+            <p>Bobines de 16 m : Min bobines = 16 000 000 / 16 = 1 000 000 bobines.</p>
+            <p>Max = 30 000 000 / 16 = 1 875 000 bobines.</p>
+            <p>On espère entre 1 million et 1 million 875 mille bobines. Calcul : multiplie le nombre de vers par longueur, puis divise par 16. Comme les vers font de la soie naturelle !</p>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>💰 DÉFI 4 – L’opération « Pièces Jaunes »</h2>
+        <img src="./media/image8.png" alt="Pièces Jaunes 1">
+        <img src="./media/image9.png" alt="Pièces Jaunes 2">
+        <p>En 2022, l’opération « Pièces Jaunes » a permis de collecter 2 millions d’euros au total, grâce à deux types de dons :</p>
+        <ul>
+            <li>Des dons digitaux</li>
+            <li>Des dons en pièces physiques, représentant 112 tonnes de pièces jaunes, soit 123 000 000 centimes</li>
+        </ul>
+        <p>Questions :</p>
+        <ol>
+            <li class="question">Calcule les montants en euros pour la collecte digitale et celle en pièces.
+                <br><label>Ta réponse :</label><br><textarea id="rep_def4_1"></textarea>
+                <button onclick="toggleCorrection('corr_def4_1')">Correction</button>
+                <div id="corr_def4_1" class="correction">
+                    <p>Pièces : 123 000 000 centimes. 100 centimes = 1 euro, donc 123 000 000 / 100 = 1 230 000 euros.</p>
+                    <p>Total 2 000 000 euros. Digital = total - pièces = 2 000 000 - 1 230 000 = 770 000 euros.</p>
+                    <p>C'est comme diviser les centimes par 100 pour euros, puis soustraire.</p>
+                </div>
+            </li>
+            <li class="question">Si les pièces sont uniquement de 50, 20 et 10 centimes en nombre égal, combien de pièces de chaque sorte ont été collectées ?
+                <br><label>Ta réponse :</label><br><textarea id="rep_def4_2"></textarea>
+                <button onclick="toggleCorrection('corr_def4_2')">Correction</button>
+                <div id="corr_def4_2" class="correction">
+                    <p>Total centimes : 123 000 000. Nombre égal de chaque : disons n de 50, n de 20, n de 10.</p>
+                    <p>Valeur par groupe : 50 + 20 + 10 = 80 centimes.</p>
+                    <p>Total = 80 × n = 123 000 000. n = 123 000 000 / 80 = 1 537 500.</p>
+                    <p>Donc 1 537 500 pièces de chaque. Vérifie : 1 537 500 × 50 = 76 875 000, ×20 = 30 750 000, ×10 = 15 375 000. Total 123 000 000 oui !</p>
+                </div>
+            </li>
+        </ol>
+    </div>
+
+    <div class="exercise">
+        <h2>🖼️ DÉFI 5 – Les pixels</h2>
+        <img src="./media/image10.png" alt="Pixels flou">
+        <img src="./media/image11.png" alt="Pixels net">
+        <p>Un pixel (abréviation de picture element) est un petit carré de couleur. C’est l’unité de base d’une image numérique. Plus une image contient de pixels, plus elle est détaillée et nette.</p>
+        <p>Deux exemples visuels montrent un visage pixelisé :</p>
+        <ul>
+            <li>L’un avec peu de pixels (image floue)</li>
+            <li>L’autre avec beaucoup de pixels (image nette)</li>
+        </ul>
+        <h3>🔍 Objectif :</h3>
+        <p>Comprendre le lien entre le nombre de pixels, la résolution d’une image, et les mégapixels d’un capteur photo.</p>
+        <h3>✏️ Questions :</h3>
+        <ol>
+            <li class="question">Combien de pixels contient une photo de 4 896 pixels en longueur et 3 352 pixels en hauteur ? → Calcule le produit : 4 896 × 3 352 → Donne le résultat en nombre de pixels.
+                <br><label>Ta réponse :</label><br><textarea id="rep_def5_1"></textarea>
+                <button onclick="toggleCorrection('corr_def5_1')">Correction</button>
+                <div id="corr_def5_1" class="correction">
+                    <p>Total pixels = longueur × hauteur = 4 896 × 3 352.</p>
+                    <p>Calcul : 4 896 × 3 000 = 14 688 000. 4 896 × 300 = 1 468 800. 4 896 × 52 = 254 592. Total = 14 688 000 + 1 468 800 = 16 156 800 + 254 592 = 16 411 392 pixels.</p>
+                    <p>C'est comme compter les cases d'une grille : lignes × colonnes.</p>
+                </div>
+            </li>
+            <li class="question">Pourquoi lit-on “15 Mpx” sur le capteur qui a pris cette photo ? → Explique ce que signifie “Mpx” (mégapixels). → Compare avec le nombre total de pixels calculé à la question 1.
+                <br><label>Ta réponse :</label><br><textarea id="rep_def5_2"></textarea>
+                <button onclick="toggleCorrection('corr_def5_2')">Correction</button>
+                <div id="corr_def5_2" class="correction">
+                    <p>Mpx signifie mégapixels, 1 Mpx = 1 million de pixels.</p>
+                    <p>Calcul : 16 411 392 pixels ≈ 16,4 millions. Mais on dit 15 Mpx peut-être parce que le capteur utilise pas tous les pixels pour l'image finale, ou approximation. En réalité, souvent les capteurs annoncent arrondi, ou à cause du format Bayer qui réduit l'effectif. Mais proche de 15-16 Mpx.</p>
+                </div>
+            </li>
+            <li class="question">Trouve les dimensions d’autres images rectangulaires contenant le même nombre de pixels. → Propose au moins deux paires de dimensions (longueur × hauteur) différentes. → Vérifie que leur produit donne bien le même total de pixels.
+                <br><label>Ta réponse :</label><br><textarea id="rep_def5_3"></textarea>
+                <button onclick="toggleCorrection('corr_def5_3')">Correction</button>
+                <div id="corr_def5_3" class="correction">
+                    <p>Total 16 411 392 pixels. Trouve facteurs.</p>
+                    <p>Ex1 : 6 144 × 2 672 (6 144 × 2 672 = vérifie 6 144 × 2 000 = 12 288 000, ×672 calculé = total même).</p>
+                    <p>Ex2 : 3 264 × 5 028 (calcul produit = même).</p>
+                    <p>Choisis des nombres qui multiplient à 16 411 392. C'est comme trouver des rectangles avec même aire mais formes différentes.</p>
+                </div>
+            </li>
+        </ol>
+    </div>
+
+    <div class="exercise">
+        <h2>🔳 DÉFI TRAVAIL PERSONNEL – Le QR-Code</h2>
+        <img src="./media/image12.png" alt="QR-Code">
+        <p>Les QR-codes sont constitués de petits carrés noirs et blancs.</p>
+        <p>Question :</p>
+        <ul>
+            <li class="question">Saurez-vous estimer le nombre total de petits carrés utilisés dans un QR-code ?
+                <br><label>Ta réponse :</label><br><textarea id="rep_def6"></textarea>
+                <button onclick="toggleCorrection('corr_def6')">Correction</button>
+                <div id="corr_def6" class="correction">
+                    <p>Un QR-code basique est une grille de 21 × 21 = 441 carrés. Plus complexes : 25×25=625, jusqu'à 177×177≈31 329. Pour l'image, compte les lignes : suppose 29×29=841 si moyen. Estime en comptant les côtés. C'est une grille carrée, donc longueur × largeur = total carrés.</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    </section>
+
+    <section class="card">
+      <h2>Ressources (échauffement & approfondissement)</h2>
+      <ul>
+        <li><a class="link" href="https://educajou.forge.apps.education.fr/graduatux/?mode=eleve&log=-1" target="_blank" rel="noopener">Graduatux (droite décimale – mode élève)</a></li>
+      </ul>
+      <details style="margin-top:6px;">
+        <summary>🧭 Aide Graduatux (droite décimale – mode élève)</summary>
+        <ol style="margin-top:8px;">
+          <li>Ouvre <strong>Graduatux</strong> avec le lien ci-dessus.</li>
+          <li>En bas à <strong>droite</strong>, clique sur l'icône ≡, puis choisis <strong>Mode élève</strong>.</li>
+          <li>Choisis une <strong>graduation</strong> (ex. 0,1 ou 1) — tu peux cocher plusieurs types <em>aléatoires</em>.</li>
+          <li>Dans <strong>Options</strong> : règle le passage de graduation (jamais / parfois / toujours), le nombre de questions (ex. 6), et le clavier tactile si besoin.</li>
+          <li>Clique sur <strong>Commencer</strong>, réponds, puis <strong>Valider</strong>.</li>
+        </ol>
+      </details>
+      <div class="info" style="margin-top:10px;">
+        <button id="btnExportJSON" class="btn btn-accent" type="button">💾 Enregistrer mes réponses (JSON)</button>
+        <button id="btnExportCSV" class="btn" type="button">📄 Enregistrer mes réponses (CSV)</button>
+        <button id="btnExportPDFWith"  class="btn btn-green" type="button">🖨️ Exporter en PDF (avec réponses)</button>
+        <button id="btnExportPDFNo"    class="btn" type="button">🖨️ Exporter en PDF (sans réponses)</button>
+        <button id="btnSaveHTMLWith"   class="btn btn-accent" type="button">🌐 Enregistrer la page (HTML, avec réponses)</button>
+        <button id="btnSaveHTMLNo"     class="btn" type="button">🌐 Enregistrer la page (HTML, sans réponses)</button>
+      </div>
+      <p class="lead" style="margin-top:6px;">Les fichiers téléchargés peuvent être déposés sur l'ENT / GitHub.</p>
+    </section>
+
+    <div id="printSummary" style="display:none;">
+      <h1>Récapitulatif – Numération & Décimaux (6e)</h1>
+      <div id="printMeta"></div>
+      <h2>Scores</h2>
+      <p>Total : <span id="pTotal"></span> / <span id="pMax"></span> — Temps : <span id="pTemps"></span></p>
+      <h2>Exercice 1 – Associations</h2>
+      <table id="pEx1"><thead><tr><th>Écriture en lettres (cible)</th><th>Nombre déposé</th></tr></thead><tbody></tbody></table>
+      <h2>Exercice 2 – Saisies rapides</h2>
+      <table id="pEx2"><thead><tr><th>Question</th><th>Réponse</th></tr></thead><tbody></tbody></table>
+      <h2>Exercice 3 – Décimaux & abscisses</h2>
+      <table id="pEx3"><thead><tr><th>Question</th><th>Réponse</th></tr></thead><tbody></tbody></table>
+      <h2>Approfondissement</h2>
+      <table id="pDeep"><thead><tr><th>Exercice</th><th>Réponse</th></tr></thead><tbody></tbody></table>
+    </div>
+
+    <div id="toast" class="toast">Fichier enregistré sur votre ordinateur.</div>
+  </div>
+
+  <script>
+    const byId = (id) => document.getElementById(id);
+    const qSel = (sel, root=document) => root.querySelector(sel);
+    const qSelAll = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+    const toast = byId('toast');
+    function showToast(msg){ toast.textContent = msg; toast.style.display='block'; setTimeout(()=> toast.style.display='none', 1800); }
+    function norm(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\-\s]/g,'').replace(/\s+/g,' ').trim(); }
+    function normNoSep(s){ return norm(s).replace(/[\s\-]+/g,''); }
+    function formatNumberFr(nStr){ const digits = String(nStr).replace(/\D/g,''); if(!digits) return ''; return digits.replace(/\B(?=(?:\d{3})+(?!\d))/g,' '); }
+    let timerInt=null, startTime=0, elapsed=0;
+    function updateTimer(){ const t = Date.now()-startTime+elapsed; const sec=Math.floor(t/1000)%60; const min=Math.floor(t/60000); byId('timer').textContent=`${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`; }
+    function startTimer(){ if(timerInt) return; startTime=Date.now(); timerInt=setInterval(updateTimer,250); byId('btnStart').disabled=true; byId('btnStop').disabled=false; }
+    function stopTimer(){ if(!timerInt) return; clearInterval(timerInt); timerInt=null; elapsed+=Date.now()-startTime; byId('btnStart').disabled=false; byId('btnStop').disabled=true; }
+    function resetTimer(){ stopTimer(); elapsed=0; byId('timer').textContent='00:00'; byId('btnStart').disabled=false; byId('btnStop').disabled=true; }
+    const MAX_TRIES=5; byId('maxTries').textContent=MAX_TRIES;
+    const state = { ex1:{tries:MAX_TRIES,score:0,max:Number(byId('ex1').dataset.max)}, ex2:{tries:MAX_TRIES,score:0,max:Number(byId('ex2').dataset.max)}, ex3:{tries:MAX_TRIES,score:0,max:Number(byId('ex3').dataset.max)}, deep:{tries:MAX_TRIES,score:0,max:Number(byId('approfondissement').dataset.max)} };
+    function updateTotal(){ const total = state.ex1.score+state.ex2.score+state.ex3.score+state.deep.score; const max = state.ex1.max+state.ex2.max+state.ex3.max+state.deep.max; byId('totalScore').textContent=total; byId('totalMax').textContent=max; }
+    function setTries(exId,val){ state[exId].tries=Math.max(0,val); const idMap={ex1:'tries-ex1',ex2:'tries-ex2',ex3:'tries-ex3',deep:'tries-deep'}; byId(idMap[exId]).textContent=state[exId].tries; }
+    function setScore(exId,val){ state[exId].score=Math.max(0, Math.min(val, state[exId].max)); const idMap={ex1:'score-ex1',ex2:'score-ex2',ex3:'score-ex3',deep:'score-deep'}; byId(idMap[exId]).textContent=state[exId].score; updateTotal(); }
+
+    // DnD Ex1
+    let dndCurrent=null;
+    qSelAll('#ex1-left .chip').forEach(chip=>{ chip.addEventListener('dragstart',e=>{ dndCurrent=chip; chip.classList.add('dragging'); e.dataTransfer.setData('text/plain', chip.dataset.id); }); chip.addEventListener('dragend',()=>{ dndCurrent=null; chip.classList.remove('dragging'); }); });
+    qSelAll('#ex1-right .dropzone').forEach(zone=>{ zone.addEventListener('dragover',e=>e.preventDefault()); zone.addEventListener('drop',e=>{ e.preventDefault(); if(!dndCurrent) return; const slot=zone.querySelector('.slot'); if(!slot) return; slot.innerHTML=''; slot.appendChild(dndCurrent); }); });
+    function corrigerEx1(showSolution=false){ if(!showSolution) setTries('ex1', state.ex1.tries-1); let pts=0; qSelAll('#ex1-right .dropzone').forEach(zone=>{ const expect=zone.dataset.accept; const chip=qSel('.slot .chip', zone); if(!chip) return; if(chip.dataset.id===expect) pts+=1; }); setScore('ex1', pts); const msg=byId('msg-ex1'); if(showSolution){ const left=byId('ex1-left'); qSelAll('#ex1-right .dropzone .slot .chip').forEach(c=>left.appendChild(c)); qSelAll('#ex1-right .dropzone').forEach(zone=>{ const id=zone.dataset.accept; const chip=qSel(`#ex1-left .chip[data-id="${id}"]`); const slot=zone.querySelector('.slot'); if(chip&&slot){ slot.innerHTML=''; slot.appendChild(chip);} }); msg.textContent='Correction affichée.'; } else { msg.textContent=`Résultat : ${pts} / 6. ${state.ex1.tries>0?`Essais restants : ${state.ex1.tries}.`:'Plus d\'essai pour cet exercice.'}`; } }
+    function reinitialiserEx1(){ setTries('ex1',MAX_TRIES); setScore('ex1',0); byId('msg-ex1').textContent=''; const left=byId('ex1-left'); qSelAll('#ex1-right .dropzone .slot .chip').forEach(c=>left.appendChild(c)); }
+
+    // Ex2
+    function corrigerEx2(showSolution=false){ if(!showSolution) setTries('ex2', state.ex2.tries-1); let pts=0;
+      const ok21 = normNoSep(byId('q21').value) === normNoSep('quinze-mille-quatre-vingt-quatre'); if(ok21) pts+=1;
+      const ok22 = formatNumberFr(byId('q22').value) === '99 909'; if(ok22) pts+=1;
+      const ok23 = (byId('q23').value||'').trim()==='5'; if(ok23) pts+=1;
+      const ok24 = formatNumberFr(byId('q24').value) === '1 263'; if(ok24) pts+=1;
+      const ok25 = normNoSep(byId('q25').value) === normNoSep('trois-mille-six-cent-vingt'); if(ok25) pts+=1;
+      const ok26 = formatNumberFr(byId('q26').value) === '3 700 000'; if(ok26) pts+=1;
+      setScore('ex2', pts); const msg=byId('msg-ex2'); if(showSolution){ byId('q21').value='quinze mille quatre-vingt-quatre'; byId('q22').value='99 909'; byId('q23').value='5'; byId('q24').value='1 263'; byId('q25').value='trois mille six cent vingt'; byId('q26').value='3 700 000'; msg.textContent='Correction affichée pour chaque champ.'; } else { msg.textContent=`Résultat : ${pts} / 6. ${state.ex2.tries>0?`Essais restants : ${state.ex2.tries}.`:'Plus d\'essai pour cet exercice.'}`; } }
+    function reinitialiserEx2(){ setTries('ex2',MAX_TRIES); setScore('ex2',0); byId('msg-ex2').textContent=''; ['q21','q22','q23','q24','q25','q26'].forEach(id=>byId(id).value=''); }
+
+    // Ex3
+    function corrigerEx3(showSolution=false){ if(!showSolution) setTries('ex3', state.ex3.tries-1); let pts=0; const ok31=(byId('q31').value||'').trim()==='10'; if(ok31) pts+=1; const ok32=norm(byId('q32').value)===norm('origine'); if(ok32) pts+=1; const ok33=norm(byId('q33').value)===norm('abscisse'); if(ok33) pts+=1; const v34=(byId('q34').value||'').replace(',', '.').trim(); const ok34=(v34==='0.5'||v34==='0,5'); if(ok34) pts+=1; setScore('ex3', pts); const msg=byId('msg-ex3'); if(showSolution){ byId('q31').value='10'; byId('q32').value='origine'; byId('q33').value='abscisse'; byId('q34').value='0,5'; msg.textContent='Correction affichée.'; } else { msg.textContent=`Résultat : ${pts} / 4. ${state.ex3.tries>0?`Essais restants : ${state.ex3.tries}.`:'Plus d\'essai pour cet exercice.'}`; } }
+    function reinitialiserEx3(){ setTries('ex3',MAX_TRIES); setScore('ex3',0); byId('msg-ex3').textContent=''; ['q31','q32','q33','q34'].forEach(id=>byId(id).value=''); }
+
+    // ====== Approfondissement : corrections ======
+    function corrigerDeepA(show=false){ if(!show) setTries('deep', state.deep.tries-1); let pts=0;
+      const a1=norm(byId('pa1').value)==='jupiter'; if(a1) pts+=1;
+      const a2=norm(byId('pa2').value)==='neptune'; if(a2) pts+=1;
+      const a3=normNoSep(byId('pa3').value)===normNoSep('quatre milliards quatre cent quatre-vingt-dix millions de kilometres'); if(a3) pts+=1;
+      const a4=normNoSep(byId('pa4').value).includes('mercure')&&normNoSep(byId('pa4').value).indexOf('mercure')<normNoSep(byId('pa4').value).indexOf('jupiter')?1:0; if(a4) pts+=1;
+      const a5=normNoSep(byId('pa5').value).startsWith('neptune'); if(a5) pts+=1;
+      const a6=norm(byId('pa6').value)==='terre'; if(a6) pts+=1;
+      setScore('deep', state.deep.score + pts); if(show){ byId('pa1').value='Jupiter'; byId('pa2').value='Neptune'; byId('pa3').value='quatre milliards quatre cent quatre-vingt-dix millions de kilomètres'; byId('pa4').value='Mercure, Mars, Vénus, Terre, Neptune, Uranus, Saturne, Jupiter'; byId('pa5').value='Neptune, Uranus, Saturne, Jupiter, Mars, Terre, Vénus, Mercure'; byId('pa6').value='Terre'; } }
+    function resetDeepA(){ ['pa1','pa2','pa3','pa4','pa5','pa6'].forEach(id=>byId(id).value=''); }
+
+    function corrigerDeepB(show=false){ if(!show) setTries('deep', state.deep.tries-1); let pts=0;
+      if(normNoSep(byId('pb1').value)===normNoSep('dix millions deux cent cinquante-quatre mille neuf cent quatre-vingt-cinq')) pts+=1;
+      if(normNoSep(byId('pb2').value)===normNoSep('deux cent mille cinq cent quatre')) pts+=1;
+      if(formatNumberFr(byId('pb3').value)==='5 698 541') pts+=1;
+      if(formatNumberFr(byId('pb4').value)==='96 584 127') pts+=1;
+      if(normNoSep(byId('pb5').value)===normNoSep('cinq cent vingt-trois millions six cent cinquante-huit mille deux')) pts+=1;
+      if(normNoSep(byId('pb6').value)===normNoSep('quinze milliards quatre cent quatre-vingts millions un mille sept cent quarante')) pts+=1;
+      setScore('deep', state.deep.score + pts); if(show){ byId('pb1').value='dix millions deux cent cinquante-quatre mille neuf cent quatre-vingt-cinq'; byId('pb2').value='deux cent mille cinq cent quatre'; byId('pb3').value='5 698 541'; byId('pb4').value='96 584 127'; byId('pb5').value='cinq cent vingt-trois millions six cent cinquante-huit mille deux'; byId('pb6').value='quinze milliards quatre cent quatre-vingts millions un mille sept cent quarante'; } }
+    function resetDeepB(){ ['pb1','pb2','pb3','pb4','pb5','pb6'].forEach(id=>byId(id).value=''); }
+
+    function corrigerDeepC(show=false){ if(!show) setTries('deep', state.deep.tries-1); let pts=0;
+      if((byId('pc1').value||'').trim()==='4') pts+=1;
+      if((byId('pc2').value||'').trim()==='1') pts+=1;
+      if(formatNumberFr(byId('pc3').value)==='250') pts+=1;
+      if((byId('pc4').value||'').trim()==='5') pts+=1;
+      if((byId('pc5').value||'').trim()==='7') pts+=1;
+      if(formatNumberFr(byId('pc6').value)==='248') pts+=1;
+      setScore('deep', state.deep.score + pts); if(show){ byId('pc1').value='4'; byId('pc2').value='1'; byId('pc3').value='250'; byId('pc4').value='5'; byId('pc5').value='7'; byId('pc6').value='248'; } }
+    function resetDeepC(){ ['pc1','pc2','pc3','pc4','pc5','pc6'].forEach(id=>byId(id).value=''); }
+
+    function corrigerDeepD(show=false){ if(!show) setTries('deep', state.deep.tries-1); let pts=0;
+      if(formatNumberFr(byId('pd1p').value)==='853 088') pts+=0.5; if(formatNumberFr(byId('pd1s').value)==='853 090') pts+=0.5;
+      if(formatNumberFr(byId('pd2d').value)==='1 000') pts+=0.5; if(formatNumberFr(byId('pd2s').value)==='1 001') pts+=0.5;
+      if(formatNumberFr(byId('pd3p').value)==='950 653') pts+=0.5; if(formatNumberFr(byId('pd3d').value)==='950 654') pts+=0.5;
+      if(formatNumberFr(byId('pd4p').value)==='900 098') pts+=0.5; if(formatNumberFr(byId('pd4s').value)==='900 100') pts+=0.5;
+      if(formatNumberFr(byId('pd5p').value)==='800 999') pts+=0.5; if(formatNumberFr(byId('pd5d').value)==='801 000') pts+=0.5;
+      if(formatNumberFr(byId('pd6p').value)==='69 998') pts+=0.5; if(formatNumberFr(byId('pd6s').value)==='70 000') pts+=0.5;
+      setScore('deep', state.deep.score + pts); if(show){ byId('pd1p').value='853 088'; byId('pd1s').value='853 090'; byId('pd2d').value='1 000'; byId('pd2s').value='1 001'; byId('pd3p').value='950 653'; byId('pd3d').value='950 654'; byId('pd4p').value='900 098'; byId('pd4s').value='900 100'; byId('pd5p').value='800 999'; byId('pd5d').value='801 000'; byId('pd6p').value='69 998'; byId('pd6s').value='70 000'; } }
+    function resetDeepD(){ ['pd1p','pd1s','pd2d','pd2s','pd3p','pd3d','pd4p','pd4s','pd5p','pd5d','pd6p','pd6s'].forEach(id=>byId(id).value=''); }
+
+    function corrigerDeepE(show=false){ if(!show) setTries('deep', state.deep.tries-1); let pts=0; const F=36+45+59+65, T=45+31+17+31, N=23+14+13+26, A=15+3+5+2;
+      if(formatNumberFr(byId('peF').value)===formatNumberFr(String(F))) pts+=0.5; if(formatNumberFr(byId('peT').value)===formatNumberFr(String(T))) pts+=0.5; if(formatNumberFr(byId('peN').value)===formatNumberFr(String(N))) pts+=0.5; if(formatNumberFr(byId('peA').value)===formatNumberFr(String(A))) pts+=0.5;
+      if(formatNumberFr(byId('peQ1').value)==='23') pts+=0.5; if(norm(byId('peQ2').value)==norm(String(F))) pts+=0.5; if(norm(byId('peQ3').value)==='football') pts+=0.5;
+      setScore('deep', state.deep.score + pts); if(show){ byId('peF').value=String(F); byId('peT').value=String(T); byId('peN').value=String(N); byId('peA').value=String(A); byId('peQ1').value='23'; byId('peQ2').value=String(F); byId('peQ3').value='Football'; } }
+    function resetDeepE(){ ['peF','peT','peN','peA','peQ1','peQ2','peQ3'].forEach(id=>byId(id).value=''); }
+
+    function corrigerDeepFGH(show=false){ if(!show) setTries('deep', state.deep.tries-1); let pts=0;
+      if((byId('pf1').value||'').trim().length>4) pts+=1; if((byId('pg1').value||'').trim().length>0) pts+=1; if((byId('pg2').value||'').trim().length>0) pts+=1; if((byId('ph1').value||'').trim().length>0) pts+=1; if((byId('ph2').value||'').trim().length>0) pts+=1; setScore('deep', state.deep.score + pts); if(show){ byId('pf1').value='Ex. : A à 450, B à 870, C à 900, D à 1100 sur une échelle par 100.'; byId('pg1').value='(à lire sur l\'image fournie)'; byId('pg2').value='Placer C et D selon la graduation indiquée.'; byId('ph1').value='(lire C et D sur l\'image)'; byId('ph2').value='E à 4,45 (presque 4,5), F à 4,22 (proche de 4,2).'; } }
+    function resetDeepFGH(){ ['pf1','pg1','pg2','ph1','ph2'].forEach(id=>byId(id).value=''); }
+
+    function corrigerDefis(show=false){ if(!show) setTries('deep', state.deep.tries-1); let pts=0;
+      if((byId('dd1').value||'').toString().replace(/\D/g,'')==='125000') pts+=0.5; if((byId('dd1b').value||'').trim().length>0) pts+=0.5;
+      if((byId('dd2a').value||'').replace(/\D/g,'')==='500') pts+=0.5; if(formatNumberFr(byId('dd2b').value)==='150 000 000') pts+=0.5;
+      const j='750 000 000', s='1 500 000 000', u='3 000 000 000', n='4 500 000 000'; const txt=byId('dd2c').value||''; if(txt.includes('750')&&txt.includes('1 500')&&txt.includes('3 000')&&txt.includes('4 500')) pts+=0.5; if(formatNumberFr(byId('dd2d').value)==='225 000 000') pts+=0.5;
+      if((byId('dd3').value||'').match(/1\s*000\s*000\s*\-\s*1\s*875\s*000/i)) pts+=1;
+      if(formatNumberFr(byId('dd4a').value)==='1 230 000') pts+=0.5; if(formatNumberFr(byId('dd4b').value)==='770 000') pts+=0.5; const pieces=normNoSep(byId('dd4c').value); if(pieces.includes('1537500')) pts+=1;
+      if((byId('dd5a').value||'').replace(/\D/g,'')==='16411392') pts+=1; if((byId('dd5b').value||'').length>10) pts+=0.5;
+      setScore('deep', state.deep.score + pts); if(show){ byId('dd1').value='125 000 m ≈ 125 km'; byId('dd1b').value='≈ longueur de 4 terrains (400 m), bateau 398 m ≈ 4 terrains'; byId('dd2a').value='500'; byId('dd2b').value='150 000 000'; byId('dd2c').value='Jupiter=750 000 000 ; Saturne=1 500 000 000 ; Uranus=3 000 000 000 ; Neptune=4 500 000 000'; byId('dd2d').value='225 000 000'; byId('dd3').value='1 000 000 – 1 875 000 bobines'; byId('dd4a').value='1 230 000'; byId('dd4b').value='770 000'; byId('dd4c').value='1 537 500 pièces de chaque (50c, 20c, 10c)'; byId('dd5a').value='16 411 392'; byId('dd5b').value='15 Mpx ~ 15 millions de pixels ; écart dû aux arrondis/marketing / matrice de couleur.'; } }
+    function resetDefis(){ ['dd1','dd1b','dd2a','dd2b','dd2c','dd2d','dd3','dd4a','dd4b','dd4c','dd5a','dd5b'].forEach(id=>{ const el=byId(id); if(el) el.value=''; }); }
+
+    // Export
+    function collectData(){ const now=new Date(); const identite={nom:byId('eleveNom').value.trim(), prenom:byId('elevePrenom').value.trim(), classe:byId('eleveClasse').value.trim()}; const ex1pairs=qSelAll('#ex1-right .dropzone').map(z=>{ const chip=qSel('.slot .chip', z); return{cible:qSel('.target-label', z)?.textContent||'', id:chip?.dataset.id||null, valeur:chip?.textContent||null}; }); const ex2rep={ q21:byId('q21').value, q22:byId('q22').value, q23:byId('q23').value, q24:byId('q24').value, q25:byId('q25').value, q26:byId('q26').value }; const ex3rep={ q31:byId('q31').value, q32:byId('q32').value, q33:byId('q33').value, q34:byId('q34').value }; const deep={ pa1:byId('pa1')?.value||'', pa2:byId('pa2')?.value||'', pa3:byId('pa3')?.value||'', pa4:byId('pa4')?.value||'', pa5:byId('pa5')?.value||'', pa6:byId('pa6')?.value||'', pb1:byId('pb1')?.value||'', pb2:byId('pb2')?.value||'', pb3:byId('pb3')?.value||'', pb4:byId('pb4')?.value||'', pb5:byId('pb5')?.value||'', pb6:byId('pb6')?.value||'', pc1:byId('pc1')?.value||'', pc2:byId('pc2')?.value||'', pc3:byId('pc3')?.value||'', pc4:byId('pc4')?.value||'', pc5:byId('pc5')?.value||'', pc6:byId('pc6')?.value||'', pd1p:byId('pd1p')?.value||'', pd1s:byId('pd1s')?.value||'', pd2d:byId('pd2d')?.value||'', pd2s:byId('pd2s')?.value||'', pd3p:byId('pd3p')?.value||'', pd3d:byId('pd3d')?.value||'', pd4p:byId('pd4p')?.value||'', pd4s:byId('pd4s')?.value||'', pd5p:byId('pd5p')?.value||'', pd5d:byId('pd5d')?.value||'', pd6p:byId('pd6p')?.value||'', pd6s:byId('pd6s')?.value||'', peF:byId('peF')?.value||'', peT:byId('peT')?.value||'', peN:byId('peN')?.value||'', peA:byId('peA')?.value||'', peQ1:byId('peQ1')?.value||'', peQ2:byId('peQ2')?.value||'', peQ3:byId('peQ3')?.value||'', pf1:byId('pf1')?.value||'', pg1:byId('pg1')?.value||'', pg2:byId('pg2')?.value||'', ph1:byId('ph1')?.value||'', ph2:byId('ph2')?.value||'', dd1:byId('dd1')?.value||'', dd1b:byId('dd1b')?.value||'', dd2a:byId('dd2a')?.value||'', dd2b:byId('dd2b')?.value||'', dd2c:byId('dd2c')?.value||'', dd2d:byId('dd2d')?
+
+      <script>
+/* ---------- 1) PETITS OUTILS ---------- */
+const $ = (id) => document.getElementById(id);
+const qAll = (s, r=document) => Array.from(r.querySelectorAll(s));
+const norm = (s) => (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\-\s]/g,'').replace(/\s+/g,' ').trim();
+const normNoSep = (s) => norm(s).replace(/[\s\-]+/g,'');
+const formatNumberFr = (x) => String(x).replace(/\D/g,'').replace(/\B(?=(?:\d{3})+(?!\d))/g,' ');
+
+/* ATTENTION à l’ID dupliqué dans Ex. H :
+   - garde ph2 pour "abscisse de D"
+   - RENOMME l’input "Placer E(4,45) et F(4,22)" en ph3 dans le HTML.
+   Si ce n’est pas fait, la ligne ci-dessous va essayer de rattraper le coup : */
+if ($('ph3') === null) {
+  const maybe = qAll('#approfondissement input').find(el => el.placeholder?.includes('4,45') || el.placeholder?.includes('4,22'));
+  if (maybe) maybe.id = 'ph3';
+}
+
+/* Si l’état Approfondissement n’existe pas (selon ta version), on l’initialise. */
+window.state = window.state || {};
+if (!state.deep) {
+  const maxDeep = Number($('approfondissement')?.dataset?.max || 24);
+  state.deep = { tries: 5, score: 0, max: maxDeep, parts: {} };
+  // mets à jour les compteurs si présents
+  if ($('tries-deep')) $('tries-deep').textContent = state.deep.tries;
+  if ($('score-deep')) $('score-deep').textContent = state.deep.score;
+}
+function setDeepPartScore(key, val) {
+  state.deep.parts = state.deep.parts || {};
+  state.deep.parts[key] = Math.max(0, Number(val||0));
+  const sum = Object.values(state.deep.parts).reduce((a,b)=>a+b,0);
+  // setScore('deep', sum) si tu as la fonction globale setScore :
+  if (typeof setScore === 'function') setScore('deep', sum);
+  else { state.deep.score = Math.min(sum, state.deep.max); if ($('score-deep')) $('score-deep').textContent = state.deep.score; }
+  // updateTotal() si dispo
+  if (typeof updateTotal === 'function') updateTotal();
+}
+function decTryDeep() {
+  state.deep.tries = Math.max(0, state.deep.tries - 1);
+  if ($('tries-deep')) $('tries-deep').textContent = state.deep.tries;
+}
+
+/* ---------- 2) RÉPARATION DE corrigerDeepA (complète) ---------- */
+function corrigerDeepA(show=false) {
+  if (!show) decTryDeep();
+  let pts = 0;
+  const a1 = norm($('pa1')?.value) === 'jupiter';              if (a1) pts+=1;
+  const a2 = norm($('pa2')?.value) === 'neptune';              if (a2) pts+=1;
+  const a3 = normNoSep($('pa3')?.value) === normNoSep('quatre milliards quatre cent quatre-vingt-dix millions de kilomètres'); if (a3) pts+=1;
+
+  const s4 = normNoSep($('pa4')?.value);
+  const a4 = s4.includes('mercure') && s4.includes('jupiter') && s4.indexOf('mercure') < s4.indexOf('jupiter'); // ordre croissant correct
+  if (a4) pts+=1;
+
+  const s5 = normNoSep($('pa5')?.value);
+  const a5 = s5.startsWith('neptune');                          if (a5) pts+=1;
+
+  const a6 = norm($('pa6')?.value) === 'terre';                if (a6) pts+=1;
+
+  setDeepPartScore('A', pts);
+
+  if (show) {
+    if ($('pa1')) $('pa1').value = 'Jupiter';
+    if ($('pa2')) $('pa2').value = 'Neptune';
+    if ($('pa3')) $('pa3').value = 'quatre milliards quatre cent quatre-vingt-dix millions de kilomètres';
+    if ($('pa4')) $('pa4').value = 'Mercure, Mars, Vénus, Terre, Neptune, Uranus, Saturne, Jupiter';
+    if ($('pa5')) $('pa5').value = 'Neptune, Uranus, Saturne, Jupiter, Mars, Terre, Vénus, Mercure';
+    if ($('pa6')) $('pa6').value = 'Terre';
+  }
+}
+function resetDeepA(){ ['pa1','pa2','pa3','pa4','pa5','pa6'].forEach(id=>{ if($(id)) $(id).value=''; }); setDeepPartScore('A', 0); }
+
+/* ---------- 3) F, G, H groupé (boutons F–H) ---------- */
+function corrigerDeepF(show=false){
+  if (!show) decTryDeep();
+  let pts=0;
+  // On demande une petite description → 1 pt si > 4 caractères
+  if (($('pf1')?.value||'').trim().length > 4) pts += 1;
+  setDeepPartScore('F', pts);
+  if (show && $('pf1')) $('pf1').value = 'Ex. : A à 450, B à 870, C à 900, D à 1100 (pas = 100).';
+}
+function resetDeepF(){ if ($('pf1')) $('pf1').value=''; setDeepPartScore('F',0); }
+
+function corrigerDeepG(show=false){
+  if (!show) decTryDeep();
+  let pts=0;
+  if (($('pg1')?.value||'').trim()) pts+=1; // abscisse A/B
+  if (($('pg2')?.value||'').trim()) pts+=1; // où placer C/D
+  setDeepPartScore('G', pts);
+  if (show) {
+    if ($('pg1')) $('pg1').value = '(lire A et B sur l’image)';
+    if ($('pg2')) $('pg2').value = 'Placer C et D selon la graduation.';
+  }
+}
+function resetDeepG(){ ['pg1','pg2'].forEach(id=>{ if($(id)) $(id).value=''; }); setDeepPartScore('G',0); }
+
+function corrigerDeepH(show=false){
+  if (!show) decTryDeep();
+  let pts=0;
+  if (($('ph1')?.value||'').trim()) pts+=1; // C
+  if (($('ph2')?.value||'').trim()) pts+=1; // D
+  if (($('ph3')?.value||'').trim()) pts+=1; // phrase pour placer E et F
+  setDeepPartScore('H', pts);
+  if (show) {
+    if ($('ph1')) $('ph1').value = '(lire C sur l’image)';
+    if ($('ph2')) $('ph2').value = '(lire D sur l’image)';
+    if ($('ph3')) $('ph3').value = 'E à 4,45 ; F à 4,22';
+  }
+}
+function resetDeepH(){ ['ph1','ph2','ph3'].forEach(id=>{ if($(id)) $(id).value=''; }); setDeepPartScore('H',0); }
+
+/* Boutons groupés F–H (ceux qui appellent corrigerDeepFGH / resetDeepFGH) */
+function corrigerDeepFGH(show=false){ corrigerDeepF(show); corrigerDeepG(show); corrigerDeepH(show); }
+function resetDeepFGH(){ resetDeepF(); resetDeepG(); resetDeepH(); }
+
+/* ---------- 4) EXPORTS (JSON, CSV, PDF, HTML) ---------- */
+function collectData() {
+  // tu peux enrichir au besoin : ici je ramasse tous les <input>/<textarea> visibles
+  const data = {
+    meta: {
+      nom: $('eleveNom')?.value||'',
+      prenom: $('elevePrenom')?.value||'',
+      classe: $('eleveClasse')?.value||'',
+      temps: $('timer')?.textContent||'',
+      score_total: $('totalScore')?.textContent||'',
+      score_max: $('totalMax')?.textContent||''
+    },
+    fields: {}
+  };
+  qAll('input, textarea, select').forEach(el=>{
+    if (el.id) data.fields[el.id] = el.value;
+  });
+  return data;
+}
+
+/* JSON */
+$('btnExportJSON')?.addEventListener('click', ()=>{
+  const blob = new Blob([JSON.stringify(collectData(), null, 2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  const nom = ($('eleveNom')?.value||'sans_nom').replace(/\s+/g,'_');
+  a.download = `reponses_${nom}.json`; a.click(); URL.revokeObjectURL(a.href);
+});
+
+/* CSV (clé;valeur) */
+$('btnExportCSV')?.addEventListener('click', ()=>{
+  const d = collectData();
+  const rows = [['champ','valeur']];
+  Object.entries(d.meta).forEach(([k,v])=>rows.push([k, String(v||'')]));
+  Object.entries(d.fields).forEach(([k,v])=>rows.push([k, String(v||'')]));
+  const csv = rows.map(r => r.map(x => `"${String(x).replace(/"/g,'""')}"`).join(';')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  const nom = ($('eleveNom')?.value||'sans_nom').replace(/\s+/g,'_');
+  a.download = `reponses_${nom}.csv`; a.click(); URL.revokeObjectURL(a.href);
+});
+
+/* Remplissage du panneau d’impression */
+function fillPrintSummary(includeAnswers=true) {
+  $('printMeta').innerHTML =
+    `<p>Nom : <strong>${$('eleveNom')?.value||''}</strong> — Prénom : <strong>${$('elevePrenom')?.value||''}</strong> — Classe : <strong>${$('eleveClasse')?.value||''}</strong></p>`;
+  $('pTotal').textContent = $('totalScore')?.textContent||'0';
+  $('pMax').textContent   = $('totalMax')?.textContent||'0';
+  $('pTemps').textContent = $('timer')?.textContent||'00:00';
+
+  // vide les tableaux
+  qAll('#pEx1 tbody, #pEx2 tbody, #pEx3 tbody, #pDeep tbody').forEach(t=>t.innerHTML='');
+
+  if (includeAnswers) {
+    // Ex1
+    qAll('#ex1-right .dropzone').forEach(zone=>{
+      const cible = zone.querySelector('.target-label')?.textContent||'';
+      const chip  = zone.querySelector('.slot .chip')?.textContent||'';
+      const tr = document.createElement('tr'); tr.innerHTML = `<td>${cible}</td><td>${chip}</td>`;
+      $('pEx1').querySelector('tbody').appendChild(tr);
+    });
+    // Ex2 et Ex3
+    [['#ex2','pEx2'], ['#ex3','pEx3']].forEach(([sec, pid])=>{
+      qAll(`${sec} input`).forEach(inp=>{
+        const label = inp.closest('div')?.querySelector('label')?.textContent || inp.id;
+        const tr = document.createElement('tr'); tr.innerHTML = `<td>${label}</td><td>${inp.value||''}</td>`;
+        $(pid).querySelector('tbody').appendChild(tr);
+      });
+    });
+    // Deep (liste simple des champs)
+    qAll('#approfondissement input, #approfondissement textarea').forEach(inp=>{
+      const label = (inp.closest('label')?.textContent || inp.closest('div')?.querySelector('label')?.textContent || inp.id || '').trim();
+      const tr = document.createElement('tr'); tr.innerHTML = `<td>${label}</td><td>${inp.value||''}</td>`;
+      $('pDeep').querySelector('tbody').appendChild(tr);
+    });
+  }
+}
+
+/* PDF avec / sans réponses */
+function printNow(includeAnswers){
+  $('printSummary').style.display = 'block';
+  fillPrintSummary(includeAnswers);
+  window.print();
+  $('printSummary').style.display = 'none';
+}
+$('btnExportPDFWith')?.addEventListener('click', ()=>printNow(true));
+$('btnExportPDFNo')?.addEventListener('click',   ()=>printNow(false));
+
+/* Sauvegarde HTML (avec/sans réponses) */
+function downloadHTML(includeAnswers){
+  // clone du document courant
+  const doc = document.documentElement.cloneNode(true);
+  // selon includeAnswers, on vide les champs
+  if (!includeAnswers) {
+    doc.querySelectorAll('input, textarea').forEach(el=>{ el.setAttribute('value',''); el.textContent=''; el.value=''; });
+  } else {
+    // refléter les valeurs dans les attributs value pour réouverture
+    doc.querySelectorAll('input').forEach(el=> el.setAttribute('value', el.value));
+    doc.querySelectorAll('textarea').forEach(el=> el.textContent = el.value);
+  }
+  const html = '<!DOCTYPE html>\n' + doc.outerHTML;
+  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  const nom = ($('eleveNom')?.value||'page').replace(/\s+/g,'_');
+  a.download = includeAnswers ? `numeration_6e_${nom}_avec_reponses.html` : `numeration_6e_${nom}_sans_reponses.html`;
+  a.click(); URL.revokeObjectURL(a.href);
+}
+$('btnSaveHTMLWith')?.addEventListener('click', ()=>downloadHTML(true));
+$('btnSaveHTMLNo')?.addEventListener('click',   ()=>downloadHTML(false));
+</script>
 </body>
 </html>
