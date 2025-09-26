@@ -1142,6 +1142,21 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('h2,h3,h4,strong,p').forEach(el => {
+    const txt = (el.textContent || '').trim().toLowerCase();
+    if (txt === 'correction') {
+      el.style.display = 'none';
+      let n = el.nextElementSibling;
+      while (n && !/^d[ée]fi\\s*\\d+/i.test((n.textContent || '').trim())) {
+        if (n.style) n.style.display = 'none';
+        n = n.nextElementSibling;
+      }
+    }
+  });
+});
+
+
 
                            
 </script>
