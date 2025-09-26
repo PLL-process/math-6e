@@ -868,7 +868,7 @@ Athlétisme  | 6
     // Export
     function collectData(){ const now=new Date(); const identite={nom:byId('eleveNom').value.trim(), prenom:byId('elevePrenom').value.trim(), classe:byId('eleveClasse').value.trim()}; const ex1pairs=qSelAll('#ex1-right .dropzone').map(z=>{ const chip=qSel('.slot .chip', z); return{cible:qSel('.target-label', z)?.textContent||'', id:chip?.dataset.id||null, valeur:chip?.textContent||null}; }); const ex2rep={ q21:byId('q21').value, q22:byId('q22').value, q23:byId('q23').value, q24:byId('q24').value, q25:byId('q25').value, q26:byId('q26').value }; const ex3rep={ q31:byId('q31').value, q32:byId('q32').value, q33:byId('q33').value, q34:byId('q34').value }; const deep={ pa1:byId('pa1')?.value||'', pa2:byId('pa2')?.value||'', pa3:byId('pa3')?.value||'', pa4:byId('pa4')?.value||'', pa5:byId('pa5')?.value||'', pa6:byId('pa6')?.value||'', pb1:byId('pb1')?.value||'', pb2:byId('pb2')?.value||'', pb3:byId('pb3')?.value||'', pb4:byId('pb4')?.value||'', pb5:byId('pb5')?.value||'', pb6:byId('pb6')?.value||'', pc1:byId('pc1')?.value||'', pc2:byId('pc2')?.value||'', pc3:byId('pc3')?.value||'', pc4:byId('pc4')?.value||'', pc5:byId('pc5')?.value||'', pc6:byId('pc6')?.value||'', pd1p:byId('pd1p')?.value||'', pd1s:byId('pd1s')?.value||'', pd2d:byId('pd2d')?.value||'', pd2s:byId('pd2s')?.value||'', pd3p:byId('pd3p')?.value||'', pd3d:byId('pd3d')?.value||'', pd4p:byId('pd4p')?.value||'', pd4s:byId('pd4s')?.value||'', pd5p:byId('pd5p')?.value||'', pd5d:byId('pd5d')?.value||'', pd6p:byId('pd6p')?.value||'', pd6s:byId('pd6s')?.value||'', peF:byId('peF')?.value||'', peT:byId('peT')?.value||'', peN:byId('peN')?.value||'', peA:byId('peA')?.value||'', peQ1:byId('peQ1')?.value||'', peQ2:byId('peQ2')?.value||'', peQ3:byId('peQ3')?.value||'', pf1:byId('pf1')?.value||'', pg1:byId('pg1')?.value||'', pg2:byId('pg2')?.value||'', ph1:byId('ph1')?.value||'', ph2:byId('ph2')?.value||'', dd1:byId('dd1')?.value||'', dd1b:byId('dd1b')?.value||'', dd2a:byId('dd2a')?.value||'', dd2b:byId('dd2b')?.value||'', dd2c:byId('dd2c')?.value||'', dd2d:byId('dd2d')?
 
-      <script>
+
 /* ---------- 1) PETITS OUTILS ---------- */
 const $ = (id) => document.getElementById(id);
 const qAll = (s, r=document) => Array.from(r.querySelectorAll(s));
@@ -1092,7 +1092,7 @@ $('btnSaveHTMLWith')?.addEventListener('click', ()=>downloadHTML(true));
 $('btnSaveHTMLNo')?.addEventListener('click',   ()=>downloadHTML(false));
                            
 <!-- À la fin du <body>, pour masquer les corrections par défaut -->
-<script>
+
 document.addEventListener('DOMContentLoaded', () => {
   // Masquer tout ce qui suit un titre "Correction" dans la section Défis
   const deep = document.querySelector('#approfondissement, body'); // ajustez le sélecteur si besoin
