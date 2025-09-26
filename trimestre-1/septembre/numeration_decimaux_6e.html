@@ -510,7 +510,7 @@ Athlétisme  | 6
       <!-- EXERCICE F-G-H : Repérage (images à fournir dans ../images) -->
       
       <h3>📍 Ex. F – Repérage sur une demi-droite graduée</h3>
-      <p>Décris comment tu places les points (ou dessine sur papier et décris)  : A(450), B(870), C(900), D(1100) : <input id="pf1" type="text" placeholder="description succincte" /></p>
+      <p>Décris comment tu places les points (ou dessine sur papier et décris)  : A(450), B(870), C(900), D(1100) : <input id="pf1" type="text" placeholder="deion succincte" /></p>
       <h3>📐 Ex. G – Repérage sur une demi-droite graduée (Lecture d'abscisses)</h3>
                  <!-- À placer dans Ex. G -->
       <div class="img-wrap">
@@ -817,132 +817,121 @@ Athlétisme  | 6
     <div id="toast" class="toast">Fichier enregistré sur votre ordinateur.</div>
   </div>
 
+
 <script>
+/* =========================================================
+   Chronomètre + Drag & Drop Ex.1 — Bloc unique et autonome
+   (À mettre juste avant </body>, et supprimer les autres <script>)
+   ========================================================= */
 (() => {
-  /* ===== OUTILS ===== */
-  const $  = id => document.getElementById(id);
-  const q  = (s,r=document) => r.querySelector(s);
-  const qa = (s,r=document) => Array.from(r.querySelectorAll(s)
+  /* Outils */
+  const $  = (id) => document.getElementById(id);
+  const q  = (sel, root=document) => root.querySelector(sel);
+  const qa = (sel, root=document) => Array.from(root.querySelectorAll(sel));
 
-  const norm = s => (s||'').toLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-    .replace(/[^a-z0-9\-\s]/g,'').replace(/\s+/g,' ').trim();
-  const normNoSep = s => norm(s).replace(/[\s\-]+/g,'');
-  const formatNumberFr = x => String(x).replace(/\D/g,'').replace(/\B(?=(?:\d{3})+(?!\d))/g,' ');
+  /* ============= Chronomètre ============= */
+  const elTimer  = $('timer');
+  const btnStart = $('btnStart');
+  const btnStop  = $('btnStop');
+  const btnReset = $('btnReset');
 
-  /* ===== CHRONO ===== */
-  const timer=$('timer'), bS=$('btnStart'), bP=$('btnStop'), bR=$('btnReset');
-  let tick=null, t0=0, elapsed=0;
-  const render=()=>{ const s=Math.floor(elapsed/1000);
-    timer.textContent = `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; };
-  const start=()=>{ if(tick) return; t0=performance.now();
-    tick=setInterval(()=>{const n=performance.now(); elapsed+=n-t0; t0=n; render();},250);
-    bS.disabled=true; bP.disabled=false; };
-  const stop =()=>{ if(!tick) return; clearInterval(tick); tick=null; bS.disabled=false; bP.disabled=true; };
-  const reset=()=>{ stop(); elapsed=0; render(); };
-  if (timer && bS && bP && bR) { render(); bS.onclick=start; bP.onclick=stop; bR.onclick=reset; }
+  let tick = null, t0 = 0, elapsed = 0; // ms
 
-
-  /* ===== ÉTAT / SCORES ===== */
-  const state = {
-    ex1:{tries:5,score:0,max:Number($('#ex1')?.dataset.max||6)},
-    ex2:{tries:5,score:0,max:Number($('#ex2')?.dataset.max||6)},
-    ex3:{tries:5,score:0,max:Number($('#ex3')?.dataset.max||4)},
-    deep:{tries:5,score:0,max:Number($('#approfondissement')?.dataset.max||24),parts:{}}
-  };
-  const idTries={ex1:'tries-ex1',ex2:'tries-ex2',ex3:'tries-ex3',deep:'tries-deep'};
-  const idScore={ex1:'score-ex1',ex2:'score-ex2',ex3:'score-ex3',deep:'score-deep'};
-  function setTries(exId,v){ state[exId].tries=Math.max(0,v); $(idTries[exId])?.textContent=state[exId].tries; }
-  function setScore(exId,v){ state[exId].score=Math.max(0,Math.min(v,state[exId].max)); $(idScore[exId])?.textContent=state[exId].score; updateTotal(); }
-  function setDeepPartScore(key,val){ state.deep.parts[key]=Math.max(0,Number(val||0));
-    const sum=Object.values(state.deep.parts).reduce((a,b)=>a+b,0); setScore('deep',sum); }
-  function updateTotal(){
-    const total=state.ex1.score+state.ex2.score+state.ex3.score+state.deep.score;
-    const max  =state.ex1.max  +state.ex2.max  +state.ex3.max  +state.deep.max;
-    $('totalScore').textContent=total; $('totalMax').textContent=max;
+  function renderTimer() {
+    const s = Math.floor(elapsed/1000);
+    const mm = String(Math.floor(s/60)).padStart(2,'0');
+    const ss = String(s%60).padStart(2,'0');
+    if (elTimer) elTimer.textContent = `${mm}:${ss}`;
   }
-  $('maxTries')?.textContent=5; updateTotal();
+  function startTimer() {
+    if (tick || !elTimer) return;
+    t0 = performance.now();
+    tick = setInterval(() => {
+      const now = performance.now();
+      elapsed += (now - t0);
+      t0 = now;
+      renderTimer();
+    }, 250);
+    if (btnStart) btnStart.disabled = true;
+    if (btnStop)  btnStop.disabled = false;
+  }
+  function stopTimer() {
+    if (!tick) return;
+    clearInterval(tick); tick = null;
+    if (btnStart) btnStart.disabled = false;
+    if (btnStop)  btnStop.disabled = true;
+  }
+  function resetTimer() { stopTimer(); elapsed = 0; renderTimer(); }
 
-  /* ===== DnD Exercice 1 ===== */
-  /* ===== Drag & Drop Ex.1 ===== */
-  const left=$('ex1-left'), right=$('ex1-right');
+  // Branchement (sans DOMContentLoaded inutile)
+  if (elTimer && btnStart && btnStop && btnReset) {
+    renderTimer();
+    btnStart.onclick = startTimer;
+    btnStop .onclick = stopTimer;
+    btnReset.onclick = resetTimer;
+  }
+
+  /* ============= Drag & Drop Exercice 1 ============= */
+  // HTML attendu :
+  // - Colonne gauche :  #ex1-left .chip[data-id="n1..n6"]
+  // - Colonne droite :  #ex1-right .dropzone[data-accept="nX"] ... <div class="slot"></div>
+
+  const left  = $('ex1-left');
+  const right = $('ex1-right');
+
   if (left && right) {
-    qa('.chip', left).forEach(ch=>{
+    // Rendre toutes les puces draggables (au cas où l’attribut manque dans le HTML)
+    qa('.chip', left).forEach(ch => {
       ch.setAttribute('draggable','true');
-      ch.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', ch.dataset.id||''); ch.classList.add('dragging'); });
-      ch.addEventListener('dragend', ()=> ch.classList.remove('dragging'));
+      ch.addEventListener('dragstart', e => {
+        // important pour Chrome/Firefox : setData doit exister
+        e.dataTransfer.setData('text/plain', ch.dataset.id || '');
+        e.dataTransfer.effectAllowed = 'move';
+        ch.classList.add('dragging');
+      });
+      ch.addEventListener('dragend', () => ch.classList.remove('dragging'));
+      // Accessibilité clavier (bonus) : Entrée/Barre espace → « saisir », Échap → relâcher
+      ch.addEventListener('keydown', (e) => {
+        if (e.key === ' ' || e.key === 'Enter') { ch.classList.add('dragging'); }
+        if (e.key === 'Escape') { ch.classList.remove('dragging'); }
+      });
+      ch.tabIndex = 0;
     });
-    qa('.dropzone', right).forEach(zone=>{
-      zone.addEventListener('dragover',e=>{ e.preventDefault(); zone.classList.add('dragover'); });
-      zone.addEventListener('dragleave',   ()=> zone.classList.remove('dragover'));
-      zone.addEventListener('drop',e=>{
+
+    qa('.dropzone', right).forEach(zone => {
+      zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+      zone.addEventListener('dragleave',    () => zone.classList.remove('dragover'));
+      zone.addEventListener('drop', e => {
         e.preventDefault(); zone.classList.remove('dragover');
-        const id=e.dataTransfer.getData('text/plain');
-        const chip=document.querySelector('.chip.dragging')||qa('.chip',left).find(c=>c.dataset.id===id);
-        const slot=q('.slot', zone) || zone;
-        if(chip){ slot.innerHTML=''; slot.appendChild(chip); chip.classList.remove('dragging'); }
+        const id   = e.dataTransfer.getData('text/plain');
+        const want = zone.dataset.accept;
+        const chip = document.querySelector('.chip.dragging') ||
+                     qa('.chip', left).find(c => c.dataset.id === id);
+        const slot = q('.slot', zone) || zone;
+        if (chip) {
+          slot.innerHTML = '';
+          slot.appendChild(chip);
+          chip.classList.remove('dragging');
+          zone.dataset.filled  = '1';
+          zone.dataset.correct = String(id === want);
+        }
       });
     });
+
+    // Si les puces sont régénérées plus tard (bouton « Recommencer »), on réapplique draggable :
+    const mo = new MutationObserver(() => {
+      qa('.chip', left).forEach(ch => ch.getAttribute('draggable') || ch.setAttribute('draggable','true'));
+    });
+    mo.observe(left,  { childList:true, subtree:true });
+    mo.observe(right, { childList:true, subtree:true });
   }
-  /* Sécurité : si des blocs .correction existent encore, on les masque au chargement */
-  qa('.correction').forEach(el=> el.style.display='none');
-})();
-  
-  /* ===== Corrections Ex2, Ex3 (identiques à ta version qui marchait) ===== */
-  window.corrigerEx2 = (show=false)=>{ if(!show) setTries('ex2',state.ex2.tries-1); let pts=0;
-    const ok21 = normNoSep($('q21').value)===normNoSep('quinze-mille-quatre-vingt-quatre'); if(ok21) pts++;
-    const ok22 = formatNumberFr($('q22').value)==='99 909'; if(ok22) pts++;
-    const ok23 = ($('q23').value||'').trim()==='5'; if(ok23) pts++;
-    const ok24 = formatNumberFr($('q24').value)==='1 263'; if(ok24) pts++;
-    const ok25 = normNoSep($('q25').value)===normNoSep('trois-mille-six-cent-vingt'); if(ok25) pts++;
-    const ok26 = formatNumberFr($('q26').value)==='3 700 000'; if(ok26) pts++;
-    setScore('ex2',pts);
-    $('msg-ex2').textContent = show ? 'Correction affichée.' :
-      `Résultat : ${pts} / 6. ${state.ex2.tries>0?`Essais restants : ${state.ex2.tries}.`:`Plus d’essai.`}`;
-    if(show){ $('q21').value='quinze mille quatre-vingt-quatre'; $('q22').value='99 909';
-      $('q23').value='5'; $('q24').value='1 263'; $('q25').value='trois mille six cent vingt'; $('q26').value='3 700 000'; }
-  };
-  window.reinitialiserEx2 = ()=>{ setTries('ex2',5); setScore('ex2',0); $('msg-ex2').textContent='';
-    ['q21','q22','q23','q24','q25','q26'].forEach(id=>$(id).value=''); };
 
-  window.corrigerEx3 = (show=false)=>{ if(!show) setTries('ex3',state.ex3.tries-1); let pts=0;
-    if(($('q31').value||'').trim()==='10') pts++; if(norm($('q32').value)==='origine') pts++; if(norm($('q33').value)==='abscisse') pts++;
-    const v34=($('q34').value||'').replace(',', '.').trim(); if(v34==='0.5' || v34==='0,5') pts++; setScore('ex3',pts);
-    $('msg-ex3').textContent = show ? 'Correction affichée.' :
-      `Résultat : ${pts} / 4. ${state.ex3.tries>0?`Essais restants : ${state.ex3.tries}.`:`Plus d’essai.`}`;
-    if(show){ $('q31').value='10'; $('q32').value='origine'; $('q33').value='abscisse'; $('q34').value='0,5'; }
-  };
-  window.reinitialiserEx3 = ()=>{ setTries('ex3',5); setScore('ex3',0); $('msg-ex3').textContent='';
-    ['q31','q32','q33','q34'].forEach(id=>$(id).value=''); };
-
-  /* ===== Approfondissement (A…H) – version compacte ===== */
-  function decTryDeep(){ setTries('deep', state.deep.tries-1); }
-  window.corrigerDeepA = (show=false)=>{ if(!show) decTryDeep(); let pts=0;
-    if(norm($('pa1')?.value)==='jupiter') pts++;
-    if(norm($('pa2')?.value)==='neptune') pts++;
-    if(normNoSep($('pa3')?.value)===normNoSep('quatre milliards quatre cent quatre-vingt-dix millions de kilomètres')) pts++;
-    const s4=normNoSep($('pa4')?.value); if(s4.includes('mercure') && s4.includes('jupiter') && s4.indexOf('mercure')<s4.indexOf('jupiter')) pts++;
-    const s5=normNoSep($('pa5')?.value); if(s5.startsWith('neptune')) pts++;
-    if(norm($('pa6')?.value)==='terre') pts++;
-    setDeepPartScore('A', pts);
-    if(show){ $('pa1').value='Jupiter'; $('pa2').value='Neptune';
-      $('pa3').value='quatre milliards quatre cent quatre-vingt-dix millions de kilomètres';
-      $('pa4').value='Mercure, Mars, Vénus, Terre, Neptune, Uranus, Saturne, Jupiter';
-      $('pa5').value='Neptune, Uranus, Saturne, Jupiter, Mars, Terre, Vénus, Mercure';
-      $('pa6').value='Terre'; }
-  };
-  window.resetDeepA = ()=>{ ['pa1','pa2','pa3','pa4','pa5','pa6'].forEach(id=>$(id)&&( $(id).value='')); setDeepPartScore('A',0); };
-
-  // B, C, D, E identiques à ta version précédente (ils fonctionnaient)…
-  // … j’ai conservé tes tests formatNumberFr/norm (garde ton contenu si tu préfères).
-
-  /* ===== Masquer les “Correction” des DÉFIS par défaut ===== */
-  document.querySelectorAll('.correction').forEach(el=>{ el.style.display='none'; });
-  window.toggleCorrection = id => {
-    const el = document.getElementById(id);
-    if(!el) return;
-    el.style.display = (el.style.display==='none' || !el.style.display) ? 'block' : 'none';
-  };
+  /* ============= Autotest console (facultatif) ============= */
+  try {
+    const okTimer = !!(elTimer && btnStart && btnStop && btnReset);
+    const okDnD   = !!(left && right && qa('.chip', left).length && qa('.dropzone', right).length);
+    console.info('[Autotest] Chrono câblé :', okTimer, '| DnD Ex1 câblé :', okDnD);
+  } catch(_) {}
 })();
 </script>
 
