@@ -763,6 +763,110 @@ Athlétisme  | 6
   </div>
 
   <script>
+
+<script>
+(() => {
+  /* ====== OUTILS ====== */
+  const $  = id => document.getElementById(id);
+  const q  = (sel, root=document) => root.querySelector(sel);
+  const qa = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+  const norm = s => (s||'').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9\-\s]/g,'').replace(/\s+/g,' ').trim();
+  const normNoSep = s => norm(s).replace(/[\s\-]+/g,'');
+  const formatNumberFr = x => String(x).replace(/\D/g,'').replace(/\B(?=(?:\d{3})+(?!\d))/g,' ');
+
+  /* ====== CHRONO ====== */
+  const timerEl = $('timer'), btnStart = $('btnStart'), btnStop = $('btnStop'), btnReset = $('btnReset');
+  let tick=null, t0=0, elapsed=0;
+
+  function renderTimer(){
+    const s = Math.floor(elapsed/1000);
+    const mm = String(Math.floor(s/60)).padStart(2,'0');
+    const ss = String(s%60).padStart(2,'0');
+    if (timerEl) timerEl.textContent = `${mm}:${ss}`;
+  }
+  function startTimer(){
+    if (tick || !timerEl) return;
+    t0 = performance.now();
+    tick = setInterval(()=>{ const now=performance.now(); elapsed += (now - t0); t0 = now; renderTimer(); }, 250);
+    if (btnStart) btnStart.disabled = true;
+    if (btnStop)  btnStop.disabled  = false;
+  }
+  function stopTimer(){
+    if (!tick) return;
+    clearInterval(tick); tick = null;
+    if (btnStart) btnStart.disabled = false;
+    if (btnStop)  btnStop.disabled  = true;
+  }
+  function resetTimer(){ stopTimer(); elapsed = 0; renderTimer(); }
+  // branchement
+  btnStart?.addEventListener('click', startTimer);
+  btnStop ?.addEventListener('click', stopTimer);
+  btnReset?.addEventListener('click', resetTimer);
+  renderTimer();
+
+  /* ====== DnD EXERCICE 1 ====== */
+  const left  = $('ex1-left');
+  const right = $('ex1-right');
+
+  if (left && right) {
+    // rendre toutes les puces draggables (au cas où l’attribut manque dans le HTML)
+    qa('.chip', left).forEach(ch => {
+      ch.setAttribute('draggable','true');
+      ch.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('text/plain', ch.dataset.id || '');
+        e.dataTransfer.effectAllowed = 'move';
+        ch.classList.add('dragging');
+      });
+      ch.addEventListener('dragend', () => ch.classList.remove('dragging'));
+    });
+
+    qa('.dropzone', right).forEach(zone => {
+      zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+      zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+      zone.addEventListener('drop', e => {
+        e.preventDefault(); zone.classList.remove('dragover');
+        const id   = e.dataTransfer.getData('text/plain');
+        const want = zone.dataset.accept;
+        const chip = document.querySelector('.chip.dragging') ||
+                     qa('.chip', left).find(c => c.dataset.id === id);
+        const slot = q('.slot', zone) || zone;
+        if (chip) {
+          slot.innerHTML = '';
+          slot.appendChild(chip);
+          chip.classList.remove('dragging');
+          zone.dataset.filled  = '1';
+          zone.dataset.correct = String(id === want);
+        }
+      });
+    });
+  }
+
+  /* ====== MASQUER LES CORRECTIONS DES DÉFIS ====== */
+  (function hideCorrections(){
+    const root = $('approfondissement') || document.body;
+    let hide = false;
+    [...root.children].forEach(n => {
+      const t = (n.textContent || '').trim();
+      if (t.toLowerCase() === 'correction') { hide = true; n.style.display = 'none'; }
+      else if (/^d[ée]fi\s*\d+/i.test(t))    { hide = false; }
+      else if (hide && n.style)              { n.style.display = 'none'; }
+    });
+  })();
+
+  /* ====== (OPTION) TES AUTRES FONCTIONS ======
+     Colle ici tes corrigerEx2/Ex3/Deep/exports SANS doublon, 
+     et surtout sans ré-déclarer norm/normNoSep/formatNumberFr.
+  */
+
+
+
+
+
+
+    
     const byId = (id) => document.getElementById(id);
     const qSel = (sel, root=document) => root.querySelector(sel);
     const qSelAll = (sel, root=document) => Array.from(root.querySelectorAll(sel));
@@ -1091,74 +1195,11 @@ function downloadHTML(includeAnswers){
 $('btnSaveHTMLWith')?.addEventListener('click', ()=>downloadHTML(true));
 $('btnSaveHTMLNo')?.addEventListener('click',   ()=>downloadHTML(false));
                            
-<!-- À la fin du <body>, pour masquer les corrections par défaut -->
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Masquer tout ce qui suit un titre "Correction" dans la section Défis
-  const deep = document.querySelector('#approfondissement, body'); // ajustez le sélecteur si besoin
-  let hide = false;
-  [...deep.children].forEach(n => {
-    const t = (n.textContent || '').trim();
-    if (/^Correction$/.test(t)) { hide = true; n.style.display = 'none'; }
-    else if (/^##?\\s*D[ÉE]FI\\b/i.test(t)) { hide = false; }
-    else if (hide && n.style) { n.style.display = 'none'; }
-  });
-});
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  const elTimer  = document.getElementById('timer');
-  const btnStart = document.getElementById('btnStart');
-  const btnStop  = document.getElementById('btnStop');
-  const btnReset = document.getElementById('btnReset');
-
-  let tick = null, t0 = null, elapsed = 0; // millisecondes
-
-  function render() {
-    const s = Math.floor(elapsed / 1000);
-    const mm = String(Math.floor(s / 60)).padStart(2, '0');
-    const ss = String(s % 60).padStart(2, '0');
-    elTimer.textContent = `${mm}:${ss}`;
-  }
-  function start() {
-    if (tick) return;
-    t0 = performance.now();
-    tick = setInterval(() => { const now = performance.now(); elapsed += now - t0; t0 = now; render(); }, 250);
-    btnStart.disabled = true;  btnStop.disabled = false;
-  }
-  function stop() {
-    if (!tick) return;
-    clearInterval(tick); tick = null;
-    btnStart.disabled = false; btnStop.disabled = true;
-  }
-  function reset() { stop(); elapsed = 0; render(); }
-
-  if (btnStart && btnStop && btnReset && elTimer) {
-    btnStart.addEventListener('click', start);
-    btnStop .addEventListener('click', stop);
-    btnReset.addEventListener('click', reset);
-    render(); // affiche 00:00 au chargement
-  }
-});
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('h2,h3,h4,strong,p').forEach(el => {
-    const txt = (el.textContent || '').trim().toLowerCase();
-    if (txt === 'correction') {
-      el.style.display = 'none';
-      let n = el.nextElementSibling;
-      while (n && !/^d[ée]fi\\s*\\d+/i.test((n.textContent || '').trim())) {
-        if (n.style) n.style.display = 'none';
-        n = n.nextElementSibling;
-      }
-    }
-  });
-});
-
-
+})();
+</script>
 
                            
-</script>
+
 </body>
 </html>
