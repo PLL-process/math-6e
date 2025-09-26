@@ -23,6 +23,27 @@
       --danger: #f87171;
       --shadow: rgba(0,0,0,0.45);
     }
+
+    /* Image responsive générique */
+    img.responsive-img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;           /* centre l'image */
+    }
+    
+    /* Pour les conteneurs d'illustrations d'exercices */
+    .img-wrap {
+      width: 100%;
+      overflow: hidden;          /* évite les débordements horizontaux */
+    }
+    .img-wrap > img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans"; }
     .wrap { max-width: 1100px; margin: 24px auto; padding: 16px; }
@@ -480,9 +501,13 @@ Athlétisme  | 6
       <h3>📐 Ex. G – Repérage sur une demi-droite graduée (Lecture d'abscisses)</h3>
                  <!-- À placer dans Ex. G -->
       <div class="img-wrap">
-        <img src="../images/EXERCISE 7 – Repérage sur une demi-droite graduée.png"
-             alt="Repérage sur une demi-droite graduée">
+        <img
+          id="img-exG"
+          class="responsive-img"
+          src="../images/EXERCISE 7 – Repérage sur une demi-droite graduée.png"
+          alt="Repérage sur une demi-droite graduée">
       </div>
+
 
       <ol>
         <li>Quelles sont les abscisses des points A et B ? 
