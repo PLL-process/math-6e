@@ -819,123 +819,116 @@ Athlétisme  | 6
 
 
 <script>
-/* =========================================================
-   Chronomètre + Drag & Drop Ex.1 — Bloc unique et autonome
-   (À mettre juste avant </body>, et supprimer les autres <script>)
-   ========================================================= */
-(() => {
-  /* Outils */
-  const $  = (id) => document.getElementById(id);
-  const q  = (sel, root=document) => root.querySelector(sel);
-  const qa = (sel, root=document) => Array.from(root.querySelectorAll(sel));
 
-  /* ============= Chronomètre ============= */
-  const elTimer  = $('timer');
-  const btnStart = $('btnStart');
-  const btnStop  = $('btnStop');
-  const btnReset = $('btnReset');
+    // =========================
+    // Utilitaires
+    // =========================
+    const byId = (id) => document.getElementById(id);
+    const qSel = (sel, root=document) => root.querySelector(sel);
+    const qSelAll = (sel, root=document) => Array.from(root.querySelectorAll(sel));
 
-  let tick = null, t0 = 0, elapsed = 0; // ms
+    const toast = byId('toast');
+    function showToast(msg){ toast.textContent = msg; toast.style.display='block'; setTimeout(()=> toast.style.display='none', 1800); }
 
-  function renderTimer() {
-    const s = Math.floor(elapsed/1000);
-    const mm = String(Math.floor(s/60)).padStart(2,'0');
-    const ss = String(s%60).padStart(2,'0');
-    if (elTimer) elTimer.textContent = `${mm}:${ss}`;
-  }
-  function startTimer() {
-    if (tick || !elTimer) return;
-    t0 = performance.now();
-    tick = setInterval(() => {
-      const now = performance.now();
-      elapsed += (now - t0);
-      t0 = now;
-      renderTimer();
-    }, 250);
-    if (btnStart) btnStart.disabled = true;
-    if (btnStop)  btnStop.disabled = false;
-  }
-  function stopTimer() {
-    if (!tick) return;
-    clearInterval(tick); tick = null;
-    if (btnStart) btnStart.disabled = false;
-    if (btnStop)  btnStop.disabled = true;
-  }
-  function resetTimer() { stopTimer(); elapsed = 0; renderTimer(); }
+    // Normalisation
+    function norm(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\-\s]/g,'').replace(/\s+/g,' ').trim(); }
+    function normNoSep(s){ return norm(s).replace(/[\s\-]+/g,''); } // Variante stricte (pour accepter espaces OU tirets)
 
-  // Branchement (sans DOMContentLoaded inutile)
-  if (elTimer && btnStart && btnStop && btnReset) {
-    renderTimer();
-    btnStart.onclick = startTimer;
-    btnStop .onclick = stopTimer;
-    btnReset.onclick = resetTimer;
-  }
+    // Formatage FR
+    function formatNumberFr(nStr){ const digits = String(nStr).replace(/\D/g,''); if(!digits) return ''; return digits.replace(/\B(?=(?:\d{3})+(?!\d))/g,' '); }
 
-  /* ============= Drag & Drop Exercice 1 ============= */
-  // HTML attendu :
-  // - Colonne gauche :  #ex1-left .chip[data-id="n1..n6"]
-  // - Colonne droite :  #ex1-right .dropzone[data-accept="nX"] ... <div class="slot"></div>
+    // =========================
+    // Chrono
+    // =========================
+    let timerInt=null, startTime=0, elapsed=0;
+    function updateTimer(){ const t = Date.now()-startTime+elapsed; const sec=Math.floor(t/1000)%60; const min=Math.floor(t/60000); byId('timer').textContent=`${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`; }
+    function startTimer(){ if(timerInt) return; startTime=Date.now(); timerInt=setInterval(updateTimer,250); byId('btnStart').disabled=true; byId('btnStop').disabled=false; }
+    function stopTimer(){ if(!timerInt) return; clearInterval(timerInt); timerInt=null; elapsed+=Date.now()-startTime; byId('btnStart').disabled=false; byId('btnStop').disabled=true; }
+    function resetTimer(){ stopTimer(); elapsed=0; byId('timer').textContent='00:00'; byId('btnStart').disabled=false; byId('btnStop').disabled=true; }
 
-  const left  = $('ex1-left');
-  const right = $('ex1-right');
+    // =========================
+    // Scores / essais globaux
+    // =========================
+    const MAX_TRIES=5; byId('maxTries').textContent=MAX_TRIES;
+    const state = { ex1:{tries:MAX_TRIES,score:0,max:Number(byId('ex1').dataset.max)}, ex2:{tries:MAX_TRIES,score:0,max:Number(byId('ex2').dataset.max)}, ex3:{tries:MAX_TRIES,score:0,max:Number(byId('ex3').dataset.max)}, deep:{tries:MAX_TRIES,score:0,max:Number(byId('approfondissement').dataset.max)} };
+    function updateTotal(){ const total = state.ex1.score+state.ex2.score+state.ex3.score+state.deep.score; const max = state.ex1.max+state.ex2.max+state.ex3.max+state.deep.max; byId('totalScore').textContent=total; byId('totalMax').textContent=max; }
+    function setTries(exId,val){ state[exId].tries=Math.max(0,val); const idMap={ex1:'tries-ex1',ex2:'tries-ex2',ex3:'tries-ex3',deep:'tries-deep'}; byId(idMap[exId]).textContent=state[exId].tries; }
+    function setScore(exId,val){ state[exId].score=Math.max(0, Math.min(val, state[exId].max)); const idMap={ex1:'score-ex1',ex2:'score-ex2',ex3:'score-ex3',deep:'score-deep'}; byId(idMap[exId]).textContent=state[exId].score; updateTotal(); }
 
-  if (left && right) {
-    // Rendre toutes les puces draggables (au cas où l’attribut manque dans le HTML)
-    qa('.chip', left).forEach(ch => {
-      ch.setAttribute('draggable','true');
-      ch.addEventListener('dragstart', e => {
-        // important pour Chrome/Firefox : setData doit exister
-        e.dataTransfer.setData('text/plain', ch.dataset.id || '');
-        e.dataTransfer.effectAllowed = 'move';
-        ch.classList.add('dragging');
-      });
-      ch.addEventListener('dragend', () => ch.classList.remove('dragging'));
-      // Accessibilité clavier (bonus) : Entrée/Barre espace → « saisir », Échap → relâcher
-      ch.addEventListener('keydown', (e) => {
-        if (e.key === ' ' || e.key === 'Enter') { ch.classList.add('dragging'); }
-        if (e.key === 'Escape') { ch.classList.remove('dragging'); }
-      });
-      ch.tabIndex = 0;
-    });
+    // =========================
+    // EX1 – Drag & Drop
+    // =========================
+    let dndCurrent=null;
+    qSelAll('#ex1-left .chip').forEach(chip=>{ chip.addEventListener('dragstart',e=>{ dndCurrent=chip; chip.classList.add('dragging'); e.dataTransfer.setData('text/plain', chip.dataset.id); }); chip.addEventListener('dragend',()=>{ dndCurrent=null; chip.classList.remove('dragging'); }); });
+    qSelAll('#ex1-right .dropzone').forEach(zone=>{ zone.addEventListener('dragover',e=>e.preventDefault()); zone.addEventListener('drop',e=>{ e.preventDefault(); if(!dndCurrent) return; const slot=zone.querySelector('.slot'); if(!slot) return; slot.innerHTML=''; slot.appendChild(dndCurrent); }); });
+    function corrigerEx1(showSolution=false){ if(!showSolution) setTries('ex1', state.ex1.tries-1); let pts=0; qSelAll('#ex1-right .dropzone').forEach(zone=>{ const expect=zone.dataset.accept; const chip=qSel('.slot .chip', zone); if(!chip) return; if(chip.dataset.id===expect) pts+=1; }); setScore('ex1', pts); const msg=byId('msg-ex1'); if(showSolution){ const left=byId('ex1-left'); qSelAll('#ex1-right .dropzone .slot .chip').forEach(c=>left.appendChild(c)); qSelAll('#ex1-right .dropzone').forEach(zone=>{ const id=zone.dataset.accept; const chip=qSel(`#ex1-left .chip[data-id="${id}"]`); const slot=zone.querySelector('.slot'); if(chip&&slot){ slot.innerHTML=''; slot.appendChild(chip);} }); msg.textContent='Correction affichée.'; } else { msg.textContent=`Résultat : ${pts} / 6. ${state.ex1.tries>0?`Essais restants : ${state.ex1.tries}.`:'Plus d\'essai pour cet exercice.'}`; } }
+    function reinitialiserEx1(){ setTries('ex1',MAX_TRIES); setScore('ex1',0); byId('msg-ex1').textContent=''; const left=byId('ex1-left'); qSelAll('#ex1-right .dropzone .slot .chip').forEach(c=>left.appendChild(c)); }
 
-    qa('.dropzone', right).forEach(zone => {
-      zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
-      zone.addEventListener('dragleave',    () => zone.classList.remove('dragover'));
-      zone.addEventListener('drop', e => {
-        e.preventDefault(); zone.classList.remove('dragover');
-        const id   = e.dataTransfer.getData('text/plain');
-        const want = zone.dataset.accept;
-        const chip = document.querySelector('.chip.dragging') ||
-                     qa('.chip', left).find(c => c.dataset.id === id);
-        const slot = q('.slot', zone) || zone;
-        if (chip) {
-          slot.innerHTML = '';
-          slot.appendChild(chip);
-          chip.classList.remove('dragging');
-          zone.dataset.filled  = '1';
-          zone.dataset.correct = String(id === want);
-        }
-      });
-    });
+    // =========================
+    // EX2 – Saisies rapides
+    // =========================
+    function corrigerEx2(showSolution=false){ if(!showSolution) setTries('ex2', state.ex2.tries-1); let pts=0;
+      const ok21 = normNoSep(byId('q21').value) === normNoSep('quinze-mille-quatre-vingt-quatre'); if(ok21) pts+=1;
+      const ok22 = formatNumberFr(byId('q22').value) === '99 909'; if(ok22) pts+=1;
+      const ok23 = (byId('q23').value||'').trim()==='5'; if(ok23) pts+=1;
+      const ok24 = formatNumberFr(byId('q24').value) === '1 263'; if(ok24) pts+=1;
+      const ok25 = normNoSep(byId('q25').value) === normNoSep('trois-mille-six-cent-vingt'); if(ok25) pts+=1;
+      const ok26 = formatNumberFr(byId('q26').value) === '3 700 000'; if(ok26) pts+=1;
+      setScore('ex2', pts); const msg=byId('msg-ex2'); if(showSolution){ byId('q21').value='quinze mille quatre-vingt-quatre'; byId('q22').value='99 909'; byId('q23').value='5'; byId('q24').value='1 263'; byId('q25').value='trois mille six cent vingt'; byId('q26').value='3 700 000'; msg.textContent='Correction affichée pour chaque champ.'; } else { msg.textContent=`Résultat : ${pts} / 6. ${state.ex2.tries>0?`Essais restants : ${state.ex2.tries}.`:'Plus d\'essai pour cet exercice.'}`; } }
+    function reinitialiserEx2(){ setTries('ex2',MAX_TRIES); setScore('ex2',0); byId('msg-ex2').textContent=''; ['q21','q22','q23','q24','q25','q26'].forEach(id=>byId(id).value=''); }
 
-    // Si les puces sont régénérées plus tard (bouton « Recommencer »), on réapplique draggable :
-    const mo = new MutationObserver(() => {
-      qa('.chip', left).forEach(ch => ch.getAttribute('draggable') || ch.setAttribute('draggable','true'));
-    });
-    mo.observe(left,  { childList:true, subtree:true });
-    mo.observe(right, { childList:true, subtree:true });
-  }
+    // =========================
+    // EX3 – Décimaux & repérage
+    // =========================
+    function corrigerEx3(showSolution=false){ if(!showSolution) setTries('ex3', state.ex3.tries-1); let pts=0; const ok31=(byId('q31').value||'').trim()==='10'; if(ok31) pts+=1; const ok32=norm(byId('q32').value)===norm('origine'); if(ok32) pts+=1; const ok33=norm(byId('q33').value)===norm('abscisse'); if(ok33) pts+=1; const v34=(byId('q34').value||'').replace(',', '.').trim(); const ok34=(v34==='0.5'||v34==='0,5'); if(ok34) pts+=1; setScore('ex3', pts); const msg=byId('msg-ex3'); if(showSolution){ byId('q31').value='10'; byId('q32').value='origine'; byId('q33').value='abscisse'; byId('q34').value='0,5'; msg.textContent='Correction affichée.'; } else { msg.textContent=`Résultat : ${pts} / 4. ${state.ex3.tries>0?`Essais restants : ${state.ex3.tries}.`:'Plus d\'essai pour cet exercice.'}`; } }
+    function reinitialiserEx3(){ setTries('ex3',MAX_TRIES); setScore('ex3',0); byId('msg-ex3').textContent=''; ['q31','q32','q33','q34'].forEach(id=>byId(id).value=''); }
 
-  /* ============= Autotest console (facultatif) ============= */
-  try {
-    const okTimer = !!(elTimer && btnStart && btnStop && btnReset);
-    const okDnD   = !!(left && right && qa('.chip', left).length && qa('.dropzone', right).length);
-    console.info('[Autotest] Chrono câblé :', okTimer, '| DnD Ex1 câblé :', okDnD);
-  } catch(_) {}
-})();
+    // =========================
+    // Approfondissement – logique
+    // =========================
+    function corrigerDeep(showSolution=false){ if(!showSolution) setTries('deep', state.deep.tries-1); let pts=0;
+      const A1ok = normNoSep(byId('deep_a1').value) === normNoSep('dix-millions-deux-cent-cinquante-quatre-mille-neuf-cent-quatre-vingt-cinq'); if(A1ok) pts+=1;
+      const A2ok = normNoSep(byId('deep_a2').value) === normNoSep('deux-cent-mille-cinq-cent-quatre'); if(A2ok) pts+=1;
+      const A3ok = formatNumberFr(byId('deep_a3').value) === '5 698 541'; if(A3ok) pts+=1;
+      const A4ok = formatNumberFr(byId('deep_a4').value) === '96 584 127'; if(A4ok) pts+=1;
+      const B1p = formatNumberFr(byId('deep_b1_prec').value) === '853 088'; const B1s = formatNumberFr(byId('deep_b1_suit').value) === '853 090'; const B2p = formatNumberFr(byId('deep_b2_prec').value) === '69 998'; const B2s = formatNumberFr(byId('deep_b2_suit').value) === '70 000'; [B1p,B1s,B2p,B2s].forEach(ok=>{ if(ok) pts+=0.5; });
+      setScore('deep', pts); const msg=byId('msg-deep'); if(showSolution){ byId('deep_a1').value='dix millions deux cent cinquante-quatre mille neuf cent quatre-vingt-cinq'; byId('deep_a2').value='deux cent mille cinq cent quatre'; byId('deep_a3').value='5 698 541'; byId('deep_a4').value='96 584 127'; byId('deep_b1_prec').value='853 088'; byId('deep_b1_suit').value='853 090'; byId('deep_b2_prec').value='69 998'; byId('deep_b2_suit').value='70 000'; msg.textContent='Correction affichée.'; } else { msg.textContent=`Résultat : ${pts} / ${state.deep.max}. ${state.deep.tries>0?`Essais restants : ${state.deep.tries}.`:'Plus d\'essai pour cette section.'}`; } }
+    function reinitialiserDeep(){ setTries('deep',MAX_TRIES); setScore('deep',0); byId('msg-deep').textContent=''; ['deep_a1','deep_a2','deep_a3','deep_a4','deep_b1_prec','deep_b1_suit','deep_b2_prec','deep_b2_suit'].forEach(id=>{ const el=byId(id); if(el) el.value=''; }); }
+
+    // =========================
+    // Export JSON / CSV / PDF / HTML
+    // =========================
+    function collectData(){ const now=new Date(); const identite={nom:byId('eleveNom').value.trim(), prenom:byId('elevePrenom').value.trim(), classe:byId('eleveClasse').value.trim()}; const ex1pairs=qSelAll('#ex1-right .dropzone').map(z=>{ const chip=qSel('.slot .chip', z); return{cible:qSel('.target-label', z)?.textContent||'', id:chip?.dataset.id||null, valeur:chip?.textContent||null}; }); const ex2rep={ q21:byId('q21').value, q22:byId('q22').value, q23:byId('q23').value, q24:byId('q24').value, q25:byId('q25').value, q26:byId('q26').value }; const ex3rep={ q31:byId('q31').value, q32:byId('q32').value, q33:byId('q33').value, q34:byId('q34').value }; const deep={ a1:byId('deep_a1')?.value||'', a2:byId('deep_a2')?.value||'', a3:byId('deep_a3')?.value||'', a4:byId('deep_a4')?.value||'', b1p:byId('deep_b1_prec')?.value||'', b1s:byId('deep_b1_suit')?.value||'', b2p:byId('deep_b2_prec')?.value||'', b2s:byId('deep_b2_suit')?.value||'' }; const scores={ ex1:state.ex1.score, ex2:state.ex2.score, ex3:state.ex3.score, deep:state.deep.score, total:state.ex1.score+state.ex2.score+state.ex3.score+state.deep.score, max:state.ex1.max+state.ex2.max+state.ex3.max+state.deep.max }; const temps=byId('timer').textContent; const essais_restants={ ex1:state.ex1.tries, ex2:state.ex2.tries, ex3:state.ex3.tries, deep:state.deep.tries }; return { horodatage:now.toISOString(), identite, temps, essais_restants, scores, ex1pairs, ex2rep, ex3rep, deep }; }
+    function download(filename, content, mime='application/octet-stream'){ const blob=new Blob([content],{type:mime}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); showToast('Fichier enregistré sur votre ordinateur.'); }
+    function exportJSON(){ const d=collectData(); const id=`${(d.identite.nom||'SansNom').toUpperCase()}_${(d.identite.prenom||'SansPrenom')}_${(d.identite.classe||'SansClasse')}`; download(`resultats_numeration_6e_${id}.json`, JSON.stringify(d,null,2), 'application/json'); }
+    function exportCSV(){ const d=collectData(); const rows=[]; rows.push(['nom','prenom','classe','temps','score_total','score_max'].join(';')); rows.push([d.identite.nom,d.identite.prenom,d.identite.classe,d.temps,d.scores.total,d.scores.max].join(';')); rows.push([]); rows.push(['exercice','cle','valeur'].join(';')); d.ex1pairs.forEach((p,i)=>rows.push(['ex1',`cible_${i+1}`,`${p.valeur||''} -> ${p.cible}`].join(';'))); Object.entries(d.ex2rep).forEach(([k,v])=>rows.push(['ex2',k,v].join(';'))); Object.entries(d.ex3rep).forEach(([k,v])=>rows.push(['ex3',k,v].join(';'))); Object.entries(d.deep).forEach(([k,v])=>rows.push(['deep',k,v].join(';'))); download(`resultats_numeration_6e_${(d.identite.nom||'SansNom').toUpperCase()}_${(d.identite.prenom||'SansPrenom')}_${(d.identite.classe||'SansClasse')}.csv`, rows.map(r=>Array.isArray(r)?r.join(';'):r).join('\n'), 'text/csv'); }
+    function buildPrintSummary(data, withAnswers=true){ const d=data||collectData(); byId('printMeta').innerHTML=`<p><strong>Nom :</strong> ${d.identite.nom||''} &nbsp; <strong>Prénom :</strong> ${d.identite.prenom||''} &nbsp; <strong>Classe :</strong> ${d.identite.classe||''}<br><strong>Date :</strong> ${new Date(d.horodatage).toLocaleString()}</p>`; byId('pTotal').textContent=d.scores.total; byId('pMax').textContent=d.scores.max; byId('pTemps').textContent=d.temps; const tb1=byId('pEx1').querySelector('tbody'); tb1.innerHTML=''; d.ex1pairs.forEach(p=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${p.cible}</td><td>${withAnswers?(p.valeur||''):''}</td>`; tb1.appendChild(tr); }); const tb2=byId('pEx2').querySelector('tbody'); tb2.innerHTML=''; Object.entries(d.ex2rep).forEach(([k,v])=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${k.toUpperCase()}</td><td>${withAnswers?(v||''):''}</td>`; tb2.appendChild(tr); }); const tb3=byId('pEx3').querySelector('tbody'); tb3.innerHTML=''; Object.entries(d.ex3rep).forEach(([k,v])=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${k.toUpperCase()}</td><td>${withAnswers?(v||''):''}</td>`; tb3.appendChild(tr); }); const tbd=byId('pDeep').querySelector('tbody'); tbd.innerHTML=''; Object.entries(d.deep||{}).forEach(([k,v])=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${k}</td><td>${withAnswers?(v||''):''}</td>`; tbd.appendChild(tr); }); }
+    function exportPDF(withAnswers=true){ const d=collectData(); buildPrintSummary(d,withAnswers); const ps=byId('printSummary'); ps.style.display='block'; window.print(); setTimeout(()=>{ ps.style.display='none'; }, 300); }
+    function clearAnswersInPlace(){ const left=byId('ex1-left'); qSelAll('#ex1-right .dropzone .slot .chip').forEach(c=>left.appendChild(c)); ['q21','q22','q23','q24','q25','q26','q31','q32','q33','q34','deep_a1','deep_a2','deep_a3','deep_a4','deep_b1_prec','deep_b1_suit','deep_b2_prec','deep_b2_suit'].forEach(id=>{ const el=byId(id); if(el) el.value=''; }); }
+    function exportPageHTML(withAnswers=true){ if(withAnswers){ const html='<!DOCTYPE html>\n'+document.documentElement.outerHTML; download('C6_numeration_decimaux_avec_reponses.html', html, 'text/html'); } else { clearAnswersInPlace(); const html='<!DOCTYPE html>\n'+document.documentElement.outerHTML; download('C6_numeration_decimaux_sans_reponses.html', html, 'text/html'); } }
+
+    // =========================
+    // Réinitialisation globale
+    // =========================
+    function resetAll(){ resetTimer(); ['eleveNom','elevePrenom','eleveClasse'].forEach(id=>byId(id).value=''); reinitialiserEx1(); reinitialiserEx2(); reinitialiserEx3(); reinitialiserDeep(); }
+
+    // =========================
+    // Écouteurs
+    // =========================
+    byId('btnStart').addEventListener('click', startTimer);
+    byId('btnStop').addEventListener('click', stopTimer);
+    byId('btnReset').addEventListener('click', resetAll);
+    byId('btnExportJSON').addEventListener('click', exportJSON);
+    byId('btnExportCSV').addEventListener('click', exportCSV);
+    byId('btnExportPDFWith').addEventListener('click', ()=>exportPDF(true));
+    byId('btnExportPDFNo').addEventListener('click',   ()=>exportPDF(false));
+    byId('btnSaveHTMLWith').addEventListener('click',  ()=>exportPageHTML(true));
+    byId('btnSaveHTMLNo').addEventListener('click',    ()=>exportPageHTML(false));
+
+    // Init
+    window.addEventListener('DOMContentLoaded', ()=>{ updateTotal(); });
+
 </script>
-
-                           
-
+                
 </body>
 </html>
