@@ -8,6 +8,10 @@
 
   <!-- Styles internes (thème sombre, boutons animés, lisibilité élevée) -->
   <style>
+          /* Masquer les solutions par défaut, on les révèlera au clic */
+    .correction { display: none; }
+
+    
     :root {
       --bg: #0f1116;
       --panel: #151922;
@@ -536,8 +540,11 @@ Athlétisme  | 6
         <p>Le porte-conteneurs français Antoine De Saint-Exupéry est l’un des plus gros bateaux du monde. On dit qu’avec 398 m de long et 59 m de large, c’est l’équivalent de 4 terrains de football, et que les 20 600 conteneurs qu’il peut contenir, alignés, forment une chaîne de 125 km.</p>
         <p>Saurez-vous vérifier ces informations en sachant qu’un conteneur de 20 pieds mesure 6 068 mm de long ?</p>
         <label>Ta vérification (calculs et explication) :</label><br><textarea id="rep_def1"></textarea>
-        <button onclick="toggleCorrection('corr_def1')">Correction</button>
-        <div id="corr_def1" class="correction">
+        
+      
+      
+            <button type="button" onclick="const x=document.getElementById('corr-defi-1'); x.style.display = x.style.display==='block'?'none':'block'">Correction</button>
+            <div id="corr-defi-1" class="correction">
             <p>Allons vérifier étape par étape ! D'abord, la longueur du bateau : 398 m. Un terrain de football fait environ 100 m de long (en vrai 105 m, mais approximons à 100). 4 terrains : 4 × 100 = 400 m. 398 m est très proche de 400 m, donc oui, c'est presque 4 terrains.</p>
             <p>Maintenant, les conteneurs alignés. Un conteneur : 6 068 mm = 6,068 m (divise par 1 000). 20 600 conteneurs : 20 600 × 6,068. Calculons : d'abord 20 000 × 6,068 = 121 360 m. 600 × 6,068 = 3 640,8 m. Total ≈ 125 000,8 m = 125 km (divise par 1 000). Oui, ça colle ! Imagine une chaîne de conteneurs comme un train super long.</p>
             <p>Pour la largeur, 59 m, un terrain fait 68 m de large, mais l'équivalence est pour la longueur, pas largeur. Tout vérifié !</p>
@@ -557,8 +564,10 @@ Athlétisme  | 6
         <ol>
             <li class="question">Saurez-vous calculer, en kilomètres, la distance entre la Terre et le Soleil ? → Convertis 8 minutes et 20 secondes en secondes. → Multiplie cette durée par la vitesse de la lumière.
                 <br><label>Ta réponse :</label><br><textarea id="rep_def2_1"></textarea>
-                <button onclick="toggleCorrection('corr_def2_1')">Correction</button>
-                <div id="corr_def2_1" class="correction">
+                
+              
+                  <button type="button" onclick="const x=document.getElementById('corr_def2_1'); x.style.display = x.style.display==='block'?'none':'block'">Correction</button>
+                  <div id="corr_def2_1" class="correction">
                     <p>Étape 1 : Convertir le temps en secondes. 8 minutes = 8 × 60 = 480 secondes. + 20 secondes = 500 secondes total.</p>
                     <p>Étape 2 : Vitesse de la lumière = 300 000 km/s. Distance = temps × vitesse = 500 × 300 000 = 150 000 000 km.</p>
                     <p>C'est 150 millions de km ! Imagine, la lumière voyage super vite, mais ça prend encore 500 secondes pour arriver du Soleil à la Terre.</p>
@@ -566,8 +575,9 @@ Athlétisme  | 6
             </li>
             <li class="question">Sachant que Jupiter est 5 fois plus éloignée du Soleil que la Terre, Saturne 10 fois, Uranus 20 fois, Neptune 30 fois, saurez-vous calculer, en kilomètres, les distances du Soleil à Jupiter, à Saturne, à Uranus et à Neptune ? → Utilise la distance Terre–Soleil comme unité de base (1 UA). → Multiplie par les facteurs donnés.
                 <br><label>Ta réponse :</label><br><textarea id="rep_def2_2"></textarea>
-                <button onclick="toggleCorrection('corr_def2_2')">Correction</button>
-                <div id="corr_def2_2" class="correction">
+                
+                    <button type="button" onclick="const x=document.getElementById('corr_def2_2'); x.style.display = x.style.display==='block'?'none':'block'">Correction</button>
+                    <div id="corr_def2_2" class="correction">
                     <p>1 UA = 150 000 000 km (de la question 1).</p>
                     <p>Jupiter : 5 UA = 5 × 150 000 000 = 750 000 000 km.</p>
                     <p>Saturne : 10 UA = 10 × 150 000 000 = 1 500 000 000 km.</p>
@@ -578,8 +588,9 @@ Athlétisme  | 6
             </li>
             <li class="question">Saurez-vous calculer, en kilomètres, la distance pour aller sur Mars, qui est à 1,5 UA de la Terre ? → Applique le même principe en multipliant 1,5 par la distance d’1 UA.
                 <br><label>Ta réponse :</label><br><textarea id="rep_def2_3"></textarea>
-                <button onclick="toggleCorrection('corr_def2_3')">Correction</button>
-                <div id="corr_def2_3" class="correction">
+                
+                    <button type="button" onclick="const x=document.getElementById('corr_def2_3'); x.style.display = x.style.display==='block'?'none':'block'">Correction</button>
+                    <div id="corr_def2_3" class="correction">
                     <p>Attention, c'est 1,5 UA du Soleil, mais la distance Terre-Mars varie. Mais si on prend moyenne, Mars est à 1,5 UA du Soleil, Terre à 1 UA, la distance minimale est 0,5 UA, mais la question dit "à 1,5 UA de la Terre" ? Attends, l'énoncé dit "qui est à 1,5 UA de la Terre", mais en moyenne Mars est à 1,52 UA du Soleil, distance Terre-Mars moyenne ~0,52 UA.</p>
                     <p>Mais suivant l'énoncé : 1,5 × 1 UA = 1,5 × 150 000 000 = 225 000 000 km. C'est l'approximation pour la distance Terre-Mars max ou quelque chose, mais calcul simple.</p>
                 </div>
@@ -605,7 +616,9 @@ Athlétisme  | 6
         <h3>✏️ Problème :</h3>
         <p>Avec 20 000 vers à soie, saurez-vous calculer combien de bobines de 16 mètres de fil de soie on peut espérer produire ?</p>
         <label>Ta réponse (calculs min et max) :</label><br><textarea id="rep_def3"></textarea>
-        <button onclick="toggleCorrection('corr_def3')">Correction</button>
+        
+        
+        <button type="button" onclick="const x=document.getElementById('corr_def3'); x.style.display = x.style.display==='block'?'none':'block'">Correction</button>
         <div id="corr_def3" class="correction">
             <p>Chaque ver produit entre 800 m et 1 500 m. Pour 20 000 vers :</p>
             <p>Minimum total : 20 000 × 800 = 16 000 000 m.</p>
@@ -632,7 +645,8 @@ Athlétisme  | 6
         <ol>
             <li class="question">Calcule les montants en euros pour la collecte digitale et celle en pièces.
                 <br><label>Ta réponse :</label><br><textarea id="rep_def4_1"></textarea>
-                <button onclick="toggleCorrection('corr_def4_1')">Correction</button>
+                
+                <button type="button" onclick="const x=document.getElementById('corr_def4_1'); x.style.display = x.style.display==='block'?'none':'block'">Correction</button>
                 <div id="corr_def4_1" class="correction">
                     <p>Pièces : 123 000 000 centimes. 100 centimes = 1 euro, donc 123 000 000 / 100 = 1 230 000 euros.</p>
                     <p>Total 2 000 000 euros. Digital = total - pièces = 2 000 000 - 1 230 000 = 770 000 euros.</p>
@@ -670,7 +684,8 @@ Athlétisme  | 6
         <ol>
             <li class="question">Combien de pixels contient une photo de 4 896 pixels en longueur et 3 352 pixels en hauteur ? → Calcule le produit : 4 896 × 3 352 → Donne le résultat en nombre de pixels.
                 <br><label>Ta réponse :</label><br><textarea id="rep_def5_1"></textarea>
-                <button onclick="toggleCorrection('corr_def5_1')">Correction</button>
+                
+                <button type="button" onclick="const x=document.getElementById('corr_def5_1'); x.style.display = x.style.display==='block'?'none':'block'">Correction</button>
                 <div id="corr_def5_1" class="correction">
                     <p>Total pixels = longueur × hauteur = 4 896 × 3 352.</p>
                     <p>Calcul : 4 896 × 3 000 = 14 688 000. 4 896 × 300 = 1 468 800. 4 896 × 52 = 254 592. Total = 14 688 000 + 1 468 800 = 16 156 800 + 254 592 = 16 411 392 pixels.</p>
@@ -687,7 +702,8 @@ Athlétisme  | 6
             </li>
             <li class="question">Trouve les dimensions d’autres images rectangulaires contenant le même nombre de pixels. → Propose au moins deux paires de dimensions (longueur × hauteur) différentes. → Vérifie que leur produit donne bien le même total de pixels.
                 <br><label>Ta réponse :</label><br><textarea id="rep_def5_3"></textarea>
-                <button onclick="toggleCorrection('corr_def5_3')">Correction</button>
+               
+                <button type="button" onclick="const x=document.getElementById('corr_def5_3'); x.style.display = x.style.display==='block'?'none':'block'">Correction</button>
                 <div id="corr_def5_3" class="correction">
                     <p>Total 16 411 392 pixels. Trouve facteurs.</p>
                     <p>Ex1 : 6 144 × 2 672 (6 144 × 2 672 = vérifie 6 144 × 2 000 = 12 288 000, ×672 calculé = total même).</p>
@@ -708,9 +724,10 @@ Athlétisme  | 6
         <ul>
             <li class="question">Saurez-vous estimer le nombre total de petits carrés utilisés dans un QR-code ?
                 <br><label>Ta réponse :</label><br><textarea id="rep_def6"></textarea>
-                <button onclick="toggleCorrection('corr_def6')">Correction</button>
-                <div id="corr_def6" class="correction">
-                    <p>Un QR-code basique est une grille de 21 × 21 = 441 carrés. Plus complexes : 25×25=625, jusqu'à 177×177≈31 329. Pour l'image, compte les lignes : suppose 29×29=841 si moyen. Estime en comptant les côtés. C'est une grille carrée, donc longueur × largeur = total carrés.</p>
+               
+              <button type="button" onclick="const x=document.getElementById('corr_def6'); x.style.display = x.style.display==='block'?'none':'block'">Correction</button>
+              <div id="corr_def6" class="correction">
+                   <p>Un QR-code basique est une grille de 21 × 21 = 441 carrés. Plus complexes : 25×25=625, jusqu'à 177×177≈31 329. Pour l'image, compte les lignes : suppose 29×29=841 si moyen. Estime en comptant les côtés. C'est une grille carrée, donc longueur × largeur = total carrés.</p>
                 </div>
             </li>
         </ul>
