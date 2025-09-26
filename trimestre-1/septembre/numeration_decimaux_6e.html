@@ -1086,6 +1086,45 @@ document.addEventListener('DOMContentLoaded', () => {
     else if (hide && n.style) { n.style.display = 'none'; }
   });
 });
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const elTimer  = document.getElementById('timer');
+  const btnStart = document.getElementById('btnStart');
+  const btnStop  = document.getElementById('btnStop');
+  const btnReset = document.getElementById('btnReset');
+
+  let tick = null, t0 = null, elapsed = 0; // millisecondes
+
+  function render() {
+    const s = Math.floor(elapsed / 1000);
+    const mm = String(Math.floor(s / 60)).padStart(2, '0');
+    const ss = String(s % 60).padStart(2, '0');
+    elTimer.textContent = `${mm}:${ss}`;
+  }
+  function start() {
+    if (tick) return;
+    t0 = performance.now();
+    tick = setInterval(() => { const now = performance.now(); elapsed += now - t0; t0 = now; render(); }, 250);
+    btnStart.disabled = true;  btnStop.disabled = false;
+  }
+  function stop() {
+    if (!tick) return;
+    clearInterval(tick); tick = null;
+    btnStart.disabled = false; btnStop.disabled = true;
+  }
+  function reset() { stop(); elapsed = 0; render(); }
+
+  if (btnStart && btnStop && btnReset && elTimer) {
+    btnStart.addEventListener('click', start);
+    btnStop .addEventListener('click', stop);
+    btnReset.addEventListener('click', reset);
+    render(); // affiche 00:00 au chargement
+  }
+});
+
+
+
                            
 </script>
 </body>
