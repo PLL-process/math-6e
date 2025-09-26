@@ -456,8 +456,11 @@ Athlétisme  | 6
       <h3>📍 Ex. F – Repérage sur une demi-droite graduée</h3>
       <p>Décris comment tu places les points (ou dessine sur papier et décris)  : A(450), B(870), C(900), D(1100) : <input id="pf1" type="text" placeholder="description succincte" /></p>
       <h3>📐 Ex. G – Repérage sur une demi-droite graduée (Lecture d'abscisses)</h3>
-      
-      <img src="images/EXERCISE 7 – Repérage sur une demi-droite graduée.png" alt="Repérage sur une demi-droite graduée">
+                 <!-- À placer dans Ex. G -->
+      <div class="img-wrap">
+        <img src="../images/EXERCISE 7 – Repérage sur une demi-droite graduée.png"
+             alt="Repérage sur une demi-droite graduée">
+      </div>
 
       <ol>
         <li>Quelles sont les abscisses des points A et B ? 
@@ -465,7 +468,12 @@ Athlétisme  | 6
         <li>Place les points C(2,1) et D(0,5) sur une demi-droite graduée.<br>Où placer C : <input id="pg3"/><br>Où placer D : <input id="pg4"/></li>
       </ol>
       <h3>📐 Ex. H – Repérage décimal (Repérage plus complexe)</h3>
-      <img src="../images/EXERCICE 8 – Repérage plus complexe.svg" alt="Repérage plus complexe">
+        <!-- À placer dans Ex. H -->
+        <div class="img-wrap">
+          <img src="../images/EXERCICE 8 – Repérage plus complexe.svg"
+               alt="Repérage plus complexe">
+        </div>
+      
       <ol>
         <li>Détermine l’abscisse des points C et D.<br>Abscisses de C : <input id="ph1"/><br>Abscisses de D : <input id="ph2"/></li><br>
         <li>Placer E(4,45) et F(4,22) : <input id="ph3"/></li>
@@ -1045,6 +1053,21 @@ function downloadHTML(includeAnswers){
 }
 $('btnSaveHTMLWith')?.addEventListener('click', ()=>downloadHTML(true));
 $('btnSaveHTMLNo')?.addEventListener('click',   ()=>downloadHTML(false));
+                           
+<!-- À la fin du <body>, pour masquer les corrections par défaut -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Masquer tout ce qui suit un titre "Correction" dans la section Défis
+  const deep = document.querySelector('#approfondissement, body'); // ajustez le sélecteur si besoin
+  let hide = false;
+  [...deep.children].forEach(n => {
+    const t = (n.textContent || '').trim();
+    if (/^Correction$/.test(t)) { hide = true; n.style.display = 'none'; }
+    else if (/^##?\\s*D[ÉE]FI\\b/i.test(t)) { hide = false; }
+    else if (hide && n.style) { n.style.display = 'none'; }
+  });
+});
+                           
 </script>
 </body>
 </html>
