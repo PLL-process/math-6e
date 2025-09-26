@@ -783,8 +783,8 @@ Athlétisme  | 6
 (() => {
   /* ===== OUTILS ===== */
   const $  = id => document.getElementById(id);
-  const q  = (sel, root=document) => root.querySelector(sel);
-  const qa = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+  const q  = (s,r=document) => r.querySelector(s);
+  const qa = (s,r=document) => Array.from(r.querySelectorAll(s)
 
   const norm = s => (s||'').toLowerCase()
     .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
@@ -793,20 +793,17 @@ Athlétisme  | 6
   const formatNumberFr = x => String(x).replace(/\D/g,'').replace(/\B(?=(?:\d{3})+(?!\d))/g,' ');
 
   /* ===== CHRONO ===== */
-  const timerEl = $('timer'), btnStart = $('btnStart'), btnStop = $('btnStop'), btnReset = $('btnReset');
+  const timer=$('timer'), bS=$('btnStart'), bP=$('btnStop'), bR=$('btnReset');
   let tick=null, t0=0, elapsed=0;
-  function renderTimer(){ const s=Math.floor(elapsed/1000);
-    timerEl.textContent = `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; }
-  function startTimer(){ if(tick||!timerEl) return; t0=performance.now();
-    tick=setInterval(()=>{ const now=performance.now(); elapsed += (now-t0); t0=now; renderTimer(); },250);
-    if(btnStart) btnStart.disabled=true; if(btnStop) btnStop.disabled=false; }
-  function stopTimer(){ if(!tick) return; clearInterval(tick); tick=null;
-    if(btnStart) btnStart.disabled=false; if(btnStop) btnStop.disabled=true; }
-  function resetTimer(){ stopTimer(); elapsed=0; renderTimer(); }
-  btnStart?.addEventListener('click', startTimer);
-  btnStop ?.addEventListener('click', stopTimer);
-  btnReset?.addEventListener('click', resetTimer);
-  renderTimer();
+  const render=()=>{ const s=Math.floor(elapsed/1000);
+    timer.textContent = `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; };
+  const start=()=>{ if(tick) return; t0=performance.now();
+    tick=setInterval(()=>{const n=performance.now(); elapsed+=n-t0; t0=n; render();},250);
+    bS.disabled=true; bP.disabled=false; };
+  const stop =()=>{ if(!tick) return; clearInterval(tick); tick=null; bS.disabled=false; bP.disabled=true; };
+  const reset=()=>{ stop(); elapsed=0; render(); };
+  if (timer && bS && bP && bR) { render(); bS.onclick=start; bP.onclick=stop; bR.onclick=reset; }
+
 
   /* ===== ÉTAT / SCORES ===== */
   const state = {
@@ -829,42 +826,30 @@ Athlétisme  | 6
   $('maxTries')?.textContent=5; updateTotal();
 
   /* ===== DnD Exercice 1 ===== */
+  /* ===== Drag & Drop Ex.1 ===== */
   const left=$('ex1-left'), right=$('ex1-right');
-  if(left && right){
+  if (left && right) {
     qa('.chip', left).forEach(ch=>{
       ch.setAttribute('draggable','true');
       ch.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', ch.dataset.id||''); ch.classList.add('dragging'); });
-      ch.addEventListener('dragend',()=>ch.classList.remove('dragging'));
+      ch.addEventListener('dragend', ()=> ch.classList.remove('dragging'));
     });
     qa('.dropzone', right).forEach(zone=>{
-      zone.addEventListener('dragover',e=>e.preventDefault());
+      zone.addEventListener('dragover',e=>{ e.preventDefault(); zone.classList.add('dragover'); });
+      zone.addEventListener('dragleave',   ()=> zone.classList.remove('dragover'));
       zone.addEventListener('drop',e=>{
-        e.preventDefault();
+        e.preventDefault(); zone.classList.remove('dragover');
         const id=e.dataTransfer.getData('text/plain');
         const chip=document.querySelector('.chip.dragging')||qa('.chip',left).find(c=>c.dataset.id===id);
-        const slot=q('.slot',zone)||zone;
+        const slot=q('.slot', zone) || zone;
         if(chip){ slot.innerHTML=''; slot.appendChild(chip); chip.classList.remove('dragging'); }
       });
     });
   }
-  window.corrigerEx1 = (show=false) => {
-    if(!show) setTries('ex1', state.ex1.tries-1);
-    let pts=0; qa('#ex1-right .dropzone').forEach(z=>{
-      const want=z.dataset.accept; const chip=q('.slot .chip',z); if(chip && chip.dataset.id===want) pts+=1;
-    });
-    setScore('ex1',pts);
-    const msg=$('msg-ex1');
-    msg.textContent = show ? 'Correction affichée.' :
-      `Résultat : ${pts} / 6. ${state.ex1.tries>0?`Essais restants : ${state.ex1.tries}.`:`Plus d’essai.`}`;
-    if(show){ const colLeft=$('ex1-left');
-      qa('#ex1-right .dropzone').forEach(z=>{ const id=z.dataset.accept; const slot=q('.slot',z); const chip=qa('#ex1-left .chip').find(c=>c.dataset.id===id);
-        if(chip&&slot){ slot.innerHTML=''; slot.appendChild(chip); }
-      });
-    }
-  };
-  window.reinitialiserEx1 = () => { setTries('ex1',5); setScore('ex1',0); $('msg-ex1').textContent='';
-    const colLeft=$('ex1-left'); qa('#ex1-right .dropzone .slot .chip').forEach(c=>colLeft.appendChild(c)); };
-
+  /* Sécurité : si des blocs .correction existent encore, on les masque au chargement */
+  qa('.correction').forEach(el=> el.style.display='none');
+})();
+  
   /* ===== Corrections Ex2, Ex3 (identiques à ta version qui marchait) ===== */
   window.corrigerEx2 = (show=false)=>{ if(!show) setTries('ex2',state.ex2.tries-1); let pts=0;
     const ok21 = normNoSep($('q21').value)===normNoSep('quinze-mille-quatre-vingt-quatre'); if(ok21) pts++;
