@@ -43,6 +43,20 @@
       display: block;
     }
 
+    /* Images responsives partout (rappel de cours, F, G, H) */
+.img-wrap { width: 100%; overflow: hidden; }
+.img-wrap > img, img.responsive-img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+
+/* Cache les corrections par défaut (on togglera au clic) */
+.correction { display: none; }
+
+/* Drag & drop Ex.1 (lisible) */
+.dropzone { border: 1px dashed #325e8f; border-radius: 10px; padding: 10px; min-height: 56px; }
+.dropzone.dragover { background: rgba(50,94,143,.15); }
+.chip { cursor: grab; user-select: none; background:#1e3350; border:1px solid #284a72; border-radius:10px; padding:8px 10px; }
+
+
+    
     
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans"; }
@@ -147,19 +161,22 @@
             <ul>
               <li>Sur une demi-droite graduée, on précise l'<strong>origine</strong> (O) et l'<strong>unité</strong> (ex. 1 ou 0,1).</li>
               <div class="img-wap">
-                 <img src="../images/unite-de-graduation-demi-droite-graduee.jpg" 
-                      alt="Demi-droite graduée avec unité de graduation, points C et D">
+                 <img  id="img-exG" class="responsive-img" 
+                       src="../images/unite-de-graduation-demi-droite-graduee.jpg" 
+                       alt="Demi-droite graduée avec unité de graduation, points C et D">
               </div>
 
               <li>Un point est repéré par son <strong>abscisse</strong>. <br>Son <strong>abscisse</strong> indique sa position sur la droite horizontale (<strong>axe des x</strong>).</li>
               <div class="img-wap">
-                 <img src="../images/unite-de-graduation-demi-droite-graduee 3.jpg" 
-                      alt="demi droite graduée au 10e et au 100e">
+                 <img   id="img-exG" class="responsive-img"
+                        src="../images/unite-de-graduation-demi-droite-graduee 3.jpg" 
+                        alt="demi droite graduée au 10e et au 100e">
               </div>  
               <li>Entre <code>4,6</code> et <code>4,7</code> avec pas 0,01 → <strong>10 sous-intervalles</strong>.</li>
               <div class="img-wap">
-                 <img src="../images/demi droite graduée 10 sous-intervalles.png" 
-                      alt="demi droite graduée 10 sous-intervalles">
+                 <img  id="img-exG" class="responsive-img"
+                       src="../images/demi droite graduée 10 sous-intervalles.png" 
+                       alt="demi droite graduée 10 sous-intervalles">
               </div>
             </ul>
           </div>
@@ -322,7 +339,11 @@
       </div>
 
       <!-- EXERCICE A : Planètes -->
+
       <h3>🪐 Ex. A – Les planètes du système solaire</h3>
+
+      <section id="exA" data-ex="A" data-max="6">
+        <!-- … énoncé … -->
       <p>Voici un tableau donnant le diamètre des planètes et leur distance au Soleil :</p>
       <div class="grid grid-2">
         <div>
@@ -342,7 +363,7 @@
         </div>
         <div>
           <ol>
-            <li>Quelle est la plus grande planète du système solaire ? <input id="pa1" type="text" placeholder="nom" /></li>
+            <li>Quelle est la plus grande planète du système solaire ? <input id="pa1" type="text" placeholder="nom" data-correct="Jupiter" /></li>
             <li>Quelle est la planète la plus éloignée du Soleil ? <input id="pa2" type="text" placeholder="nom" /></li>
             <li>Écris en toutes lettres la distance de cette planète au Soleil (la plus éloignée) : <input id="pa3" type="text" placeholder="..." /></li>
             <li>Range les planètes par ordre croissant de leur diamètre (sépare par ",") : <input id="pa4" type="text" placeholder="Mercure, ... , Jupiter" /></li>
@@ -351,14 +372,61 @@
           </ol>
         </div>
       </div>
+             
+<label>1) Plus grosse planète :
+    <input id="pa1" type="text" data-correct="Jupiter">
+  </label>
+
+  <label>2) Planète la plus éloignée :
+    <input id="pa2" type="text" data-correct="Neptune">
+  </label>        
+        
       <details style="margin-top:6px;"><summary>💡 Aide Ex. A</summary>
         <p>Compare les <em>plus grands nombres</em> dans chaque colonne. 150 millions = 150&nbsp;000&nbsp;000.</p>
       </details>
+        
+     <!-- boutons -->     
       <div class="info" style="margin-top:8px;">
         <button class="btn btn-green" type="button" onclick="corrigerDeepA(false)">✅ Vérifier A</button>
         <button class="btn btn-accent btn-correction" type="button" onclick="corrigerDeepA(true)">🧠 Correction A</button>
         <button class="btn" type="button" onclick="resetDeepA()">🔁 Recommencer A</button>
+        <span class="badge">Essais restants : <strong id="tries-A">5</strong></span>
+        <span class="badge">Score : <strong id="score-A">0</strong> / <span id="max-A">6</span></span>
       </div>
+        
+
+  <p id="msg-A" aria-live="polite"></p>
+
+<!-- ✅ Correction Exercice A – Les planètes du système solaire -->
+<section id="corr-exA" class="correction">
+  <h3>✅ Correction – Ex. A : Les planètes</h3>
+  <ol>
+    <li><strong>Plus grande planète :</strong> <span class="reponse">Jupiter</span><br>
+      <em>Diamètre : 140 000 km</em>
+    </li>
+    <li><strong>Planète la plus éloignée du Soleil :</strong> <span class="reponse">Neptune</span><br>
+      <em>Distance : 4 490 000 000 km</em>
+    </li>
+    <li><strong>Distance en toutes lettres :</strong> <span class="reponse">Quatre milliards quatre cent quatre-vingt-dix millions de kilomètres</span></li>
+    <li><strong>Ordre croissant des diamètres :</strong><br>
+      <span class="reponse">Mercure, Mars, Vénus, Terre, Neptune, Uranus, Saturne, Jupiter</span>
+    </li>
+    <li><strong>Ordre décroissant des distances au Soleil :</strong><br>
+      <span class="reponse">Neptune, Uranus, Saturne, Jupiter, Mars, Terre, Vénus, Mercure</span>
+    </li>
+    <li><strong>Planète ≈ 150 millions km :</strong> <span class="reponse">Terre</span><br>
+      <em>Distance : 149 600 000 km</em>
+    </li>
+  </ol>
+  <details style="margin-top:8px;">
+    <summary>💡 Méthode utilisée</summary>
+    <p>On compare les valeurs numériques dans le tableau. Pour les distances, 150 millions = 150 000 000.</p>
+  </details>
+</section>
+
+
+</section>        
+
       <hr/>
 
       <!-- EXERCICE B : Lecture/écriture grands nombres -->
