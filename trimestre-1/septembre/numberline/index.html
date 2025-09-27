@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Droite graduée – Jeu interactif multilingue (v2.3.1)</title>
+  <style>
+    body { font-family: sans-serif; max-width: 760px; margin: auto; padding: 20px; line-height: 1.4; }
+    svg  { max-width: 100%; height: auto; margin-top: 10px; transition: opacity 0.45s ease-in-out; }
+    svg.fade-out { opacity: 0; } svg.fade-in { opacity: 1; }
+    button, select, input[type="checkbox"] { font-size: 1em; margin: 5px; }
+    #startZone { border: 1px solid #ccc; padding: 10px; margin-bottom: 20px; border-radius: 6px; background: #f9fafb; }
+    #feedback { font-weight: bold; margin-top: 10px; min-height: 1.2em; }
+    .point.bounce { animation: bounce 0.5s; }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    .point.shake { animation: shake 0.5s; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 10%,30%,50%,70%,90%{transform:translateX(-5px)} 20%,40%,60%,80%{transform:translateX(5px)} }
+    #modeChoisi { font-weight: bold; margin: 6px 0; color: #0f172a; }
+  </style>
+</head>
+<body>
+  <h2>📍 Jeu interactif – Droite graduée adaptative</h2>
+  <div id="startZone">
+    <p id="guide">Guide 6e : choisis la langue, le temps par question et le mode. Clique « Démarrer ».
+      Déplace la croix à la souris (ou ← →), vérifie, puis passe à la question suivante.</p>
+    <label for="lang">🌍 Langue / Language :</label>
+    <select id="lang">
+      <option value="fr">🇫🇷 Français</option>
+      <option value="en">🇬🇧 English</option>
+      <option value="es">🇪🇸 Español</option>
+      <option value="zh">🇨🇳 中文</option>
+    </select>
+    <label for="temps">⏱️ Temps par question :</label>
+    <select id="temps">
+      <option value="30">30 secondes</option>
+      <option value="60">1 minute</option>
+      <option value="infini">Sans chrono</option>
+    </select>
+    <label for="mode">📊 Mode des questions :</label>
+    <select id="mode">
+      <option value="mix">Mix (entiers + décimaux)</option>
+      <option value="entiers">Entiers seulement</option>
+      <option value="dec1">Décimaux à 1 chiffre</option>
+      <option value="dec2">Décimaux à 2 chiffres</option>
+      <option value="dec3">Décimaux à 3 chiffres</option>
+      <option value="fractions">Fractions</option>
+      <option value="multiple">Points multiples</option>
+      <option value="expert">Expert (tout mixé)</option>
+    </select>
+    <label for="sons">🔊 Activer les sons :</label>
+    <input type="checkbox" id="sons" checked>
+    <button onclick="demarrerJeu()">🎮 Démarrer le jeu</button>
+  </div>
+  <p id="instruction" style="display:none;"></p>
+  <p id="modeChoisi"  style="display:none;"></p>
+  <p id="consigne"    style="display:none;"></p>
+  <p id="chrono"      style="display:none;"></p>
+  <svg id="droite" width="100%" height="100" viewBox="0 0 600 100" style="border:1px solid #ccc; display:none;" role="img" aria-label="Droite graduée">
+    <line id="mainLine" x1="50" y1="50" x2="550" y2="50" stroke="black" stroke-width="2" />
+    <g id="graduations"></g>
+    <g id="points"></g>
+  </svg>
+  <p id="currentValue" style="display:none;">Position actuelle : 0</p>
+  <div id="zoomControls" style="display:none;">
+    <button id="zoomInBtn" onclick="zoomIn()">🔍 Zoom +</button>
+    <button id="zoomOutBtn" onclick="zoomOut()">🔍 Zoom -</button>
+  </div>
+  <p id="feedback" style="display:none;" role="status"></p>
+  <div id="controls" style="display:none;">
+    <button id="verifierBtn" onclick="verifierPoint()">✅ Vérifier</button>
+    <button id="nextBtn"     onclick="niveauSuivant()">⏭️ Question suivante</button>
+    <button onclick="rechargerQuestion()">🔄 Recharger question</button>
+    <button onclick="rechargerExercice()">🔄 Recharger exercice</button>
+    <button onclick="retourMenu()">🏠 Retour au menu</button>
+  </div>
+  <p id="scoreZone" style="display:none;">🎯 Score : <strong id="score">0</strong> / <span id="total">20</span></p>
+
+  <script>
+    const graduationStart=50, pixelSpan=500, tolerance=8, zoomFactor=0.5;
+    let chrono=30, chronoInterval, timeLeft=0, tempsEcoule=false, score=0, niveauActuel=0, questions=[];
+    let minVal=-10, maxVal=10, pas=1, graduationStep=25, afficherChaque=1, labelEvery=1;
+    let niveauCorrect=false, lang='fr', isDragging=false, modeQuestions='mix', sonsActives=true, zoomLevel=1;
+    let originalMinVal=-10, originalMaxVal=10, sansChrono=false, currentPoint=null, modeActif='mix';
+    let customWindow=false;
+
+    const pointNames='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+    const successSound=new Audio('https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg');
+    const errorSound  =new Audio('https://actions.google.com/sounds/v1/foley/wood_board_drop.ogg');
+    const timeoutSound=new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
+
+    const textes={
+      fr:{instruction:"🖱️ Clique sur la droite graduée ou utilise les flèches ← → du clavier pour placer le point.",
+          consigneSingle:"Question {n}/20 : place le point {p} sur l'abscisse : {v}",
+          consigneMultiple:"Question {n}/20 : Place les points {v} sur la demi-droite graduée.",
+          bravo:"✅ Bravo ! Bien placé.", erreur:"❌ Essaie encore.", fini:"🎉 Bravo ! Exercice terminé.",
+          temps:"⏰ Temps écoulé !", score:"🎯 Score :", mode:"Mode : "},
+      en:{instruction:"🖱️ Click the number line or use ← → to place the cross.",
+          consigneSingle:"Question {n}/20: place point {p} at abscissa: {v}",
+          consigneMultiple:"Question {n}/20: place points {v} on the half-line.",
+          bravo:"✅ Well done!", erreur:"❌ Try again.", fini:"🎉 Done!", temps:"⏰ Time's up!", score:"🎯 Score:", mode:"Mode: "},
+      es:{instruction:"🖱️ Haz clic en la recta numérica o usa ← → para colocar la cruz.",
+          consigneSingle:"Pregunta {n}/20: coloca el punto {p} en la abscisa: {v}",
+          consigneMultiple:"Pregunta {n}/20: coloca los puntos {v} en la semirrecta.",
+          bravo:"✅ ¡Bien hecho!", erreur:"❌ Inténtalo de nuevo.", fini:"🎉 ¡Terminado!", temps:"⏰ ¡Tiempo agotado!", score:"🎯 Puntuación:", mode:"Modo: "},
+      zh:{instruction:"🖱️ 点击数轴或用 ← → 放置标记。",
+          consigneSingle:"问题 {n}/20：将点 {p} 放在横坐标：{v}",
+          consigneMultiple:"问题 {n}/20：把点 {v} 放在半直线上。",
+          bravo:"✅ 做得好！", erreur:"❌ 再试一次。", fini:"🎉 完成！", temps:"⏰ 时间到！", score:"🎯 分数:", mode:"模式："}
+    };
+
+    const modeLabels={
+      fr:{mix:"Mix (entiers + décimaux)", entiers:"Entiers seulement", dec1:"Décimaux à 1 chiffre", dec2:"Décimaux à 2 chiffres",
+          dec3:"Décimaux à 3 chiffres", fractions:"Fractions", multiple:"Points multiples", expert:"Expert (tout mixé)"},
+      en:{mix:"Mix (integers + decimals)", entiers:"Integers only", dec1:"Decimals (1 digit)", dec2:"Decimals (2 digits)",
+          dec3:"Decimals (3 digits)", fractions:"Fractions", multiple:"Multiple points", expert:"Expert (all mixed)"},
+      es:{mix:"Mixto (enteros + decimales)", entiers:"Solo enteros", dec1:"Decimales (1 cifra)", dec2:"Decimales (2 cifras)",
+          dec3:"Decimales (3 cifras)", fractions:"Fracciones", multiple:"Puntos múltiples", expert:"Experto (todo mezclado)"},
+      zh:{mix:"混合（整数+小数）", entiers:"仅整数", dec1:"小数（1位）", dec2:"小数（2位）", dec3:"小数（3位）", fractions:"分数", multiple:"多个点", expert:"专家（全部混合）"}
+    };
+
+    function getLang(){ return document.getElementById("lang").value; }
+    function formatNumberByLang(value,precision){ const f=value.toFixed(precision); return (lang==='fr')?f.replace('.',','):f; }
+    function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+    function randDecimal(min,max,digits){ const v=Math.random()*(max-min)+min; return parseFloat(v.toFixed(digits)); }
+    function randFraction(){ const dens=[2,3,4,5,8,10]; const den=dens[randInt(0,dens.length-1)]; const num=randInt(-10,10); return {num,den,value:num/den}; }
+
+    function demarrerJeu(){
+      lang=getLang();
+      const tempsValue=document.getElementById("temps").value;
+      if(tempsValue==='infini'){ sansChrono=true; chrono=Infinity; } else { sansChrono=false; chrono=parseInt(tempsValue,10); }
+      modeQuestions=document.getElementById("mode").value;
+      modeActif=modeQuestions;
+      sonsActives=document.getElementById("sons").checked;
+      genererQuestions();
+      document.getElementById("startZone").style.display="none";
+      document.getElementById("instruction").style.display="block";
+      document.getElementById("consigne").style.display="block";
+      document.getElementById("chrono").style.display=sansChrono?"none":"block";
+      document.getElementById("droite").style.display="block";
+      document.getElementById("currentValue").style.display="block";
+      document.getElementById("zoomControls").style.display="block";
+      document.getElementById("feedback").style.display="block";
+      document.getElementById("controls").style.display="block";
+      document.getElementById("scoreZone").style.display="block";
+      const modeElt=document.getElementById("modeChoisi");
+      modeElt.textContent=textes[lang].mode+(modeLabels[lang][modeQuestions]||modeQuestions);
+      modeElt.style.display="block";
+      preparerNiveau();
+    }
+
+    function genererQuestions(){
+      questions=[];
+      for(let i=0;i<20;i++){
+        const name=pointNames[i%pointNames.length];
+        if(modeQuestions==='multiple'){
+          const nb=randInt(2,3); const pts=[];
+          for(let j=0;j<nb;j++){
+            const sub=String.fromCharCode(65+(i*nb+j)%26);
+            const val=randDecimal(0,10,1);
+            pts.push({name:sub,value:val,placed:false});
+          }
+          const disp=pts.map(p=>`${p.name}(${formatNumberByLang(p.value,1)})`).join(' et ');
+          questions.push({type:'multiple', kind:'multiple', points:pts, display:disp, mode:modeActif});
+          continue;
+        }
+        let precision=0, value=0, display='', kind='integer';
+        switch(modeQuestions){
+          case 'entiers':
+            value=randInt(-10,10); precision=0; display=value.toString(); kind='integer'; break;
+          case 'dec1':
+            if(Math.random()<0.30){
+              const nb=randInt(2,3); const pts=[];
+              for(let j=0;j<nb;j++){
+                const sub=String.fromCharCode(65+(i*nb+j)%26);
+                const val=randDecimal(0,10,1);
+                pts.push({name:sub,value:val,placed:false});
+              }
+              const disp=pts.map(p=>`${p.name}(${formatNumberByLang(p.value,1)})`).join(' et ');
+              questions.push({type:'multiple', kind:'dec1-multi', points:pts, display:disp, mode:modeActif});
+              continue;
+            } else {
+              value=randDecimal(-2,12,1); precision=1; display=formatNumberByLang(value,1); kind='dec1';
+            }
+            break;
+          case 'dec2':
+            value=randDecimal(-1,1,2); precision=2; display=formatNumberByLang(value,2); kind='dec2'; break;
+          case 'dec3':
+            value=randDecimal(-0.5,0.5,3); precision=3; display=formatNumberByLang(value,3); kind='dec3'; break;
+          case 'fractions':
+            const fr=randFraction(); value=fr.value; display=`${fr.num}/${fr.den}`; precision=2; kind='fraction'; break;
+          case 'mix':
+            if(Math.random()<0.5){ value=randInt(-10,10); precision=0; display=value.toString(); kind='integer'; }
+            else { value=randDecimal(-2,12,1); precision=1; display=formatNumberByLang(value,1); kind='dec1'; }
+            break;
+          case 'expert':
+            if(Math.random()<0.30){
+              const nb=randInt(2,3); const pts=[];
+              for(let j=0;j<nb;j++){
+                const sub=String.fromCharCode(65+(i*nb+j)%26);
+                const pick=randInt(0,3);
+                let val = (pick===0)?randInt(-10,10)
+                          :(pick===1)?randDecimal(-2,12,1)
+                          :(pick===2)?randDecimal(-1,1,2)
+                                     :randDecimal(-0.5,0.5,3);
+                pts.push({name:sub,value:val,placed:false});
+              }
+              const disp=pts.map(p=>`${p.name}(${formatNumberByLang(p.value,1)})`).join(' et ');
+              questions.push({type:'multiple', kind:'expert-multi', points:pts, display:disp, mode:modeActif});
+              continue;
+            }else{
+              const pool=['integer','dec1','dec2','dec3','fraction'];
+              const pick=pool[randInt(0,pool.length-1)];
+              if(pick==='integer'){ value=randInt(-10,10); precision=0; display=value.toString(); kind='integer'; }
+              else if(pick==='dec1'){ value=randDecimal(-2,12,1); precision=1; display=formatNumberByLang(value,1); kind='dec1'; }
+              else if(pick==='dec2'){ value=randDecimal(-1,1,2); precision=2; display=formatNumberByLang(value,2); kind='dec2'; }
+              else if(pick==='dec3'){ value=randDecimal(-0.5,0.5,3); precision=3; display=formatNumberByLang(value,3); kind='dec3'; }
+              else { const fr2=randFraction(); value=fr2.value; display=`${fr2.num}/${fr2.den}`; precision=2; kind='fraction'; }
+            }
+            break;
+          default:
+            value=randDecimal(-2,12,1); precision=1; display=formatNumberByLang(value,1); kind='dec1'; break;
+        }
+        questions.push({type:'single', kind, value, display, pointName:name, precision, mode:modeActif});
+      }
+    }
+
+    function configNiveau(){
+      const q=questions[niveauActuel];
+      if(customWindow){
+        if(q.type==='multiple'){ pas=0.1; labelEvery=1; }
+        else if(q.kind==='integer'){ pas=1; labelEvery=1; }
+        else if(q.kind==='dec1'){ pas=0.1; labelEvery=1; }
+        else if(q.kind==='dec2'){ pas=0.01; labelEvery=0.5; }
+        else if(q.kind==='dec3'){ pas=0.001; labelEvery=0.1; }
+        else if(q.kind==='fraction'){ pas=0.1; labelEvery=1; }
+      } else {
+        if(q.type==='multiple'){ originalMinVal=-2; originalMaxVal=12; pas=0.1; labelEvery=1; }
+        else if(q.kind==='integer'){ originalMinVal=-10; originalMaxVal=10; pas=1; labelEvery=1; }
+        else if(q.kind==='dec1'){ originalMinVal=-2; originalMaxVal=12; pas=0.1; labelEvery=1; }
+        else if(q.kind==='dec2'){ originalMinVal=-1; originalMaxVal=1; pas=0.01; labelEvery=0.5; }
+        else if(q.kind==='dec3'){ originalMinVal=-0.5; originalMaxVal=0.5; pas=0.001; labelEvery=0.1; }
+        else if(q.kind==='fraction'){ originalMinVal=-6; originalMaxVal=6; pas=0.1; labelEvery=1; }
+        minVal=originalMinVal; maxVal=originalMaxVal;
+      }
+      const span=maxVal-minVal; graduationStep=pixelSpan/span;
+      afficherChaque=Math.max(1,Math.round(labelEvery/pas));
+    }
+
+    function genererGraduations(){
+      const graduations=document.getElementById("graduations");
+      graduations.innerHTML="";
+      const pasStr=pas.toString(); const precision=pasStr.includes('.')?pasStr.split('.')[1].length:0;
+      const numSteps=Math.round((maxVal-minVal)/pas);
+      for(let k=0;k<=numSteps;k++){
+        let v=minVal+k*pas; v=parseFloat(v.toFixed(precision));
+        const pos=(v-minVal)/(maxVal-minVal); const x=graduationStart+pos*pixelSpan;
+        const line=document.createElementNS("http://www.w3.org/2000/svg","line");
+        line.setAttribute("x1",x); line.setAttribute("x2",x); line.setAttribute("stroke","black");
+        if(k%afficherChaque===0){
+          line.setAttribute("y1",40); line.setAttribute("y2",60); line.setAttribute("stroke-width",3);
+          const text=document.createElementNS("http://www.w3.org/2000/svg","text");
+          text.setAttribute("x",x); text.setAttribute("y",70); text.setAttribute("text-anchor","middle"); text.setAttribute("font-size","10");
+          text.textContent=formatNumberByLang(v,precision); graduations.appendChild(text);
+        } else {
+          line.setAttribute("y1",45); line.setAttribute("y2",55); line.setAttribute("stroke-width",1);
+        }
+        graduations.appendChild(line);
+      }
+    }
+
+    function getPointValue(point){
+      const x=parseFloat(point.querySelector("line").getAttribute("x1"))+5;
+      return minVal+(x-graduationStart)/graduationStep;
+    }
+    function setPointFromValue(point,value){
+      value=Math.max(minVal,Math.min(value,maxVal));
+      const pos=(value-minVal)/(maxVal-minVal); const newX=graduationStart+pos*pixelSpan;
+      point.querySelectorAll("line").forEach(l=>{ l.setAttribute("x1",newX-5); l.setAttribute("x2",newX+5); });
+      point.querySelector("text").setAttribute("x",newX);
+    }
+
+    function preparerNiveau(){
+      customWindow=false;
+      const droite=document.getElementById("droite");
+      droite.classList.add('fade-out');
+      setTimeout(()=>{
+        configNiveau(); genererGraduations(); updateConsigne();
+        const group=document.getElementById("points"); group.innerHTML="";
+        const q=questions[niveauActuel];
+        if(q.mode!==modeActif){ genererQuestions(); niveauActuel=0; customWindow=false; configNiveau(); genererGraduations(); }
+        if(q.type==='single'){
+          let initValue=Math.max(minVal,Math.min(0,maxVal));
+          if(Math.abs(initValue-q.value)<1e-9) initValue+=pas;
+          const pos=(initValue-minVal)/(maxVal-minVal); const initX=graduationStart+pos*pixelSpan;
+          group.appendChild(createPoint(q.pointName,initX,q.value));
+        } else {
+          q.points.forEach(p=>{
+            let initValue=randDecimal(minVal,maxVal,1); if(Math.abs(initValue-p.value)<1e-9) initValue+=pas;
+            const pos=(initValue-minVal)/(maxVal-minVal); const initX=graduationStart+pos*pixelSpan;
+            group.appendChild(createPoint(p.name,initX,p.value,p.placed));
+          });
+        }
+        niveauCorrect=false; tempsEcoule=false; document.getElementById("feedback").textContent="";
+        document.getElementById("verifierBtn").disabled=false;
+        droite.classList.remove('fade-out'); droite.classList.add('fade-in'); startChrono();
+      },250);
+    }
+
+    function createPoint(name,x,targetValue,placed=false){
+      const cross=document.createElementNS("http://www.w3.org/2000/svg","g");
+      cross.classList.add('point'); cross.setAttribute("data-name",name);
+      cross.setAttribute("data-target",targetValue); cross.setAttribute("data-placed",placed);
+      const l1=document.createElementNS("http://www.w3.org/2000/svg","line"); l1.setAttribute("x1",x-5); l1.setAttribute("y1",45); l1.setAttribute("x2",x+5); l1.setAttribute("y2",55); l1.setAttribute("stroke","red"); l1.setAttribute("stroke-width",2);
+      const l2=document.createElementNS("http://www.w3.org/2000/svg","line"); l2.setAttribute("x1",x-5); l2.setAttribute("y1",55); l2.setAttribute("x2",x+5); l2.setAttribute("y2",45); l2.setAttribute("stroke","red"); l2.setAttribute("stroke-width",2);
+      const t=document.createElementNS("http://www.w3.org/2000/svg","text"); t.setAttribute("x",x); t.setAttribute("y",40); t.setAttribute("text-anchor","middle"); t.setAttribute("font-size","12"); t.setAttribute("fill","red"); t.textContent=name;
+      cross.appendChild(l1); cross.appendChild(l2); cross.appendChild(t);
+      if(!placed){
+        cross.setAttribute("tabindex","0");
+        cross.addEventListener("mousedown",()=>{isDragging=true; currentPoint=cross;});
+        cross.addEventListener("touchstart",(e)=>{isDragging=true; currentPoint=cross; e.preventDefault();},{passive:false});
+        cross.addEventListener("keydown",function(e){
+          const el=e.currentTarget||this;
+          let currentX=parseFloat(el.querySelector("line").getAttribute("x1"))+5;
+          let value=minVal+(currentX-graduationStart)/graduationStep;
+          if(e.key==="ArrowRight") value+=pas; if(e.key==="ArrowLeft") value-=pas;
+          value=Math.max(minVal,Math.min(value,maxVal));
+          const pos=(value-minVal)/(maxVal-minVal); const newX=graduationStart+pos*pixelSpan;
+          el.querySelectorAll("line").forEach(line=>{ line.setAttribute("x1",newX-5); line.setAttribute("x2",newX+5); });
+          el.querySelector("text").setAttribute("x",newX);
+          document.getElementById("feedback").textContent=""; updateCurrentValue(el);
+        });
+      }
+      return cross;
+    }
+
+    function updateCurrentValue(point){
+      if(!point) return;
+      const x=parseFloat(point.querySelector("line").getAttribute("x1"))+5;
+      const value=minVal+(x-graduationStart)/graduationStep;
+      const pasStr=pas.toString(); const precision=pasStr.includes('.')?pasStr.split('.')[1].length:0;
+      document.getElementById("currentValue").textContent="Position actuelle : "+formatNumberByLang(parseFloat(value.toFixed(precision)),precision);
+    }
+
+    function zoomIn(){
+      if(zoomLevel<=0.2) return;
+      const points=Array.from(document.querySelectorAll(".point"));
+      const valuesBefore=points.map(p=>getPointValue(p));
+      const center=(currentPoint?getPointValue(currentPoint):(minVal+maxVal)/2);
+      zoomLevel*=zoomFactor;
+      const newSpan=(originalMaxVal-originalMinVal)*zoomLevel;
+      minVal=center-newSpan/2; maxVal=center+newSpan/2;
+      customWindow=true;
+      const span=maxVal-minVal; graduationStep=pixelSpan/span;
+      genererGraduations();
+      points.forEach((p,i)=>setPointFromValue(p, valuesBefore[i]));
+      if(currentPoint) updateCurrentValue(currentPoint);
+    }
+    function zoomOut(){
+      if(zoomLevel>=5) return;
+      const points=Array.from(document.querySelectorAll(".point"));
+      const valuesBefore=points.map(p=>getPointValue(p));
+      const center=(currentPoint?getPointValue(currentPoint):(minVal+maxVal)/2);
+      zoomLevel/=zoomFactor;
+      const newSpan=(originalMaxVal-originalMinVal)*zoomLevel;
+      minVal=center-newSpan/2; maxVal=center+newSpan/2;
+      customWindow=true;
+      const span=maxVal-minVal; graduationStep=pixelSpan/span;
+      genererGraduations();
+      points.forEach((p,i)=>setPointFromValue(p, valuesBefore[i]));
+      if(currentPoint) updateCurrentValue(currentPoint);
+    }
+
+    const droite=document.getElementById("droite");
+    droite.addEventListener("mousemove",(e)=>{
+      if(!isDragging||!currentPoint) return;
+      const rect=droite.getBoundingClientRect();
+      let x=e.clientX-rect.left; x=Math.max(graduationStart,Math.min(x,graduationStart+pixelSpan));
+      let value=minVal+(x-graduationStart)/graduationStep;
+      const snapped=Math.round(value/pas)*pas;
+      const pos=(snapped-minVal)/(maxVal-minVal); const newX=graduationStart+pos*pixelSpan;
+      currentPoint.querySelectorAll("line").forEach(l=>{l.setAttribute("x1",newX-5); l.setAttribute("x2",newX+5);});
+      currentPoint.querySelector("text").setAttribute("x",newX);
+      document.getElementById("feedback").textContent=""; updateCurrentValue(currentPoint);
+    });
+    document.addEventListener("mouseup",()=>{isDragging=false;});
+    droite.addEventListener("touchmove",function(e){
+      if(e.touches.length===1 && isDragging && currentPoint){
+        e.preventDefault();
+        const rect=this.getBoundingClientRect();
+        let x=e.touches[0].clientX-rect.left; x=Math.max(graduationStart,Math.min(x,graduationStart+pixelSpan));
+        let value=minVal+(x-graduationStart)/graduationStep;
+        const snapped=Math.round(value/pas)*pas;
+        const pos=(snapped-minVal)/(maxVal-minVal); const newX=graduationStart+pos*pixelSpan;
+        currentPoint.querySelectorAll("line").forEach(l=>{l.setAttribute("x1",newX-5);l.setAttribute("x2",newX+5);});
+        currentPoint.querySelector("text").setAttribute("x",newX);
+        document.getElementById("feedback").textContent=""; updateCurrentValue(currentPoint);
+      }
+    },{passive:false});
+    document.addEventListener("touchend",()=>{isDragging=false;});
+
+    function updateConsigne(){
+      document.getElementById("instruction").textContent=textes[lang].instruction;
+      const q=questions[niveauActuel];
+      const key=(q.type==='multiple')?'consigneMultiple':'consigneSingle';
+      const nom=(q.type==='single')?q.pointName:q.points.map(p=>p.name).join(', ');
+      const txt=textes[lang][key].replace("{n}",(niveauActuel+1)).replace("{p}",nom).replace("{v}",q.display);
+      document.getElementById("consigne").innerHTML=txt;
+    }
+    function startChrono(){
+      clearInterval(chronoInterval);
+      if(sansChrono){ document.getElementById("chrono").textContent="⏱️ Temps : illimité"; return; }
+      timeLeft=chrono; tempsEcoule=false;
+      document.getElementById("chrono").textContent="⏱️ Temps restant : "+timeLeft+"s";
+      chronoInterval=setInterval(()=>{
+        timeLeft--; document.getElementById("chrono").textContent="⏱️ Temps restant : "+timeLeft+"s";
+        if(timeLeft<=0){ clearInterval(chronoInterval); tempsEcoule=true;
+          document.getElementById("feedback").textContent=textes[lang].temps; document.getElementById("feedback").style.color="orange";
+          document.getElementById("verifierBtn").disabled=true; if(sonsActives) timeoutSound.play();
+          setTimeout(()=>{ if(!niveauCorrect) niveauSuivant(); }, 1800);
+        }
+      },1000);
+    }
+
+    function verifierPoint(){
+      if(tempsEcoule && !sansChrono){
+        document.getElementById("feedback").textContent=textes[lang].temps;
+        document.querySelectorAll(".point").forEach(p=>p.classList.add('shake'));
+        setTimeout(()=>document.querySelectorAll(".point").forEach(p=>p.classList.remove('shake')),500);
+        if(sonsActives) timeoutSound.play(); return;
+      }
+      if(niveauCorrect){ document.getElementById("feedback").textContent=textes[lang].bravo; return; }
+
+      const q=questions[niveauActuel]; let allCorrect=true;
+      if(q.type==='single'){
+        const point=document.querySelector('.point[data-name="'+q.pointName+'"]');
+        const x=parseFloat(point.querySelector("line").getAttribute("x1"))+5;
+        const targetPos=(q.value-minVal)/(maxVal-minVal); const targetX=graduationStart+targetPos*pixelSpan;
+        if(Math.abs(x-targetX)<=tolerance){
+          point.setAttribute("data-placed","true"); document.getElementById("feedback").textContent=textes[lang].bravo;
+          document.getElementById("feedback").style.color="green"; point.classList.add('bounce'); setTimeout(()=>point.classList.remove('bounce'),500);
+          if(sonsActives) successSound.play(); score++; niveauCorrect=true;
+        } else {
+          allCorrect=false; document.getElementById("feedback").textContent=textes[lang].erreur;
+          document.getElementById("feedback").style.color="red"; point.classList.add('shake'); setTimeout(()=>point.classList.remove('shake'),500);
+          if(sonsActives) errorSound.play();
+        }
+      } else {
+        q.points.forEach(p=>{
+          const point=document.querySelector('.point[data-name="'+p.name+'"]');
+          const x=parseFloat(point.querySelector("line").getAttribute("x1"))+5;
+          const targetPos=(p.value-minVal)/(maxVal-minVal); const targetX=graduationStart+targetPos*pixelSpan;
+          if(Math.abs(x-targetX)<=tolerance){ point.setAttribute("data-placed","true"); p.placed=true; }
+          else { allCorrect=false; point.classList.add('shake'); setTimeout(()=>point.classList.remove('shake'),500); }
+        });
+        if(allCorrect){
+          document.getElementById("feedback").textContent=textes[lang].bravo;
+          document.getElementById("feedback").style.color="green";
+          document.querySelectorAll(".point").forEach(p=>p.classList.add('bounce'));
+          /* FIX: correct setTimeout parentheses */
+          setTimeout(()=>{ document.querySelectorAll(".point").forEach(p=>p.classList.remove('bounce')); }, 500);
+          if(sonsActives) successSound.play(); score++; niveauCorrect=true;
+        } else {
+          document.getElementById("feedback").textContent=textes[lang].erreur;
+          document.getElementById("feedback").style.color="red";
+          if(sonsActives) errorSound.play();
+        }
+      }
+      updateScore();
+    }
+
+    function niveauSuivant(){ clearInterval(chronoInterval); niveauActuel++;
+      if(niveauActuel<20){ preparerNiveau(); }
+      else{ document.getElementById("controls").style.display="none";
+        document.getElementById("consigne").textContent=textes[lang].fini;
+        document.getElementById("chrono").style.display="none"; document.getElementById("droite").style.display="none";
+        document.getElementById("instruction").style.display="none"; document.getElementById("feedback").style.display="none";
+        document.getElementById("currentValue").style.display="none"; document.getElementById("zoomControls").style.display="none";
+        saveScore(); displayHistory(); } }
+    function rechargerQuestion(){ clearInterval(chronoInterval); preparerNiveau(); }
+    function rechargerExercice(){ clearInterval(chronoInterval); score=0; niveauActuel=0; genererQuestions(); document.getElementById("score").textContent=0; preparerNiveau(); }
+    function retourMenu(){ clearInterval(chronoInterval); score=0; niveauActuel=0; questions=[]; document.getElementById("score").textContent=0;
+      document.getElementById("startZone").style.display="block"; document.getElementById("instruction").style.display="none";
+      document.getElementById("consigne").style.display="none"; document.getElementById("chrono").style.display="none";
+      document.getElementById("droite").style.display="none"; document.getElementById("currentValue").style.display="none";
+      document.getElementById("zoomControls").style.display="none"; document.getElementById("feedback").style.display="none";
+      document.getElementById("controls").style.display="none"; document.getElementById("scoreZone").style.display="none";
+      document.getElementById("modeChoisi").style.display="none"; }
+
+    function updateScore(){ document.getElementById("score").textContent=score; }
+    function saveScore(){ let scores=JSON.parse(localStorage.getItem('scores'))||[]; scores.push(score); if(scores.length>5) scores.shift(); localStorage.setItem('scores',JSON.stringify(scores));
+      const high=Math.max(...scores); document.getElementById("consigne").innerHTML+="<br>High Score: "+high; }
+    function displayHistory(){ let scores=JSON.parse(localStorage.getItem('scores'))||[]; if(scores.length>0){ document.getElementById("consigne").innerHTML+="<br>Historique des scores : "+scores.join(', '); } }
+  </script>
+</body>
+</html>
