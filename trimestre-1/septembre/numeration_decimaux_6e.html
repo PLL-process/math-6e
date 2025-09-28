@@ -749,7 +749,7 @@
 
 <!-- ==================== EXERCICE G ==================== -->       
       <h3>📐 Ex. G – Repérage sur une demi-droite graduée (Lecture d'abscisses)</h3>
-                 <!-- À placer dans Ex. G -->
+                
       <div class="img-wrap">
         <img
           id="img-exG"
@@ -848,11 +848,10 @@
       </div>
       <hr/>
 
-      
+<!-- ====================================================== DEFIS court ====================================================== -->          
 <div class="exercise">      
       <!-- DEFIS courts -->
       <h1>👥 DÉFIS courts– À faire en groupe de 3</h1><br>
- 
 </div>
       
 <div class="exercise">
@@ -863,7 +862,7 @@
             <p>Cet exercice se fait en groupe et encourage la discussion. Pas de réponse fixe, mais parlez des idées, partagez les calculs, et notez ce que vous apprenez. C'est pour travailler ensemble comme une équipe !</p>
         </div>
     </div>
-
+<!-- ====================================================== DÉFI 1 – Le porte-conteneurs Antoine de Saint-Exupéry ====================================================== -->    
     <div class="exercise">
         <h2>🚢 DÉFI 1 – Le porte-conteneurs Antoine de Saint-Exupéry</h2>
       <div class="img-wap">
@@ -891,7 +890,7 @@
             <p>Pour la largeur, 59 m, un terrain fait 68 m de large, mais l'équivalence est pour la longueur, pas largeur. Tout vérifié !</p>
         </div>
     </div>
-
+<!-- ====================================================== DÉFI 2 – L’unité astronomique (UA) ====================================================== -->    
     <div class="exercise">
         <h2>🌞 DÉFI 2 – L’unité astronomique (UA)</h2>
          <div class="img-wap">
@@ -944,7 +943,7 @@
             <li>Relier les mathématiques à l’astronomie et à la physique</li>
         </ul>
     </div>
-
+<!-- ====================================================== DÉFI 3 – Les vers à soie ====================================================== -->   
     <div class="exercise">
         <h2>🐛 DÉFI 3 – Les vers à soie</h2>
       
@@ -969,7 +968,7 @@
             <p>On espère entre 1 million et 1 million 875 mille bobines. Calcul : multiplie le nombre de vers par longueur, puis divise par 16. Comme les vers font de la soie naturelle !</p>
         </div>
     </div>
-
+<!-- ====================================================== DÉFI 4 – L’opération « Pièces Jaunes » ====================================================== -->   
     <div class="exercise">
         <h2>💰 DÉFI 4 – L’opération « Pièces Jaunes »</h2>
       <div class="img-wap">
@@ -1006,7 +1005,7 @@
             </li>
         </ol>
     </div>
-
+<!-- ====================================================== DÉFI 5 – Les pixels ====================================================== -->   
     <div class="exercise">
         <h2>🖼️ DÉFI 5 – Les pixels</h2>
       <div class="img-wap">
@@ -1054,7 +1053,7 @@
             </li>
         </ol>
     </div>
-
+<!-- ====================================================== DÉFI TRAVAIL PERSONNEL – Le QR-Code ====================================================== -->   
     <div class="exercise">
         <h2>🔳 DÉFI TRAVAIL PERSONNEL – Le QR-Code</h2>
         <div class="img-wap">
@@ -1075,7 +1074,7 @@
     </div>
 
     </section>
-
+<!-- ====================================================== Ressources (échauffement & approfondissement ====================================================== -->   
     <section class="card">
       <h2>Ressources (échauffement & approfondissement)</h2>
       <ul>
@@ -1222,6 +1221,21 @@
     // =========================
     function resetAll(){ resetTimer(); ['eleveNom','elevePrenom','eleveClasse'].forEach(id=>byId(id).value=''); reinitialiserEx1(); reinitialiserEx2(); reinitialiserEx3(); reinitialiserDeep(); }
 
+    // ... Pour bouton “Correction” de la question 2 du DÉFI 5
+
+      function toggleCorrection(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        // si la correction est cachée (display: none) -> on l'affiche, sinon on la cache
+        const cur = getComputedStyle(el).display;
+        el.style.display = (cur === 'none') ? 'block' : 'none';
+      }
+      
+      // ...
+
+  
+
+  
     // =========================
     // Écouteurs
     // =========================
