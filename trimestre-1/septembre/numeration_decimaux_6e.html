@@ -47,8 +47,6 @@
     .img-wrap { width: 100%; overflow: hidden; }
     .img-wrap > img, img.responsive-img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
     
-    /* Cache les corrections par défaut (on togglera au clic) */
-    .correction { display: none; }
     
     /* Drag & drop Ex.1 (lisible) */
     .dropzone { border: 1px dashed #325e8f; border-radius: 10px; padding: 10px; min-height: 56px; }
@@ -387,7 +385,7 @@
         <button id="btn-corr-ex2" class="btn btn-accent btn-correction" type="button" onclick="corrigerEx2(true)">🧠 Correction</button>
         <button class="btn" type="button" onclick="reinitialiserEx2()">🔁 Recommencer</button>
       </div>
-      <p id="msg-ex2" class="lead" style="margin-top:6px;"></p>
+      <p id="msg-ex2" class="lead" style="margin-top:6px;" aria-live="polite"></p>
     </section>
 
     <section id="ex3" class="card" data-max="4">
@@ -426,13 +424,13 @@
         <button id="btn-corr-ex3" class="btn btn-accent btn-correction" type="button" onclick="corrigerEx3(true)">🧠 Correction</button>
         <button class="btn" type="button" onclick="reinitialiserEx3()">🔁 Recommencer</button>
       </div>
-      <p id="msg-ex3" class="lead" style="margin-top:6px;"></p>
+      <p id="msg-ex3" class="lead" style="margin-top:6px;" aria-live="polite"></p>
     </section>
 
     <!-- ========================= -->
     <!-- APPROFONDISSEMENT        -->
     <!-- ========================= -->
-    <section id="approfondissement" class="card" data-max="24">
+    <section id="approfondissement" class="card" data-max="36">
       <div class="info">
         <h2>Approfondissement – Exercices</h2>
         <span class="badge">Essais restants : <strong id="tries-deep">5</strong></span>
@@ -821,11 +819,11 @@
 
       <ol>
         <li>Quelles sont les abscisses des points A et B ? 
-          <br>Abscisses de A : <input id="pg1" type="text" placeholder="exemple : (1.75, 0)"/> 
-          <br>Abscisses de B : <input id="pg2" type="text" placeholder="exemple : (1.75, 0)"/></li><br>
+          <br>Abscisses de A : <input id="pg1" data-correct="(0.8, 0)" type="text" placeholder="exemple : (1.75, 0)"/> 
+          <br>Abscisses de B : <input id="pg2" data-correct="(1.4, 0)" type="text" placeholder="exemple : (1.75, 0)"/></li><br>
         <li>Place mentalement les points C(2,1) et D(0,5) sur la demi-droite graduée.
-          <br>Où placer C : <input id="pg3" placeholder="Ex. : à 0,5 sur la demi-droite"/>
-          <br>Où placer D : <input id="pg4" placeholder="Ex. : à 0,5 sur la demi-droite"/></li>
+          <br>Où placer C : <input id="pg3" data-correct="à 2,1 sur la demi-droite" placeholder="Ex. : à 0,75 sur la demi-droite"/>
+          <br>Où placer D : <input id="pg4" data-correct="à 0,5 sur la demi-droite" placeholder="Ex. : à 0,25 sur la demi-droite"/></li>
       </ol>
 
     <!-- ==================== EXERCICE H ==================== -->       
