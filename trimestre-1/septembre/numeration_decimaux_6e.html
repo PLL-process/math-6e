@@ -43,20 +43,55 @@
       display: block;
     }
 
-    /* Images responsives partout (rappel de cours, F, G, H) */
-.img-wrap { width: 100%; overflow: hidden; }
-.img-wrap > img, img.responsive-img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
-
-/* Cache les corrections par défaut (on togglera au clic) */
-.correction { display: none; }
-
-/* Drag & drop Ex.1 (lisible) */
-.dropzone { border: 1px dashed #325e8f; border-radius: 10px; padding: 10px; min-height: 56px; }
-.dropzone.dragover { background: rgba(50,94,143,.15); }
-.chip { cursor: grab; user-select: none; background:#1e3350; border:1px solid #284a72; border-radius:10px; padding:8px 10px; }
-
-
+        /* Images responsives partout (rappel de cours, F, G, H) */
+    .img-wrap { width: 100%; overflow: hidden; }
+    .img-wrap > img, img.responsive-img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
     
+    /* Cache les corrections par défaut (on togglera au clic) */
+    .correction { display: none; }
+    
+    /* Drag & drop Ex.1 (lisible) */
+    .dropzone { border: 1px dashed #325e8f; border-radius: 10px; padding: 10px; min-height: 56px; }
+    .dropzone.dragover { background: rgba(50,94,143,.15); }
+    .chip { cursor: grab; user-select: none; background:#1e3350; border:1px solid #284a72; border-radius:10px; padding:8px 10px; }
+
+
+    body {
+  background-color: #1e1e1e; /* Fond sombre */
+  color: #f0f0f0;            /* Texte clair */
+  font-family: 'Segoe UI', sans-serif;
+  line-height: 1.6;
+}
+
+h3 {
+  color: #ffd700; /* Jaune doré pour les titres */
+  margin-bottom: 0.5em;
+}
+
+ul {
+  padding-left: 1.2em;
+}
+
+li {
+  margin-bottom: 0.5em;
+}
+
+a {
+  color: #00bfff; /* Bleu clair pour les liens */
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+a:hover {
+  color: #ff69b4; /* Rose au survol */
+}
+
+iframe {
+  margin-top: 1em;
+  border: 2px solid #00bfff;
+  border-radius: 8px;
+}
+
     
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans"; }
@@ -579,12 +614,12 @@
       <br>Colonne B : nombre d’élèves
       <br><em>Exemple :</em>
       <pre>
-A           | B
-------------|-----
-Football    | 12
-Natation    | 8
-Basket      | 10
-Athlétisme  | 6
+        A           | B
+        ------------|-----
+        Football    | 12
+        Natation    | 8
+        Basket      | 10
+        Athlétisme  | 6
       </pre>
     </li>
     <li><strong>3.</strong> Sélectionne les cellules contenant les données.</li>
@@ -611,44 +646,42 @@ Athlétisme  | 6
 
       <!-- EXERCICE F-G-H : Repérage (images à fournir dans ../images) -->
     
-      <h3>📍 Ex. F – Repérage sur une demi-droite graduée</h3>
-        !-- ==================== EXERCICE F / QUESTION 1 : POINTS À PLACER (GeoGebra Classroom) ==================== -->
-      <li>Placer les points A(450), B(870), C(900), D(1100) sur la demi-droite graduée de GeoGebra Classroom ou dessine les sur une feuille.</li> 
-            
-      <p>Consigne : rejoins la leçon (fais descendre l'échelle verticale et clique sur "Continuer sans se connecter"), entre ton nom et place les points demandés.</p> <!-- Consigne élève -->
-      <ul>
-        <li>🧗‍♂️ Rejoins la leçon :  <em>clique sur l'URL ci-dessous</em> <br>
-                 <!-- Lien de repli (si l’IFRAME est bloquée par le navigateur/ENT) -->
-            <p>
-              <a href="https://www.geogebra.org/classroom/aa6srqrt" target="_blank" rel="noopener">
-                👉 Ouvrir la leçon GeoGebra dans un nouvel onglet (code : AA6S&nbsp;RQRT)
-              </a>
-            </p>
-        </li>
-        <li>🖱️ Clique sur <strong>"Continuer sans se connecter"</strong></li>
-        <li>✍️ Entre ton nom</li>
-        <li>🖱️ Clique sur <strong>"Lancer"</strong></li>
-        <li>🟢 place les points demandés</li>
-           <ul>
-            <li><strong>A(450)</strong>strong></li>
-            <li><strong>B(870)</strong></li>
-            <li><strong>C(900)</strong>strong></li>
-            <li><strong>D(1100)</strong>strong></li>
-          </ul>
-      </ul>
-      
-      <iframe
-        src="https://www.geogebra.org/classroom/aa6srqrt"  <!-- Votre lien Classroom (code AA6S RQRT) -->
-        title="GeoGebra Classroom – Ex. F Q1"              <!-- Titre accessible -->
-        width="100%"                                       <!-- Largeur responsive -->
-        height="640"                                       <!-- Hauteur d’affichage (ajustable) -->
-        style="border:1px solid #ccc;border-radius:6px"    <!-- Bordure sobre -->
-        loading="lazy"                                     <!-- Chargement différé -->
-        referrerpolicy="strict-origin-when-cross-origin"   <!-- Politique de référent stricte -->
-        sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-popups"> <!-- Permissions nécessaires -->
-      </iframe>
-      
- 
+<h3>📍 Ex. F – Repérage sur une demi-droite graduée</h3>
+
+<p><strong>Objectif :</strong> Placer les points <code>A(450)</code>, <code>B(870)</code>, <code>C(900)</code>, <code>D(1100)</code> sur la demi-droite graduée de GeoGebra Classroom ou les dessiner sur une feuille.</p>
+
+<p><strong>Consigne :</strong> Suis les étapes ci-dessous pour accéder à l’exercice :</p>
+
+<ul>
+  <li>🧗‍♂️ <strong>Rejoins la leçon :</strong> <em>clique sur le lien ci-dessous</em><br>
+    <a href="https://www.geogebra.org/classroom/aa6srqrt" target="_blank" rel="noopener">
+      👉 Ouvrir la leçon GeoGebra dans un nouvel onglet (code : AA6S&nbsp;RQRT)
+    </a>
+  </li>
+  <li>🖱️ Clique sur <strong>"Continuer sans se connecter"</strong></li>
+  <li>✍️ Entre ton nom</li>
+  <li>🚀 Clique sur <strong>"Lancer"</strong></li>
+  <li>🟢 Place les points demandés :
+    <ul>
+      <li><strong>A(450)</strong></li>
+      <li><strong>B(870)</strong></li>
+      <li><strong>C(900)</strong></li>
+      <li><strong>D(1100)</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<iframe
+  src="https://www.geogebra.org/classroom/aa6srqrt"
+  title="GeoGebra Classroom – Ex. F Q1"
+  width="100%"
+  height="640"
+  style="border:1px solid #00bfff; border-radius:8px"
+  loading="lazy"
+  referrerpolicy="strict-origin-when-cross-origin"
+  sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-popups">
+</iframe>
+
  
       <!-- ====== /Q2 (Classroom) ====== -->
      <!-- ==================== EXERCICE F / QUESTION 2 : Description de la méthode ==================== --> 
