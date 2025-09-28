@@ -57,41 +57,72 @@
 
 
     body {
-  background-color: #1e1e1e; /* Fond sombre */
-  color: #f0f0f0;            /* Texte clair */
-  font-family: 'Segoe UI', sans-serif;
-  line-height: 1.6;
-}
+      background-color: #1e1e1e; /* Fond sombre */
+      color: #f0f0f0;            /* Texte clair */
+      font-family: 'Segoe UI', sans-serif;
+      line-height: 1.6;
+    }
+    
+    h3 {
+      color: #ffd700; /* Jaune doré pour les titres */
+      margin-bottom: 0.5em;
+    }
+    
+    ul {
+      padding-left: 1.2em;
+    }
+    
+    li {
+      margin-bottom: 0.5em;
+    }
+    
+    a {
+      color: #00bfff; /* Bleu clair pour les liens */
+      text-decoration: underline;
+      font-weight: bold;
+    }
+    
+    a:hover {
+      color: #ff69b4; /* Rose au survol */
+    }
+    
+    iframe {
+      margin-top: 1em;
+      border: 2px solid #00bfff;
+      border-radius: 8px;
+    }
+    
+    .aide {
+      background-color: #333;
+      color: #ffd700;
+      padding: 0.8em;
+      margin: 0.5em 0;
+      border-left: 4px solid #00bfff;
+      border-radius: 6px;
+      font-size: 0.95em;
+    }
+    
+    li[title] {
+      cursor: help;
+      position: relative;
+    }
+    
+    li[title]:hover::after {
+      content: attr(title);
+      position: absolute;
+      left: 1em;
+      top: 100%;
+      background: #222;
+      color: #fff;
+      padding: 0.5em;
+      border-radius: 4px;
+      white-space: nowrap;
+      font-size: 0.85em;
+      z-index: 10;
+    }
 
-h3 {
-  color: #ffd700; /* Jaune doré pour les titres */
-  margin-bottom: 0.5em;
-}
 
-ul {
-  padding-left: 1.2em;
-}
-
-li {
-  margin-bottom: 0.5em;
-}
-
-a {
-  color: #00bfff; /* Bleu clair pour les liens */
-  text-decoration: underline;
-  font-weight: bold;
-}
-
-a:hover {
-  color: #ff69b4; /* Rose au survol */
-}
-
-iframe {
-  margin-top: 1em;
-  border: 2px solid #00bfff;
-  border-radius: 8px;
-}
-
+    
     
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans"; }
@@ -650,26 +681,54 @@ iframe {
 
 <p><strong>Objectif :</strong> Placer les points <code>A(450)</code>, <code>B(870)</code>, <code>C(900)</code>, <code>D(1100)</code> sur la demi-droite graduée de GeoGebra Classroom ou les dessiner sur une feuille.</p>
 
-<p><strong>Consigne :</strong> Suis les étapes ci-dessous pour accéder à l’exercice :</p>
+<div class="aide">
+  🧠 <strong>Aide :</strong> GeoGebra Classroom est une plateforme interactive. Tu vas y placer des points sur une ligne graduée. Suis les étapes ci-dessous pour y accéder et comprendre comment interagir.
+</div>
 
 <ul>
-  <li>🧗‍♂️ <strong>Rejoins la leçon :</strong> <em>clique sur le lien ci-dessous</em><br>
+  <li title="Clique sur le lien pour ouvrir la leçon dans un nouvel onglet.">🧗‍♂️ <strong>Rejoins la leçon :</strong> 
     <a href="https://www.geogebra.org/classroom/aa6srqrt" target="_blank" rel="noopener">
-      👉 Ouvrir la leçon GeoGebra dans un nouvel onglet (code : AA6S&nbsp;RQRT)
+      👉 Ouvrir la leçon GeoGebra (code : AA6S&nbsp;RQRT)
     </a>
   </li>
-  <li>🖱️ Clique sur <strong>"Continuer sans se connecter"</strong></li>
-  <li>✍️ Entre ton nom</li>
-  <li>🚀 Clique sur <strong>"Lancer"</strong></li>
-  <li>🟢 Place les points demandés :
+
+  <li title="Tu n’as pas besoin de compte. Clique sur ce bouton pour continuer.">🖱️ Clique sur <strong>"Continuer sans se connecter"</strong></li>
+
+  <li title="Écris ton prénom pour que l’enseignant puisse te reconnaître.">✍️ Entre ton nom</li>
+
+  <li title="Cela démarre l’exercice. Tu verras une demi-droite graduée.">🚀 Clique sur <strong>"Lancer"</strong></li>
+
+  <li title="Utilise l’outil 'Point' dans GeoGebra pour placer les coordonnées demandées.">🟢 Place les points demandés :
     <ul>
-      <li><strong>A(450)</strong></li>
-      <li><strong>B(870)</strong></li>
-      <li><strong>C(900)</strong></li>
-      <li><strong>D(1100)</strong></li>
+      <li title="Utilise l’outil 'Point' et clique sur 450.">A(450)</li>
+      <li title="Place le point à 870 sur la demi-droite.">B(870)</li>
+      <li title="Place le point à 900.">C(900)</li>
+      <li title="Place le point à 1100.">D(1100)</li>
     </ul>
   </li>
 </ul>
+
+<div class="aide">
+  🎓 <strong>Choisis ta méthode pour placer les points :</strong><br><br>
+
+  🖱️ <strong>Méthode graphique</strong> – intuitive et visuelle :  
+  <ul>
+    <li>Clique sur l’outil <strong>"Point"</strong> (icône en forme de cercle)</li>
+    <li>Place le point directement sur la demi-droite graduée à la bonne position</li>
+    <li>💡 Astuce : tu peux zoomer ou déplacer la vue avec ta souris si besoin</li>
+  </ul>
+
+  ⌨️ <strong>Méthode algébrique</strong> – rapide et précise :  
+  <ul>
+    <li>Clique sur l’onglet <strong>Algèbre</strong> à gauche</li>
+    <li>Dans la zone <em>"Saisie..."</em>, tape les coordonnées du point, par exemple : <code>A = (450, 0)</code></li>
+    <li>Appuie sur Entrée pour valider</li>
+    <li>🔁 Répète pour les autres points : <code>B = (870, 0)</code>, <code>C = (900, 0)</code>, <code>D = (1100, 0)</code></li>
+  </ul>
+
+  🧠 <em>Tu peux choisir la méthode qui te semble la plus simple. Les deux sont valides !</em>
+</div>
+
 
 <iframe
   src="https://www.geogebra.org/classroom/aa6srqrt"
@@ -683,8 +742,8 @@ iframe {
 </iframe>
 
  
-      <!-- ====== /Q2 (Classroom) ====== -->
-     <!-- ==================== EXERCICE F / QUESTION 2 : Description de la méthode ==================== --> 
+   
+<!-- ==================== EXERCICE F / QUESTION 2 : Description de la méthode ==================== --> 
      <li>Décris simplement ta méthode : <input id="pf1" type="text" placeholder="Description succincte : comment avez-vous placé les points ?" /></p></li>
 
 
