@@ -262,20 +262,20 @@
             <ul>
               <li>Sur une demi-droite graduée, on précise l'<strong>origine</strong> (O) et l'<strong>unité</strong> (ex. 1 ou 0,1).</li>
               <div class="img-wrap">
-                 <img  id="img-exG" class="responsive-img" 
+                 <img  id="img-exG1" class="responsive-img" 
                        src="../images/unite-de-graduation-demi-droite-graduee.jpg" 
                        alt="Demi-droite graduée avec unité de graduation, points C et D">
               </div>
 
               <li>Un point est repéré par son <strong>abscisse</strong>. <br>Son <strong>abscisse</strong> indique sa position sur la droite horizontale (<strong>axe des x</strong>).</li>
               <div class="img-wrap">
-                 <img   id="img-exG" class="responsive-img"
+                 <img   id="img-exG2" class="responsive-img"
                         src="../images/unite-de-graduation-demi-droite-graduee 3.jpg" 
                         alt="demi droite graduée au 10e et au 100e">
               </div>  
               <li>Entre <code>4,6</code> et <code>4,7</code> avec pas 0,01 → <strong>10 sous-intervalles</strong>.</li>
               <div class="img-wrap">
-                 <img  id="img-exG" class="responsive-img"
+                 <img  id="img-exG3" class="responsive-img"
                        src="../images/demi droite graduée 10 sous-intervalles.png" 
                        alt="demi droite graduée 10 sous-intervalles">
               </div>
@@ -752,7 +752,7 @@
                 
       <div class="img-wrap">
         <img
-          id="img-exG"
+          id="img-exG4"
           class="responsive-img"
           src="../images/EXERCISE 7 – Repérage sur une demi-droite graduée.png"
           alt="Repérage sur une demi-droite graduée">
@@ -1163,7 +1163,172 @@
     function updateTotal(){ const total = state.ex1.score+state.ex2.score+state.ex3.score+state.deep.score; const max = state.ex1.max+state.ex2.max+state.ex3.max+state.deep.max; byId('totalScore').textContent=total; byId('totalMax').textContent=max; }
     function setTries(exId,val){ state[exId].tries=Math.max(0,val); const idMap={ex1:'tries-ex1',ex2:'tries-ex2',ex3:'tries-ex3',deep:'tries-deep'}; byId(idMap[exId]).textContent=state[exId].tries; }
     function setScore(exId,val){ state[exId].score=Math.max(0, Math.min(val, state[exId].max)); const idMap={ex1:'score-ex1',ex2:'score-ex2',ex3:'score-ex3',deep:'score-deep'}; byId(idMap[exId]).textContent=state[exId].score; updateTotal(); }
+    
+        /* ========= NORMALISATION TEXTE ========= */
+    function norm(s){
+      return (s||"")
+        .toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g,"")  // accents
+        .replace(/[^\w\s\-\,]/g,"")                      // ponctuations exotiques
+        .replace(/\s+/g," ")                              // espaces multiples
+        .trim();
+    }
+    function normNoSep(s){
+      return norm(s).replace(/[\s,\-]+/g,"");             // sans espaces, virgules, tirets
+    }
+    
+    /* ========= EX. A – PLANÈTES (corriger/vérifier/reset) ========= */
+    function corrigerDeepA(showSolution=false){
+      const get = id => document.getElementById(id);
+      const expectEq = (id) => {
+        const el = get(id);
+        const expected = el.dataset.correct || "";
+        // noms → simple égalité insensible casse/accents
+        return norm(el.value) === norm(expected);
+      };
+      const expectListEq = (id) => {
+        // tolère espaces/virgules/tirets : "Mercure, Mars, ..." etc.
+        const el = get(id);
+        const expected = el.dataset.correct || "";
+        return normNoSep(el.value) === normNoSep(expected);
+      };
+    
+      if(!showSolution) setTries('deep', state.deep.tries-1);
+    
+      let pts = 0;
+      if (expectEq('pa1')) pts++;
+      if (expectEq('pa2')) pts++;
+      // phrase en toutes lettres – on garde norm() (tolère majuscules/minuscules/accents)
+      if (norm(get('pa3').value) === norm(get('pa3').dataset.correct)) pts++;
+      if (expectListEq('pa4')) pts++;
+      if (expectListEq('pa5')) pts++;
+      if (expectEq('pa6')) pts++;
+    
+      // maj badges A
+      byId('score-A').textContent = pts;
+      byId('max-A').textContent = '6';
+      byId('tries-A').textContent = state.deep.tries;
+    
+      // on répercute sur le score "deep" global (6 pts pour A)
+      const deepSansA = state.deep.score - (state._lastA || 0);
+      state._lastA = pts;
+      setScore('deep', deepSansA + pts);
+    
+      const msg = byId('msg-A');
+      if(showSolution){
+        // Remplit les champs avec la solution officielle
+        ['pa1','pa2','pa3','pa4','pa5','pa6'].forEach(id=>{
+          const el = byId(id);
+          if(el && el.dataset.correct) el.value = el.dataset.correct;
+        });
+        // Affiche le bloc de correction détaillée (masqué par CSS)
+        const corr = byId('corr-exA'); if(corr) corr.style.display = 'block';
+        msg.textContent = 'Correction affichée.';
+      }else{
+        msg.textContent = `Résultat A : ${pts} / 6. ${state.deep.tries>0?`Essais restants : ${state.deep.tries}.`:`Plus d’essai pour A.`}`;
+      }
+    }
+    function resetDeepA(){
+      ['pa1','pa2','pa3','pa4','pa5','pa6'].forEach(id=>{ const el=byId(id); if(el) el.value=''; });
+      if(byId('corr-exA')) byId('corr-exA').style.display='none';
+      // on retire la contribution A du score deep
+      const deepSansA = state.deep.score - (state._lastA || 0);
+      state._lastA = 0;
+      setScore('deep', deepSansA);
+      byId('msg-A').textContent='';
+      byId('tries-A').textContent = (state.deep.tries = MAX_TRIES);
+    }
+    
+    /* ========= EX. 1 – MÉLANGE DES ÉTIQUETTES (ANTI-ALIGNE) ========= */
+    function shuffleChildren(container){
+      const nodes = Array.from(container.children);
+      for(let i = nodes.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        container.insertBefore(nodes[j], nodes[i]);
+        [nodes[i], nodes[j]] = [nodes[j], nodes[i]];
+      }
+    }
+    function initEx1Shuffle(){
+      const left = byId('ex1-left');
+      if(left) shuffleChildren(left);
+    }
+    // remélange aussi au reset
+    const _reinitEx1_org = reinitialiserEx1;
+    reinitialiserEx1 = function(){
+      _reinitEx1_org();
+      initEx1Shuffle();
+    };
+    // et au premier chargement
+    window.addEventListener('DOMContentLoaded', initEx1Shuffle);
+    
+    /* ========= EX. 1 – « Correction » visible (auto-placement) =========
+       (ta fonction corrigerEx1 existante va bien, on ne change que le message) */
+    const _corrEx1_org = corrigerEx1;
+    corrigerEx1 = function(showSolution=false){
+      _corrEx1_org(showSolution);
+      if(showSolution){
+        // petit plus : on met aussi le focus sur le message pour accessibilité
+        const msg=byId('msg-ex1'); if(msg){ msg.setAttribute('tabindex','-1'); msg.focus?.(); }
+      }
+    };
+    
+    /* ========= EX. 2 & EX. 3 – boutons « Correction » =========
+       (tes fonctions existent déjà ; on force l’affichage lisible) */
+    const _corrEx2_org = corrigerEx2;
+    corrigerEx2 = function(showSolution=false){
+      _corrEx2_org(showSolution);
+      if(showSolution){ byId('msg-ex2').textContent = 'Correction affichée pour chaque champ.'; }
+    };
+    const _corrEx3_org = corrigerEx3;
+    corrigerEx3 = function(showSolution=false){
+      _corrEx3_org(showSolution);
+      if(showSolution){ byId('msg-ex3').textContent = 'Correction affichée.'; }
+    };
+    
+    /* ========= EX. G/H – CORRECTION RAPIDE (si tu ajoutes data-correct) =========
+       Exemple d’usage (optionnel) :
+       <input id="pg1" data-correct="2,6"> etc.
+    */
+    function corrigerDeepFGH(showSolution=false){
+      // Exemple minimal si tu renseignes data-correct sur les champs G/H
+      const ids = ['pg1','pg2','pg3','pg4','ph1','ph2','ph3'].filter(id=>byId(id));
+      let ok = 0;
+      ids.forEach(id=>{
+        const el = byId(id);
+        if(!el) return;
+        const exp = el.dataset.correct;
+        if(!exp) return;
+        // tolère virgule/point pour décimaux
+        const v = (el.value||'').replace(',', '.').trim();
+        const e = exp.replace(',', '.').trim();
+        if(v === e) ok++;
+        if(showSolution) el.value = exp;
+      });
+      // 7 champs max → points à ton goût (ici 1 pt/champ)
+      const prev = state.deep.score - (state._lastFGH || 0);
+      state._lastFGH = ok;
+      setScore('deep', prev + ok);
+      if(showSolution) { /* affiche un éventuel bloc correction si présent */ }
+    }
+    function resetDeepFGH(){
+      ['pg1','pg2','pg3','pg4','ph1','ph2','ph3'].forEach(id=>{ const el=byId(id); if(el) el.value=''; });
+      const prev = state.deep.score - (state._lastFGH || 0);
+      state._lastFGH = 0;
+      setScore('deep', prev);
+    }
+    
+    /* ========= TOGGLE générique pour DÉFIS (corrigés masqués) ========= */
+    function toggleCorrection(id){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.style.display = (getComputedStyle(el).display === 'none') ? 'block' : 'none';
+    }
 
+
+
+
+
+  
     // =========================
     // EX1 – Drag & Drop
     // =========================
