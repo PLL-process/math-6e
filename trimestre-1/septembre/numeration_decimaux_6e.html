@@ -735,7 +735,7 @@
       </div>
       <hr/>
 
-<!-- ==================== EXERCICE F ==================== -->     >
+<!-- ==================== EXERCICE F ==================== -->     
     
 <h3>📍 Ex. F – Repérage sur une demi-droite graduée</h3>
 
@@ -804,8 +804,9 @@
  
    
 <!-- ==================== EXERCICE F / QUESTION 2 : Description de la méthode ==================== --> 
-     <li>Décris simplement ta méthode : <input id="pf1" type="text" placeholder="Description succincte : comment avez-vous placé les points ?" /></p></li>
-
+<p>Décris simplement ta méthode :
+  <input id="pf1" type="text" placeholder="En une phrase : comment as-tu placé les points ?" />
+</p>
 
 <!-- ==================== EXERCICE G ==================== -->       
       <h3>📐 Ex. G – Repérage sur une demi-droite graduée (Lecture d'abscisses)</h3>
@@ -820,8 +821,8 @@
 
       <ol>
         <li>Quelles sont les abscisses des points A et B ? 
-          <br>Abscisses de A : <input id="pg1" placeholder="exemple : (1.75, 0)/> 
-          <br>Abscisses de B : <input id="pg2" placeholder="exemple : (1.75, 0)/></li><br>
+          <br>Abscisses de A : <input id="pg1" type="text" placeholder="exemple : (1.75, 0)"/> 
+          <br>Abscisses de B : <input id="pg2" type="text" placeholder="exemple : (1.75, 0)"/></li><br>
         <li>Place mentalement les points C(2,1) et D(0,5) sur la demi-droite graduée.
           <br>Où placer C : <input id="pg3" placeholder="Ex. : à 0,5 sur la demi-droite"/>
           <br>Où placer D : <input id="pg4" placeholder="Ex. : à 0,5 sur la demi-droite"/></li>
@@ -892,7 +893,7 @@
         <div class="aide">
         🎨 <strong>Personnaliser l’apparence des points :</strong><br><br>
       
-        Tu peux modifier la <strong>forme</strong, la <strong>taille</strong> et la <strong>couleur</strong> d’un point en suivant ces étapes :
+        Tu peux modifier la <strong>forme</strong>, la <strong>taille</strong> et la <strong>couleur</strong> d’un point en suivant ces étapes :
         <ol>
           <li>🖱️ Clique sur le point que tu veux modifier</li>
           <li>⚙️ Dans le menu qui apparaît, clique sur <strong>"Propriétés"</strong></li>
@@ -1229,7 +1230,7 @@
     function showToast(msg){ toast.textContent = msg; toast.style.display='block'; setTimeout(()=> toast.style.display='none', 1800); }
 
     // Normalisation
-    function norm(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\-\s]/g,'').replace(/\s+/g,' ').trim(); }
+
     function normNoSep(s){ return norm(s).replace(/[\s\-]+/g,''); } // Variante stricte (pour accepter espaces OU tirets)
 
     // Formatage FR
@@ -1446,17 +1447,6 @@
     function corrigerEx3(showSolution=false){ if(!showSolution) setTries('ex3', state.ex3.tries-1); let pts=0; const ok31=(byId('q31').value||'').trim()==='10'; if(ok31) pts+=1; const ok32=norm(byId('q32').value)===norm('origine'); if(ok32) pts+=1; const ok33=norm(byId('q33').value)===norm('abscisse'); if(ok33) pts+=1; const v34=(byId('q34').value||'').replace(',', '.').trim(); const ok34=(v34==='0.5'||v34==='0,5'); if(ok34) pts+=1; setScore('ex3', pts); const msg=byId('msg-ex3'); if(showSolution){ byId('q31').value='10'; byId('q32').value='origine'; byId('q33').value='abscisse'; byId('q34').value='0,5'; msg.textContent='Correction affichée.'; } else { msg.textContent=`Résultat : ${pts} / 4. ${state.ex3.tries>0?`Essais restants : ${state.ex3.tries}.`:'Plus d\'essai pour cet exercice.'}`; } }
     function reinitialiserEx3(){ setTries('ex3',MAX_TRIES); setScore('ex3',0); byId('msg-ex3').textContent=''; ['q31','q32','q33','q34'].forEach(id=>byId(id).value=''); }
 
-    // =========================
-    // Approfondissement – logique
-    // =========================
-    function corrigerDeep(showSolution=false){ if(!showSolution) setTries('deep', state.deep.tries-1); let pts=0;
-      const A1ok = normNoSep(byId('deep_a1').value) === normNoSep('dix-millions-deux-cent-cinquante-quatre-mille-neuf-cent-quatre-vingt-cinq'); if(A1ok) pts+=1;
-      const A2ok = normNoSep(byId('deep_a2').value) === normNoSep('deux-cent-mille-cinq-cent-quatre'); if(A2ok) pts+=1;
-      const A3ok = formatNumberFr(byId('deep_a3').value) === '5 698 541'; if(A3ok) pts+=1;
-      const A4ok = formatNumberFr(byId('deep_a4').value) === '96 584 127'; if(A4ok) pts+=1;
-      const B1p = formatNumberFr(byId('deep_b1_prec').value) === '853 088'; const B1s = formatNumberFr(byId('deep_b1_suit').value) === '853 090'; const B2p = formatNumberFr(byId('deep_b2_prec').value) === '69 998'; const B2s = formatNumberFr(byId('deep_b2_suit').value) === '70 000'; [B1p,B1s,B2p,B2s].forEach(ok=>{ if(ok) pts+=0.5; });
-      setScore('deep', pts); const msg=byId('msg-deep'); if(showSolution){ byId('deep_a1').value='dix millions deux cent cinquante-quatre mille neuf cent quatre-vingt-cinq'; byId('deep_a2').value='deux cent mille cinq cent quatre'; byId('deep_a3').value='5 698 541'; byId('deep_a4').value='96 584 127'; byId('deep_b1_prec').value='853 088'; byId('deep_b1_suit').value='853 090'; byId('deep_b2_prec').value='69 998'; byId('deep_b2_suit').value='70 000'; msg.textContent='Correction affichée.'; } else { msg.textContent=`Résultat : ${pts} / ${state.deep.max}. ${state.deep.tries>0?`Essais restants : ${state.deep.tries}.`:'Plus d\'essai pour cette section.'}`; } }
-    function reinitialiserDeep(){ setTries('deep',MAX_TRIES); setScore('deep',0); byId('msg-deep').textContent=''; ['deep_a1','deep_a2','deep_a3','deep_a4','deep_b1_prec','deep_b1_suit','deep_b2_prec','deep_b2_suit'].forEach(id=>{ const el=byId(id); if(el) el.value=''; }); }
 
     // =========================
     // Export JSON / CSV / PDF / HTML
@@ -1473,20 +1463,33 @@
     // =========================
     // Réinitialisation globale
     // =========================
-    function resetAll(){ resetTimer(); ['eleveNom','elevePrenom','eleveClasse'].forEach(id=>byId(id).value=''); reinitialiserEx1(); reinitialiserEx2(); reinitialiserEx3(); reinitialiserDeep(); }
+function resetAll(){
+  resetTimer();
+  ['eleveNom','elevePrenom','eleveClasse'].forEach(id=>byId(id).value='');
 
-    // ... Pour bouton “Correction” de la question 2 du DÉFI 5
+  reinitialiserEx1();
+  reinitialiserEx2();
+  reinitialiserEx3();
 
-      function toggleCorrection(id) {
-        const el = document.getElementById(id);
-        if (!el) return;
-        // si la correction est cachée (display: none) -> on l'affiche, sinon on la cache
-        const cur = getComputedStyle(el).display;
-        el.style.display = (cur === 'none') ? 'block' : 'none';
-      }
-      
-      // ...
+  // Approfondissement : reset A–E + F–H
+  resetDeepA();
+  resetDeepB();
+  resetDeepC();
+  resetDeepD();
+  resetDeepE();
+  resetDeepFGH();
 
+  // Réinitialise les essais et le score globaux d'approfondissement
+  setTries('deep', MAX_TRIES);
+  state._lastA = state._lastB = state._lastC = state._lastD = state._lastE = state._lastFGH = 0;
+  setScore('deep', 0);
+
+  // Cache les blocs de correction si affichés
+  ['corr-exA','corr-exB','corr-exC','corr-exD','corr-exE','corr-exGH'].forEach(id=>{
+    const el = byId(id); if(el) el.style.display = 'none';
+  });
+}
+ 
   /* ============ Outils locaux ============ */
 function _asInt(v){ return String(v||'').replace(/\s/g,'').trim(); }
 function _asFr(v){ // formate "nombre" avec espaces (si complet)
