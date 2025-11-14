@@ -27,17 +27,23 @@
       overflow-x: hidden;
     }
     header {
-      position: sticky; top: 0; z-index: 20;
-      background: rgba(17, 26, 59, 0.95); backdrop-filter: blur(8px);
-      box-shadow: var(--shadow); padding: 6px 16px;
+      position: sticky; 
+      top: 0; 
+      z-index: 20;
+      background: rgba(17, 26, 59, 0.95); 
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow); 
+      padding: 6px 16px;      /* Hauteur réduite du volet */
     }
     .wrap { max-width: 1100px; margin: 0 auto; padding: 8px 16px 60px; }
     h1 { margin: 0; font-size: clamp(1.1rem, 2.3vw, 1.6rem); letter-spacing: .5px; }
-    .subtitle { margin-top: 3px; color: var(--muted); font-size: .88rem; }
-    #global-score, #timer, #badges { margin-top: 3px; font-size: .95rem; text-align: right; }
+    .subtitle { margin-top: 2px; color: var(--muted); font-size: .78rem; line-height: 1.3; }
+    .header-info { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin-top: 3px; font-size: .85rem; }
     #global-score { color: var(--accent-2); }
     #timer { color: var(--warn); font-weight: 600; }
-    .mode-toggle { margin-top: 6px; text-align: right; font-size: .85rem; }
+    #badges { color: var(--accent); }
+    .mode-toggle { display: flex; gap: 12px; font-size: .78rem; margin-top: 4px; flex-wrap: wrap; }
+    .mode-toggle label { display: flex; align-items: center; gap: 4px; cursor: pointer; }
     .idcard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: var(--panel); border: 1px solid #1c2656; border-radius: 12px; padding: 10px; margin: 10px 0 16px; box-shadow: var(--shadow); animation: pop .5s ease-out; }
     label { font-size: .82rem; color: var(--muted); display: block; margin-bottom: 4px; }
     input[type="text"], .short, select { width: 100%; background: #0b1432; border: 1px solid #20306a; border-radius: 8px; color: var(--ink); padding: 7px 9px; outline: none; transition: border .2s ease, box-shadow .2s ease; font-size: .9rem; }
@@ -54,7 +60,7 @@
     .btn.ghost { background: transparent; color: var(--accent); border: 1px dashed var(--accent); box-shadow: none; }
     .help { display: none; margin-top: 7px; background: #0c1740; border: 1px dashed #3150a8; border-radius: 8px; padding: 8px 10px; color: #d3ddff; line-height: 1.55; font-size: .85rem; }
     .feedback { margin-top: 5px; font-weight: 600; white-space: pre-wrap; font-size: .82rem; }
-    .ok { color: var(--accent-2); }
+    .ok { color: var(--good); }
     .no { color: var(--bad); }
     .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
     .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
@@ -63,11 +69,9 @@
     .rank-label { font-weight: 600; color: var(--accent-2); }
     .step { margin: 6px 0; padding: 6px; background: #0d1a40; border-radius: 6px; border-left: 3px solid var(--accent); font-size: .82rem; }
     .step-title { font-weight: 600; color: var(--accent); margin-bottom: 3px; }
-    .number-animation { font-weight: 700; color: var(--accent-2); animation: numberPop 0.5s ease-out; display: inline-block; }
     #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000; }
     @keyframes glow { 0% { text-shadow: 0 0 0 rgba(93, 214, 255, 0); } 50% { text-shadow: 0 0 8px rgba(93, 214, 255, .2); } 100% { text-shadow: 0 0 0 rgba(93, 214, 255, 0); } }
     @keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    @keyframes numberPop { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
   </style>
 </head>
 <body>
@@ -78,12 +82,17 @@
   <header class="wrap">
     <h1>6e – Les nombres décimaux <span class="badge">14 exercices</span></h1>
     <div class="subtitle">Complète les réponses puis clique sur <strong>Correction</strong> pour vérifier. Tu peux aussi cliquer sur <strong>Aide</strong> pour un indice adapté aux 6e. N'hésite pas à recommencer pour t'améliorer !</div>
-    <div id="global-score">Score total : 0 / 100</div>
-    <div id="timer">Temps : 00:00</div>
-    <div id="badges">Badges : aucun pour l'instant</div>
-    <div class="mode-toggle">
-      <label><input type="checkbox" id="easy-mode"> Mode facile (moins de chiffres)</label>
-      <label style="margin-left: 12px;"><input type="checkbox" id="timer-mode" checked> Mode chronométré</label>
+    
+    <div class="header-info">
+      <div>
+        <div id="global-score">Score total : 0 / 100</div>
+        <div id="timer">Temps : 00:00</div>
+        <div id="badges">Badges : aucun pour l'instant</div>
+      </div>
+      <div class="mode-toggle">
+        <label><input type="checkbox" id="easy-mode"> Mode facile</label>
+        <label><input type="checkbox" id="timer-mode" checked> Chronométré</label>
+      </div>
     </div>
   </header>
 
@@ -101,7 +110,7 @@
     <!-- EXERCICE 1 -->
     <section id="exo1" class="exo">
       <h2>Exercice 1 — Partie entière et partie décimale</h2>
-      <p class="consigne">Pour chaque nombre, indique <strong>la partie entière</strong> et <strong>la partie décimale</strong>. (Astuce : la virgule sépare les deux parties.) Prends ton temps, tu vas y arriver !</p>
+      <p class="consigne">Pour chaque nombre, indique <strong>la partie entière</strong> et <strong>la partie décimale  </strong>. (Astuce : la virgule sépare les deux parties.) Prends ton temps, tu vas y arriver !</p>
       <div class="grid-2">
         <div><label for="input-e1a-ent">4,53 → partie entière</label><input id="input-e1a-ent" data-key="e1a-ent" placeholder="4,53 → partie entière" /></div>
         <div><label for="input-e1a-dec">4,53 → partie décimale</label><input id="input-e1a-dec" data-key="e1a-dec" placeholder="4,53 → partie décimale" /></div>
@@ -127,7 +136,7 @@
       </div>
     </section>
 
-    <!-- EXERCICE 2 -->
+    <!-- EXERCICE 2 — NOMBRES GÉNÉRÉS ET AFFICHÉS -->
     <section id="exo2" class="exo">
       <h2>Exercice 2 — Chiffre des différents rangs</h2>
       <p class="consigne">Pour chaque nombre généré, indique le <strong>chiffre du rang demandé</strong>. Le rang est affiché en <span class="rank-label">gras</span> ! Amuse-toi à régénérer pour t'entraîner plus !</p>
@@ -512,7 +521,7 @@
           <ul>
             <li>Dixièmes = 8</li>
             <li>8 + 2 = 10 → on écrit 0, et on ajoute 1 aux unités</li>
-            <li>321 + 1 = 322 → <strong>322,0</strong></li>
+            <li>321 + 1 = 322 →,0</li>
           </ul>
         </div>
         <p>Tu es un pro de l’addition décimale !</p>
@@ -639,28 +648,39 @@
     const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
     const nrm = s => (s == null ? "" : String(s).trim().replace(/\s+/g, "").replace(/,/g, ".").toLowerCase());
     const eqAny = (val, arr) => arr.map(nrm).includes(nrm(val));
-    const toggleHelp = id => { const el = $("#" + id); el.style.display = (el.style.display === "block") ? "none" : "block"; };
+    const toggleHelp = id => { 
+      const el = $("#" + id); 
+      if (!el) return;
+      el.style.display = (el.style.display === "block") ? "none" : "block"; 
+    };
     const get = key => nrm($(`[data-key="${key}"]`)?.value || "");
     const getRadio = name => nrm(document.querySelector(`input[name="${name}"]:checked`)?.value || "");
     const resetExo = (n) => {
       $$(`[data-key^="e${n}"]`).forEach(el => el.value = '');
       if (n === 9) $$(`input[name^="e9-"]`).forEach(el => el.checked = false);
-      $(`#f${n}`).textContent = '';
-      $(`#f${n}`).className = 'feedback';
-      if (n === 2) generateExo2();
+      const f = $(`#f${n}`);
+      if (f) {
+        f.textContent = '';
+        f.className = 'feedback';
+      }
+      if (n === 2) generateExo2();   // Régénère les nombres de l'exercice 2
     };
 
-    // === CONFETTIS ===
+    // === CONFETTIS (sécurisé si canvas absent) ===
     const canvas = $('#confetti-canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    window.addEventListener('resize', () => {
+    let ctx = null;
+    if (canvas) {
+      ctx = canvas.getContext('2d');
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-    });
+      window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      });
+    }
     let confetti = [];
     const launchConfetti = () => {
+      if (!ctx || !canvas) return;
       confetti = [];
       for (let i = 0; i < 300; i++) {
         confetti.push({
@@ -674,8 +694,8 @@
           tiltAngle: 0
         });
       }
-      let animationFrame;
       const animate = () => {
+        if (!ctx || !canvas) return;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         confetti.forEach(p => {
           p.tiltAngle += p.tiltAngleIncrement;
@@ -691,7 +711,7 @@
           }
         });
         confetti = confetti.filter(p => p.y <= canvas.height);
-        if (confetti.length > 0) animationFrame = requestAnimationFrame(animate);
+        if (confetti.length > 0) requestAnimationFrame(animate);
       };
       animate();
     };
@@ -720,6 +740,8 @@
     }
 
     // === SAUVEGARDE ===
+    let totalScore = 0, maxScore = 0;
+    let earnedBadges = new Set();
     const saveProgress = () => {
       const data = { totalScore, maxScore, earnedBadges: Array.from(earnedBadges) };
       localStorage.setItem('decimalProgress', JSON.stringify(data));
@@ -735,20 +757,24 @@
     window.addEventListener('beforeunload', saveProgress);
     window.addEventListener('load', loadProgress);
 
-    // === MODE FACILE & EXO 2 ===
+    // === MODE FACILE & EXO 2 — NOMBRES AFFICHÉS CORRECTEMENT ===
     const easyMode = $('#easy-mode');
-    easyMode.addEventListener('change', generateExo2);
+    if (easyMode) {
+      easyMode.addEventListener('change', () => {
+        generateExo2();   // Régénération quand le mode facile change
+      });
+    }
     let expected2 = {};
     const generateExo2 = () => {
-      const isEasy = easyMode.checked;
+      const isEasy = easyMode?.checked || false;
       const rangs = [
-        {name: 'unit', minInt: isEasy ? 0 : 0, maxInt: isEasy ? 99 : 9999, decDigits: isEasy ? 1 : 3, isDecimal: false},
-        {name: 'diz', minInt: isEasy ? 10 : 10, maxInt: isEasy ? 99 : 9999, decDigits: isEasy ? 1 : 3, isDecimal: false},
-        {name: 'cens', minInt: isEasy ? 0 : 100, maxInt: isEasy ? 999 : 9999, decDigits: isEasy ? 1 : 3, isDecimal: false},
-        {name: 'mil', minInt: isEasy ? 0 : 1000, maxInt: isEasy ? 9999 : 99999, decDigits: isEasy ? 1 : 3, isDecimal: false},
-        {name: 'dix', minInt: 0, maxInt: isEasy ? 9 : 999, decDigits: 1, isDecimal: true},
-        {name: 'cent', minInt: 0, maxInt: isEasy ? 99 : 999, decDigits: 2, isDecimal: true},
-        {name: 'mill', minInt: 0, maxInt: isEasy ? 999 : 999, decDigits: 3, isDecimal: true},
+        {name: 'unit', minInt: isEasy ? 0 : 0,    maxInt: isEasy ? 99 : 9999,   decDigits: isEasy ? 1 : 3, isDecimal: false},
+        {name: 'diz',  minInt: isEasy ? 10 : 10,  maxInt: isEasy ? 99 : 9999,   decDigits: isEasy ? 1 : 3, isDecimal: false},
+        {name: 'cens', minInt: isEasy ? 0 : 100,  maxInt: isEasy ? 999 : 9999,  decDigits: isEasy ? 1 : 3, isDecimal: false},
+        {name: 'mil',  minInt: isEasy ? 0 : 1000, maxInt: isEasy ? 9999 : 99999,decDigits: isEasy ? 1 : 3, isDecimal: false},
+        {name: 'dix',  minInt: 0,                 maxInt: isEasy ? 9 : 999,     decDigits: 1,             isDecimal: true},
+        {name: 'cent', minInt: 0,                 maxInt: isEasy ? 99 : 999,    decDigits: 2,             isDecimal: true},
+        {name: 'mill', minInt: 0,                 maxInt: 999,                  decDigits: 3,             isDecimal: true},
       ];
       rangs.forEach(r => {
         let intPart = Math.floor(Math.random() * (r.maxInt - r.minInt + 1)) + r.minInt;
@@ -757,37 +783,22 @@
         let nbStr = String(intPart);
         if (r.isDecimal || Math.random() < 0.7) nbStr += ',' + decPart;
         const span = $(`#nb-${r.name}`);
-        span.textContent = '';
-        animateNumber(span, nbStr);
+        if (span) span.textContent = nbStr; // Affichage du nombre généré
         const [intStr, decStr = ''] = nbStr.split(',');
         const intNum = parseInt(intStr, 10) || 0;
         let chiffre;
         if (r.name === 'unit') chiffre = intNum % 10;
-        else if (r.name === 'diz') chiffre = Math.floor((intNum % 100) / 10);
+        else if (r.name === 'diz')  chiffre = Math.floor((intNum % 100) / 10);
         else if (r.name === 'cens') chiffre = Math.floor((intNum % 1000) / 100);
-        else if (r.name === 'mil') chiffre = Math.floor((intNum % 10000) / 1000);
-        else if (r.name === 'dix') chiffre = decStr[0] || 0;
+        else if (r.name === 'mil')  chiffre = Math.floor((intNum % 10000) / 1000);
+        else if (r.name === 'dix')  chiffre = decStr[0] || 0;
         else if (r.name === 'cent') chiffre = decStr[1] || 0;
         else if (r.name === 'mill') chiffre = decStr[2] || 0;
         expected2[`e2-${r.name}`] = String(chiffre);
       });
     };
-    window.addEventListener('load', generateExo2);
-
-    // === ANIMATIONS CHIFFRES ===
-    const animateNumber = (element, value) => {
-      element.innerHTML = '';
-      value.split('').forEach(char => {
-        const span = document.createElement('span');
-        span.textContent = char;
-        span.className = 'number-animation';
-        element.appendChild(span);
-        setTimeout(() => span.classList.remove('number-animation'), 500);
-      });
-    };
 
     // === SCORE & BADGES ===
-    let totalScore = 0, maxScore = 0;
     const updateGlobalScore = () => {
       const percent = maxScore ? Math.round((totalScore / maxScore) * 100) : 0;
       $('#global-score').textContent = `Score total : ${totalScore} / ${maxScore} (${percent}%)`;
@@ -800,7 +811,6 @@
       { min: 80,  name: "Maître des décimaux" },
       { min: 95,  name: "Légende des nombres" }
     ];
-    let earnedBadges = new Set();
     const updateBadges = (percent) => {
       badges.forEach(b => {
         if (percent >= b.min && !earnedBadges.has(b.name)) {
@@ -814,7 +824,8 @@
       });
     };
     const addScore = (points, max) => {
-      totalScore += points; maxScore += max;
+      totalScore += points; 
+      maxScore += max;
       updateGlobalScore();
       if (getPercent() === 100) {
         launchConfetti();
@@ -826,6 +837,7 @@
     // === SONS ===
     const playSound = (success) => {
       const audio = success ? $('#sound-success') : $('#sound-error');
+      if (!audio) return;
       audio.currentTime = 0;
       audio.play().catch(() => {});
     };
@@ -836,12 +848,12 @@
       const check = (key, correct, label) => {
         const input = $(`[data-key="${key}"]`);
         if (eqAny(get(key), correct)) {
-          feedback += `${label} : <span class="number-animation">Correct !</span>\n`;
+          feedback += `${label} : Correct !\n`;
           count++;
-          input.style.borderColor = 'var(--good)';
+          if (input) input.style.borderColor = 'var(--good)';
         } else {
-          feedback += `${label} : Presque ! C'est <span class="number-animation">${correct[0]}</span>.\n`;
-          input.style.borderColor = 'var(--bad)';
+          feedback += `${label} : Presque ! C'est ${correct[0]}.\n`;
+          if (input) input.style.borderColor = 'var(--bad)';
         }
       };
       check('e1a-ent', ['4'], '1a entière');
@@ -852,7 +864,7 @@
       check('e1c-dec', ['83/100','0.83','83'], '1c décimale');
       const enc = count === 6 ? "Parfait !" : "Tu y es presque !";
       feedback += `\nScore : ${count}/6. ${enc}`;
-      $('#f1').innerHTML = feedback;
+      $('#f1').textContent = feedback;
       $('#f1').className = 'feedback ' + (count === 6 ? 'ok' : 'no');
       playSound(count === 6);
       addScore(count, 6);
@@ -862,12 +874,13 @@
       let feedback = "Feedback détaillé :\n", count = 0;
       ['unit', 'diz', 'cens', 'mil', 'dix', 'cent', 'mill'].forEach(name => {
         const key = `e2-${name}`;
-        const label = $(`label[for="input-${key}"] .rank-label`).textContent;
+        const labelEl = $(`label[for="input-${key}"] .rank-label`);
+        const label = labelEl ? labelEl.textContent : key;
         if (eqAny(get(key), [expected2[key]])) {
           feedback += `${label} : Correct !\n`;
           count++;
         } else {
-          feedback += `${label} : Faux, c'est ${expected2[key]}. Regarde bien le chiffre en <strong>${label}</strong>.\n`;
+          feedback += `${label} : Faux, c'est ${expected2[key]}.\n`;
         }
       });
       const enc = count === 7 ? "Parfait ! Tu es un pro des rangs !" : "Presque ! Recommence pour tout maîtriser !";
@@ -1129,9 +1142,13 @@
     };
 
     const corrigerTout = () => {
-      totalScore = 0; maxScore = 0;
+      totalScore = 0; 
+      maxScore = 0;
       [1,2,3,4,5,6,7,8,9,10,11,12,13,14].forEach(n => window[`corriger${n}`]());
     };
+
+    // ✅ Appel direct : les nombres de l'exercice 2 sont générés dès l'ouverture
+    generateExo2();
   </script>
 </body>
 </html>
