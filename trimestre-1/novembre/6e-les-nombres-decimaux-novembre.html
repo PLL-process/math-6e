@@ -1,1160 +1,1137 @@
 <!DOCTYPE html>
-<!-- Déclare le type de document comme HTML5 -->
 <html lang="fr">
-<!-- Ouvre le document HTML et précise la langue en français pour l’accessibilité -->
 <head>
-  <!-- En-tête du document : métadonnées, titre, styles -->
   <meta charset="utf-8" />
-  <!-- Définit l’encodage des caractères en UTF-8 pour bien afficher les accents -->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Ajuste l’affichage sur mobile pour que la page soit responsive -->
   <title>6e – Les nombres décimaux (14 exercices)</title>
-  <!-- Titre visible dans l’onglet du navigateur -->
   <style>
-    /* =============================
-       🎨 Thème & mise en page
-       ============================= */
-    :root { /* Déclare des variables CSS pour les couleurs afin de garder une cohérence visuelle */
-      --bg: #0e1630;          /* Couleur de fond principale (bleu nuit) */
-      --panel: #111a3b;       /* Couleur des cartes (panneaux) */
-      --ink: #e6ecff;         /* Couleur du texte principal (encrage clair) */
-      --muted: #a9b6df;       /* Couleur de texte secondaire (plus pâle) */
-      --accent: #5dd6ff;      /* Couleur d’accent pour boutons et liens */
-      --accent-2: #9bffb0;    /* Deuxième accent pour les validations */
-      --warn: #ffd166;        /* Couleur pour avertissements */
-      --bad: #ff7b7b;         /* Couleur pour erreurs */
-      --good: #8be98b;        /* Couleur pour succès */
-      --shadow: 0 10px 30px rgba(0,0,0,.35); /* Ombre douce pour relief */
+    :root {
+      --bg: #0e1630;
+      --panel: #111a3b;
+      --ink: #e6ecff;
+      --muted: #a9b6df;
+      --accent: #5dd6ff;
+      --accent-2: #9bffb0;
+      --warn: #ffd166;
+      --bad: #ff7b7b;
+      --good: #8be98b;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
     }
-
-    * { box-sizing: border-box; } /* Inclut les bordures/paddings dans la largeur totale des éléments */
-
-    body { /* Style global du corps de page */
-      margin: 0; /* Supprime les marges par défaut du navigateur */
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; /* Police lisible sur tous les OS */
-      color: var(--ink); /* Texte en couleur claire */
-      background: radial-gradient(1200px 700px at 10% -10%, #1d2a56 0%, transparent 70%), /* Halo décoratif en haut à gauche */
-                  radial-gradient(1000px 600px at 110% 0%, #23336a 0%, transparent 70%), /* Halo décoratif en haut à droite */
-                  linear-gradient(180deg, #0a1030, #0e1630 40%, #0b122a); /* Dégradé vertical de fond */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--ink);
+      background: radial-gradient(1200px 700px at 10% -10%, #1d2a56 0%, transparent 70%),
+                  radial-gradient(1000px 600px at 110% 0%, #23336a 0%, transparent 70%),
+                  linear-gradient(180deg, #0a1030, #0e1630 40%, #0b122a);
+      overflow-x: hidden;
     }
-
-    header { /* Bandeau supérieur */
-      position: sticky; /* Reste collé en haut lors du scroll */
-      top: 0; /* Positionne au bord supérieur */
-      z-index: 10; /* S’assure qu’il passe au-dessus des autres éléments */
-      background: rgba(17, 26, 59, 0.8); /* Panneau semi-transparent pour voir le fond */
-      backdrop-filter: blur(6px); /* Flou d’arrière-plan pour un effet verre dépoli */
-      box-shadow: var(--shadow); /* Ombre portée pour relief */
-      padding: 14px 18px; /* Espacement interne confortable */
+    header {
+      position: sticky; top: 0; z-index: 20;
+      background: rgba(17, 26, 59, 0.95); backdrop-filter: blur(8px);
+      box-shadow: var(--shadow); padding: 6px 16px;
     }
-
-    .wrap { /* Conteneur central pour limiter la largeur de lecture */
-      max-width: 1100px; /* Largeur maximale pour le contenu */
-      margin: 0 auto; /* Centre le conteneur horizontalement */
-      padding: 10px 18px 60px; /* Espacement interne (haut, côtés, bas) */
-    }
-
-    h1 { /* Titre principal */
-      margin: 0; /* Retire la marge par défaut */
-      font-size: clamp(1.2rem, 2.5vw, 1.8rem); /* Taille adaptative selon la largeur de l’écran */
-      letter-spacing: .5px; /* Légère espacement entre lettres pour élégance */
-    }
-
-    .subtitle { /* Sous-titre sous le H1 */
-      margin-top: 6px; /* Petit espace au-dessus */
-      color: var(--muted); /* Couleur plus douce */
-      font-size: .95rem; /* Taille un peu plus petite */
-    }
-
-    .idcard { /* Carte d’identification (nom, prénom, classe) */
-      display: grid; /* Utilise une grille pour aligner les champs */
-      grid-template-columns: repeat(3, 1fr); /* Trois colonnes égales */
-      gap: 12px; /* Espace entre les champs */
-      background: var(--panel); /* Fond de carte */
-      border: 1px solid #1c2656; /* Liseré discret */
-      border-radius: 16px; /* Coins arrondis */
-      padding: 14px; /* Espacement interne */
-      margin: 16px 0 24px; /* Marge externe (haut et bas) */
-      box-shadow: var(--shadow); /* Ombre pour relief */
-      animation: pop .6s ease-out; /* Animation d’apparition douce */
-    }
-
-    label { /* Étiquettes des champs */
-      font-size: .9rem; /* Taille lisible mais compacte */
-      color: var(--muted); /* Couleur adoucie */
-      display: block; /* Force l’affichage en bloc au-dessus de l’input */
-      margin-bottom: 6px; /* Espace entre étiquette et champ */
-    }
-
-    input[type="text"], .short, textarea, select { /* Champs de saisie */
-      width: 100%; /* Les champs s’étirent pour remplir la colonne */
-      background: #0b1432; /* Fond sombre pour les champs */
-      border: 1px solid #20306a; /* Bordure visible mais discrète */
-      border-radius: 12px; /* Coins arrondis doux */
-      color: var(--ink); /* Texte clair */
-      padding: 10px 12px; /* Espacement interne */
-      outline: none; /* Supprime le contour bleu par défaut au focus */
-      transition: border .2s ease, box-shadow .2s ease; /* Animation lors du focus */
-    }
-
-    input:focus, textarea:focus, select:focus { /* Style quand le champ est actif */
-      border-color: var(--accent); /* Met en avant la bordure avec la couleur d’accent */
-      box-shadow: 0 0 0 3px rgba(93, 214, 255, .2); /* Halo autour du champ pour l’accessibilité */
-    }
-
-    .exo { /* Carte d’un exercice */
-      background: var(--panel); /* Fond de carte */
-      border: 1px solid #1b2450; /* Liseré */
-      border-radius: 18px; /* Coins arrondis */
-      padding: 16px; /* Espacement interne */
-      margin: 14px 0; /* Espace entre les exercices */
-      box-shadow: var(--shadow); /* Ombre pour relief */
-      overflow: hidden; /* Masque les débordements (utile pour les animations) */
-    }
-
-    .exo h2 { /* Titre d’exercice */
-      margin: 0 0 6px; /* Espace inférieur */
-      font-size: clamp(1.05rem, 2.1vw, 1.2rem); /* Taille adaptative */
-    }
-
-    .consigne { /* Zone de consigne avec animation »glow« */
-      margin: 0 0 12px; /* Espace sous la consigne */
-      color: var(--muted); /* Texte adouci */
-      line-height: 1.5; /* Interligne lisible */
-      position: relative; /* Permet d’ajouter une lueur animée */
-      animation: glow 3s ease-in-out infinite; /* Animation de pulsation douce */
-    }
-
-    .row { /* Ligne horizontale pour regrouper des éléments (inputs/boutons) */
-      display: flex; /* Active le modèle flex */
-      flex-wrap: wrap; /* Autorise le retour à la ligne si l’écran est étroit */
-      gap: 8px; /* Espace entre les éléments */
-      align-items: center; /* Aligne verticalement au centre */
-    }
-
-    .btn { /* Style de base pour tous les boutons */
-      background: linear-gradient(180deg, var(--accent), #34b6ff); /* Dégradé bleu */
-      color: #051024; /* Texte sombre pour contraste */
-      border: none; /* Retire la bordure native */
-      padding: 9px 14px; /* Taille du bouton */
-      border-radius: 12px; /* Coins arrondis */
-      cursor: pointer; /* Curseur main pour cliquer */
-      font-weight: 600; /* Texte un peu plus gras */
-      box-shadow: 0 6px 16px rgba(52, 182, 255, .35); /* Ombre colorée pour relief */
-      transition: transform .08s ease, filter .2s ease; /* Animation au survol/clic */
-    }
-
-    .btn:hover { filter: brightness(1.06); } /* Légère hausse de luminosité au survol */
-    .btn:active { transform: translateY(1px); } /* Petit enfoncement au clic */
-
-    .btn.alt { /* Variante de bouton secondaire (aide) */
-      background: linear-gradient(180deg, #ffd166, #ffb347); /* Dégradé jaune orangé */
-      color: #532c00; /* Texte brun pour lisibilité */
-      box-shadow: 0 6px 16px rgba(255, 179, 71, .35); /* Ombre assortie */
-    }
-
-    .btn.ghost { /* Variante légère (pour « Corriger tout ») */
-      background: transparent; /* Sans fond plein */
-      color: var(--accent); /* Texte bleu accent */
-      border: 1px dashed var(--accent); /* Bordure en pointillés pour le style pédagogique */
-      box-shadow: none; /* Pas d’ombre */
-    }
-
-    .help { /* Bloc qui s’affiche/masque pour l’aide */
-      display: none; /* Caché par défaut */
-      margin-top: 10px; /* Espace au-dessus */
-      background: #0c1740; /* Fond plus sombre pour la différencier */
-      border: 1px dashed #3150a8; /* Bordure pointillée didactique */
-      border-radius: 12px; /* Coins arrondis */
-      padding: 10px 12px; /* Espacement interne */
-      color: #d3ddff; /* Texte clair */
-    }
-
-    .feedback { /* Zone d’affichage du résultat de correction */
-      margin-top: 8px; /* Espace au-dessus */
-      font-weight: 600; /* Texte accentué */
-    }
-
-    .ok { color: var(--accent-2); } /* Texte vert pour « correct » */
-    .no { color: var(--bad); }       /* Texte rouge pour « incorrect » */
-
-    .grid-2 { /* Petite grille deux colonnes pour aligner proprement des paires de champs */
-      display: grid; /* Active le modèle grille */
-      grid-template-columns: repeat(2, 1fr); /* Deux colonnes égales */
-      gap: 8px; /* Espace entre les cellules */
-      width: 100%; /* S’étend sur la largeur disponible */
-    }
-
-    .grid-3 { /* Grille trois colonnes utile pour certains exercices */
-      display: grid; /* Active le modèle grille */
-      grid-template-columns: repeat(3, 1fr); /* Trois colonnes */
-      gap: 8px; /* Espacement */
-      width: 100%; /* Largeur totale */
-    }
-
-    .badge { /* Petite étiquette décorative sur les titres */
-      display: inline-block; /* Permet d’avoir un fond et un padding autour du texte */
-      padding: 3px 8px; /* Taille de l’étiquette */
-      border-radius: 999px; /* Pilule */
-      background: #1a2b63; /* Fond bleuté */
-      color: var(--accent); /* Texte d’accent */
-      font-size: .8rem; /* Petite taille */
-      margin-left: 6px; /* Espace à gauche du titre */
-    }
-
-    @keyframes glow { /* Définit l’animation de pulsation sur les consignes */
-      0% { text-shadow: 0 0 0 rgba(93, 214, 255, 0); } /* Départ sans lueur */
-      50% { text-shadow: 0 0 12px rgba(93, 214, 255, .2); } /* Milieu avec lueur */
-      100% { text-shadow: 0 0 0 rgba(93, 214, 255, 0); } /* Retour à l’état initial */
-    }
-
-    @keyframes pop { /* Animation d’apparition des cartes */
-      from { transform: translateY(6px); opacity: 0; } /* Départ un peu en dessous et transparent */
-      to { transform: translateY(0); opacity: 1; } /* Arrivée en place et visible */
-    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 8px 16px 60px; }
+    h1 { margin: 0; font-size: clamp(1.1rem, 2.3vw, 1.6rem); letter-spacing: .5px; }
+    .subtitle { margin-top: 3px; color: var(--muted); font-size: .88rem; }
+    #global-score, #timer, #badges { margin-top: 3px; font-size: .95rem; text-align: right; }
+    #global-score { color: var(--accent-2); }
+    #timer { color: var(--warn); font-weight: 600; }
+    .mode-toggle { margin-top: 6px; text-align: right; font-size: .85rem; }
+    .idcard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: var(--panel); border: 1px solid #1c2656; border-radius: 12px; padding: 10px; margin: 10px 0 16px; box-shadow: var(--shadow); animation: pop .5s ease-out; }
+    label { font-size: .82rem; color: var(--muted); display: block; margin-bottom: 4px; }
+    input[type="text"], .short, select { width: 100%; background: #0b1432; border: 1px solid #20306a; border-radius: 8px; color: var(--ink); padding: 7px 9px; outline: none; transition: border .2s ease, box-shadow .2s ease; font-size: .9rem; }
+    input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(93, 214, 255, .2); }
+    .exo { background: var(--panel); border: 1px solid #1b2450; border-radius: 14px; padding: 12px; margin: 10px 0; box-shadow: var(--shadow); overflow: hidden; transition: transform 0.2s ease; }
+    .exo:hover { transform: scale(1.01); }
+    .exo h2 { margin: 0 0 4px; font-size: clamp(.95rem, 2vw, 1.05rem); }
+    .consigne { margin: 0 0 8px; color: var(--muted); line-height: 1.45; animation: glow 3s ease-in-out infinite; font-size: .88rem; }
+    .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .btn { background: linear-gradient(180deg, var(--accent), #34b6ff); color: #051024; border: none; padding: 6px 11px; border-radius: 8px; cursor: pointer; font-weight: 600; box-shadow: 0 4px 12px rgba(52, 182, 255, .35); transition: all .08s ease; font-size: .85rem; }
+    .btn:hover { filter: brightness(1.06); }
+    .btn:active { transform: translateY(1px); }
+    .btn.alt { background: linear-gradient(180deg, #ffd166, #ffb347); color: #532c00; box-shadow: 0 4px 12px rgba(255, 179, 71, .35); }
+    .btn.ghost { background: transparent; color: var(--accent); border: 1px dashed var(--accent); box-shadow: none; }
+    .help { display: none; margin-top: 7px; background: #0c1740; border: 1px dashed #3150a8; border-radius: 8px; padding: 8px 10px; color: #d3ddff; line-height: 1.55; font-size: .85rem; }
+    .feedback { margin-top: 5px; font-weight: 600; white-space: pre-wrap; font-size: .82rem; }
+    .ok { color: var(--accent-2); }
+    .no { color: var(--bad); }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .badge { display: inline-block; padding: 2px 6px; border-radius: 999px; background: #1a2b63; color: var(--accent); font-size: .7rem; margin-left: 4px; }
+    .badge-earned { background: #9bffb0; color: #051024; font-weight: 600; animation: pop .4s ease-out; }
+    .rank-label { font-weight: 600; color: var(--accent-2); }
+    .step { margin: 6px 0; padding: 6px; background: #0d1a40; border-radius: 6px; border-left: 3px solid var(--accent); font-size: .82rem; }
+    .step-title { font-weight: 600; color: var(--accent); margin-bottom: 3px; }
+    .number-animation { font-weight: 700; color: var(--accent-2); animation: numberPop 0.5s ease-out; display: inline-block; }
+    #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000; }
+    @keyframes glow { 0% { text-shadow: 0 0 0 rgba(93, 214, 255, 0); } 50% { text-shadow: 0 0 8px rgba(93, 214, 255, .2); } 100% { text-shadow: 0 0 0 rgba(93, 214, 255, 0); } }
+    @keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    @keyframes numberPop { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
   </style>
 </head>
 <body>
-  <!-- Corps du document contenant le contenu affiché à l’élève -->
+  <canvas id="confetti-canvas"></canvas>
+  <audio id="sound-success" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3" preload="auto"></audio>
+  <audio id="sound-error" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-383.mp3" preload="auto"></audio>
+
   <header class="wrap">
-    <!-- Zone supérieure collante avec le titre du document -->
     <h1>6e – Les nombres décimaux <span class="badge">14 exercices</span></h1>
-    <!-- Titre principal et petit badge indiquant le nombre d’exercices -->
-    <div class="subtitle">Complète les réponses puis clique sur <strong>Correction</strong> pour vérifier. Tu peux aussi cliquer sur <strong>Aide</strong> pour un indice adapté aux 6e ✨</div>
-    <!-- Sous-titre explicatif en langage adapté aux élèves -->
+    <div class="subtitle">Complète les réponses puis clique sur <strong>Correction</strong> pour vérifier. Tu peux aussi cliquer sur <strong>Aide</strong> pour un indice adapté aux 6e. N'hésite pas à recommencer pour t'améliorer !</div>
+    <div id="global-score">Score total : 0 / 100</div>
+    <div id="timer">Temps : 00:00</div>
+    <div id="badges">Badges : aucun pour l'instant</div>
+    <div class="mode-toggle">
+      <label><input type="checkbox" id="easy-mode"> Mode facile (moins de chiffres)</label>
+      <label style="margin-left: 12px;"><input type="checkbox" id="timer-mode" checked> Mode chronométré</label>
+    </div>
   </header>
 
   <main class="wrap">
-    <!-- Conteneur principal des cartes et du formulaire d’identification -->
-
     <section class="idcard">
-      <!-- Carte d’identification de l’élève -->
-      <div>
-        <!-- Colonne 1 : Nom -->
-        <label for="nom">Nom</label>
-        <!-- Étiquette du champ Nom -->
-        <input id="nom" type="text" placeholder="Ex. : Martin" />
-        <!-- Champ de saisie du Nom avec exemple -->
-      </div>
-      <div>
-        <!-- Colonne 2 : Prénom -->
-        <label for="prenom">Prénom</label>
-        <!-- Étiquette du champ Prénom -->
-        <input id="prenom" type="text" placeholder="Ex. : Léa" />
-        <!-- Champ de saisie du Prénom avec exemple -->
-      </div>
-      <div>
-        <!-- Colonne 3 : Classe -->
-        <label for="classe">Classe</label>
-        <!-- Étiquette du champ Classe -->
-        <input id="classe" type="text" placeholder="Ex. : 6e B" />
-        <!-- Champ de saisie de la Classe avec exemple -->
-      </div>
+      <div><label for="nom">Nom</label><input id="nom" type="text" placeholder="Ex. : Martin" /></div>
+      <div><label for="prenom">Prénom</label><input id="prenom" type="text" placeholder="Ex. : Léa" /></div>
+      <div><label for="classe">Classe</label><input id="classe" type="text" placeholder="Ex. : 6e B" /></div>
     </section>
 
-    <div class="row" style="justify-content: flex-end; margin-bottom:10px;">
-      <!-- Barre d’actions globale au-dessus des exercices -->
-      <button class="btn ghost" onclick="corrigerTout()">Corriger tout</button>
-      <!-- Bouton pour lancer la correction de tous les exercices -->
+    <div class="row" style="justify-content: flex-end; margin-bottom:8px;">
+      <button class="btn ghost" onclick="corrigerTout()">Corriger tout et voir ton score !</button>
     </div>
 
-    <!-- ============================= -->
-    <!-- EXERCICE 1                   -->
-    <!-- ============================= -->
+    <!-- EXERCICE 1 -->
     <section id="exo1" class="exo">
-      <!-- Carte de l’exercice 1 -->
       <h2>Exercice 1 — Partie entière et partie décimale</h2>
-      <!-- Titre de l’exercice 1 -->
-      <p class="consigne">Pour chaque nombre, indique <strong>la partie entière</strong> et <strong>la partie décimale</strong>. (Astuce : la virgule sépare les deux parties.)</p>
-      <!-- Consigne animée et simplifiée -->
+      <p class="consigne">Pour chaque nombre, indique <strong>la partie entière</strong> et <strong>la partie décimale</strong>. (Astuce : la virgule sépare les deux parties.) Prends ton temps, tu vas y arriver !</p>
       <div class="grid-2">
-        <!-- Grille à 2 colonnes pour les paires -->
-        <div>
-          <label for="input-e1a-ent">4,53 → partie entière</label>
-          <input id="input-e1a-ent" data-key="e1a-ent" placeholder="4,53 → partie entière" />
-        </div>
-        <div>
-          <label for="input-e1a-dec">4,53 → partie décimale</label>
-          <input id="input-e1a-dec" data-key="e1a-dec" placeholder="4,53 → partie décimale" />
-        </div>
-        <div>
-          <label for="input-e1b-ent">529,5 → partie entière</label>
-          <input id="input-e1b-ent" data-key="e1b-ent" placeholder="529,5 → partie entière" />
-        </div>
-        <div>
-          <label for="input-e1b-dec">529,5 → partie décimale</label>
-          <input id="input-e1b-dec" data-key="e1b-dec" placeholder="529,5 → partie décimale" />
-        </div>
-        <div>
-          <label for="input-e1c-ent">0,83 → partie entière</label>
-          <input id="input-e1c-ent" data-key="e1c-ent" placeholder="0,83 → partie entière" />
-        </div>
-        <div>
-          <label for="input-e1c-dec">0,83 → partie décimale</label>
-          <input id="input-e1c-dec" data-key="e1c-dec" placeholder="0,83 → partie décimale" />
-        </div>
+        <div><label for="input-e1a-ent">4,53 → partie entière</label><input id="input-e1a-ent" data-key="e1a-ent" placeholder="4,53 → partie entière" /></div>
+        <div><label for="input-e1a-dec">4,53 → partie décimale</label><input id="input-e1a-dec" data-key="e1a-dec" placeholder="4,53 → partie décimale" /></div>
+        <div><label for="input-e1b-ent">529,5 → partie entière</label><input id="input-e1b-ent" data-key="e1b-ent" placeholder="529,5 → partie entière" /></div>
+        <div><label for="input-e1b-dec">529,5 → partie décimale</label><input id="input-e1b-dec" data-key="e1b-dec" placeholder="529,5 → partie décimale" /></div>
+        <div><label for="input-e1c-ent">0,83 → partie entière</label><input id="input-e1c-ent" data-key="e1c-ent" placeholder="0,83 → partie entière" /></div>
+        <div><label for="input-e1c-dec">0,83 → partie décimale</label><input id="input-e1c-dec" data-key="e1c-dec" placeholder="0,83 → partie décimale" /></div>
       </div>
-      <div class="row" style="margin-top:10px;">
-        <!-- Ligne des boutons Aide / Correction et du feedback -->
-        <button class="btn alt" onclick="toggleHelp('h1')">Aide</button>
-        <!-- Bouton pour afficher/masquer l’aide -->
+      <div class="row" style="margin-top:8px;">
+        <button class="btn alt" onclick="toggleHelp('h1')">Aide détaillée</button>
         <button class="btn" onclick="corriger1()">Correction</button>
-        <!-- Bouton pour lancer la correction de l’exercice 1 -->
+        <button class="btn ghost" onclick="resetExo(1)">Recommencer</button>
         <span id="f1" class="feedback"></span>
-        <!-- Zone où afficher le résultat de la correction -->
       </div>
       <div id="h1" class="help">
-        <!-- Bloc d’aide détaillant une explication adaptée aux 6e -->
-        La <strong>partie entière</strong> est à gauche de la virgule. La <strong>partie décimale</strong> est à droite.
-        Pour la partie décimale on accepte : « 53 », « 0,53 » ou « 53/100 » (c’est la même idée).
+        <p>Bonjour ! On va y aller étape par étape.</p>
+        <p>1. La <strong>partie entière</strong> est à gauche de la virgule.</p>
+        <p>Exemple : Dans 4,53 → <strong>4</strong>.</p>
+        <p>2. La <strong>partie décimale</strong> est à droite de la virgule.</p>
+        <p>Exemple : Dans 4,53 → <strong>53</strong> (ou 0,53, ou 53/100).</p>
+        <p>Si le nombre commence par 0, comme 0,83 → entière = 0, décimale = 83.</p>
+        <p>Essaie de relire le nombre lentement et de repérer la virgule. Tu es capable !</p>
       </div>
     </section>
 
-    <!-- ============================= -->
-    <!-- EXERCICE 2                   -->
-    <!-- ============================= -->
+    <!-- EXERCICE 2 -->
     <section id="exo2" class="exo">
-      <!-- Carte de l’exercice 2 -->
-      <h2>Exercice 2 — Chiffre des centaines & des centièmes</h2>
-      <!-- Titre de l’exercice 2 -->
-      <p class="consigne">Complète : on te demande le <em>chiffre des centaines</em> (dans la partie entière) puis le <em>chiffre des centièmes</em> (deuxième chiffre après la virgule).</p>
-      <!-- Consigne clarifiée -->
+      <h2>Exercice 2 — Chiffre des différents rangs</h2>
+      <p class="consigne">Pour chaque nombre généré, indique le <strong>chiffre du rang demandé</strong>. Le rang est affiché en <span class="rank-label">gras</span> ! Amuse-toi à régénérer pour t'entraîner plus !</p>
       <div class="grid-2">
-        <!-- Première ligne : 13564,981 -->
-        <div>
-          <label for="input-e2a-cens">13564,981 → centaines ?</label>
-          <input id="input-e2a-cens" data-key="e2a-cens" placeholder="13564,981 → centaines ?" />
-        </div>
-        <div>
-          <label for="input-e2a-centiemes">13564,981 → centièmes ?</label>
-          <input id="input-e2a-centiemes" data-key="e2a-centiemes" placeholder="13564,981 → centièmes ?" />
-        </div>
-        <!-- Deuxième ligne : 5462,137 -->
-        <div>
-          <label for="input-e2b-cens">5462,137 → centaines ?</label>
-          <input id="input-e2b-cens" data-key="e2b-cens" placeholder="5462,137 → centaines ?" />
-        </div>
-        <div>
-          <label for="input-e2b-centiemes">5462,137 → centièmes ?</label>
-          <input id="input-e2b-centiemes" data-key="e2b-centiemes" placeholder="5462,137 → centièmes ?" />
-        </div>
-        <!-- Troisième ligne : 2,3157 -->
-        <div>
-          <label for="input-e2c-cens">2,3157 → centaines ?</label>
-          <input id="input-e2c-cens" data-key="e2c-cens" placeholder="2,3157 → centaines ?" />
-        </div>
-        <div>
-          <label for="input-e2c-centiemes">2,3157 → centièmes ?</label>
-          <input id="input-e2c-centiemes" data-key="e2c-centiemes" placeholder="2,3157 → centièmes ?" />
-        </div>
-        <!-- Quatrième ligne : 581,35 -->
-        <div>
-          <label for="input-e2d-cens">581,35 → centaines ?</label>
-          <input id="input-e2d-cens" data-key="e2d-cens" placeholder="581,35 → centaines ?" />
-        </div>
-        <div>
-          <label for="input-e2d-centiemes">581,35 → centièmes ?</label>
-          <input id="input-e2d-centiemes" data-key="e2d-centiemes" placeholder="581,35 → centièmes ?" />
-        </div>
+        <div><label for="input-e2-unit"><span id="nb-unit"></span> → chiffre des <strong class="rank-label">unités</strong> ?</label><input id="input-e2-unit" data-key="e2-unit" placeholder="Chiffre des unités ?" /></div>
+        <div><label for="input-e2-diz"><span id="nb-diz"></span> → chiffre des <strong class="rank-label">dizaines</strong> ?</label><input id="input-e2-diz" data-key="e2-diz" placeholder="Chiffre des dizaines ?" /></div>
+        <div><label for="input-e2-cens"><span id="nb-cens"></span> → chiffre des <strong class="rank-label">centaines</strong> ?</label><input id="input-e2-cens" data-key="e2-cens" placeholder="Chiffre des centaines ?" /></div>
+        <div><label for="input-e2-mil"><span id="nb-mil"></span> → chiffre des <strong class="rank-label">milliers</strong> ?</label><input id="input-e2-mil" data-key="e2-mil" placeholder="Chiffre des milliers ?" /></div>
+        <div><label for="input-e2-dix"><span id="nb-dix"></span> → chiffre des <strong class="rank-label">dixièmes</strong> ?</label><input id="input-e2-dix" data-key="e2-dix" placeholder="Chiffre des dixièmes ?" /></div>
+        <div><label for="input-e2-cent"><span id="nb-cent"></span> → chiffre des <strong class="rank-label">centièmes</strong> ?</label><input id="input-e2-cent" data-key="e2-cent" placeholder="Chiffre des centièmes ?" /></div>
+        <div><label for="input-e2-mill"><span id="nb-mill"></span> → chiffre des <strong class="rank-label">millièmes</strong> ?</label><input id="input-e2-mill" data-key="e2-mill" placeholder="Chiffre des millièmes ?" /></div>
       </div>
-      <div class="row" style="margin-top:10px;">
-        <!-- Ligne des boutons et feedback -->
-        <button class="btn alt" onclick="toggleHelp('h2')">Aide</button>
-        <!-- Afficher/masquer l’aide -->
+      <div class="row" style="margin-top:8px;">
+        <button class="btn alt" onclick="toggleHelp('h2')">Aide détaillée</button>
         <button class="btn" onclick="corriger2()">Correction</button>
-        <!-- Lancer la correction -->
+        <button class="btn ghost" onclick="resetExo(2)">Recommencer et régénérer</button>
         <span id="f2" class="feedback"></span>
-        <!-- Zone de feedback -->
       </div>
       <div id="h2" class="help">
-        <!-- Texte d’aide accessible -->
-        <p>👉 <strong>Centaines</strong> : regarde la partie entière. C’est le 3e chiffre en partant de la droite.</p>
-        <p>👉 <strong>Centièmes</strong> : c’est le <em>2e chiffre</em> après la virgule.</p>
+        <p>Salut ! On va décomposer ça pas à pas.</p>
+        <p>La <strong>virgule</strong> sépare la partie entière (gauche) et la partie décimale (droite).</p>
+        <p><strong>Partie entière</strong> : compte à l'envers depuis la virgule :</p>
+        <ul>
+          <li>Juste avant la virgule : <strong class="rank-label">unités</strong></li>
+          <li>2e avant : <strong class="rank-label">dizaines</strong></li>
+          <li>3e avant : <strong class="rank-label">centaines</strong></li>
+          <li>4e avant : <strong class="rank-label">milliers</strong></li>
+        </ul>
+        <p><strong>Partie décimale</strong> : compte depuis la virgule :</p>
+        <ul>
+          <li>1er après : <strong class="rank-label">dixièmes</strong></li>
+          <li>2e après : <strong class="rank-label">centièmes</strong></li>
+          <li>3e après : <strong class="rank-label">millièmes</strong></li>
+        </ul>
+        <p>Si un rang n'existe pas, c'est 0. Exemple : 5,12 → centaines = 0.</p>
+        <p>Compte les chiffres avec ton doigt si besoin. Tu progresses !</p>
       </div>
     </section>
 
-    <!-- ============================= -->
-    <!-- EXERCICE 3                   -->
-    <!-- ============================= -->
+    <!-- EXERCICE 3 -->
     <section id="exo3" class="exo">
-      <!-- Carte de l’exercice 3 -->
       <h2>Exercice 3 — Zéros inutiles</h2>
-      <!-- Titre de l’exercice 3 -->
-      <p class="consigne">Réécris chaque nombre en <strong>retirant seulement les zéros inutiles</strong> (pas ceux qui donnent la valeur !).</p>
-      <!-- Consigne simplifiée et insistante sur le sens -->
+      <p class="consigne">Réécris chaque nombre en <strong>retirant seulement les zéros inutiles</strong> (pas ceux qui donnent la valeur !). Courage, c'est facile une fois compris !</p>
       <div class="grid-3">
-        <!-- 7 champs pour les 7 nombres -->
-        <div>
-          <label for="input-e3-1">009</label>
-          <input id="input-e3-1" data-key="e3-1" placeholder="009" />
-        </div>
-        <div>
-          <label for="input-e3-2">05900</label>
-          <input id="input-e3-2" data-key="e3-2" placeholder="05900" />
-        </div>
-        <div>
-          <label for="input-e3-3">500</label>
-          <input id="input-e3-3" data-key="e3-3" placeholder="500" />
-        </div>
-        <div>
-          <label for="input-e3-4">02,07500</label>
-          <input id="input-e3-4" data-key="e3-4" placeholder="02,07500" />
-        </div>
-        <div>
-          <label for="input-e3-5">08000</label>
-          <input id="input-e3-5" data-key="e3-5" placeholder="08000" />
-        </div>
-        <div>
-          <label for="input-e3-6">0070</label>
-          <input id="input-e3-6" data-key="e3-6" placeholder="0070" />
-        </div>
-        <div>
-          <label for="input-e3-7">023,005600</label>
-          <input id="input-e3-7" data-key="e3-7" placeholder="023,005600" />
-        </div>
+        <div><label for="input-e3-1">009</label><input id="input-e3-1" data-key="e3-1" placeholder="009" /></div>
+        <div><label for="input-e3-2">05900</label><input id="input-e3-2" data-key="e3-2" placeholder="05900" /></div>
+        <div><label for="input-e3-3">500</label><input id="input-e3-3" data-key="e3-3" placeholder="500" /></div>
+        <div><label for="input-e3-4">02,07500</label><input id="input-e3-4" data-key="e3-4" placeholder="02,07500" /></div>
+        <div><label for="input-e3-5">08000</label><input id="input-e3-5" data-key="e3-5" placeholder="08000" /></div>
+        <div><label for="input-e3-6">0070</label><input id="input-e3-6" data-key="e3-6" placeholder="0070" /></div>
+        <div><label for="input-e3-7">023,005600</label><input id="input-e3-7" data-key="e3-7" placeholder="023,005600" /></div>
       </div>
-      <div class="row" style="margin-top:10px;">
-        <!-- Boutons et feedback -->
-        <button class="btn alt" onclick="toggleHelp('h3')">Aide</button>
-        <!-- Bouton d’aide -->
+      <div class="row" style="margin-top:8px;">
+        <button class="btn alt" onclick="toggleHelp('h3')">Aide détaillée</button>
         <button class="btn" onclick="corriger3()">Correction</button>
-        <!-- Bouton correction -->
+        <button class="btn ghost" onclick="resetExo(3)">Recommencer</button>
         <span id="f3" class="feedback"></span>
-        <!-- Zone de feedback -->
       </div>
       <div id="h3" class="help">
-        <!-- Aide explicative -->
-        <p>Un <strong>zéro inutile</strong> :
-          <br>• au début d’un nombre entier (ex. 007 → 7)
-          <br>• à droite de la partie décimale (ex. 2,4500 → 2,45)
-        </p>
-        <p>Mais dans <em>500</em>, les deux zéros sont utiles : ils indiquent <strong>cinq cents</strong> (et pas 5).</p>
+        <p>Un <strong>zéro inutile</strong> ne change pas la valeur du nombre.</p>
+        <ul>
+          <li>Au début : 009 → 9</li>
+          <li>À la fin de la décimale : 2,07500 → 2,075</li>
+          <li>Mais dans 500, les zéros montrent 500, pas 5 → garde-les !</li>
+        </ul>
+        <p>Essaie sur un papier d'abord. Recommence si besoin !</p>
       </div>
     </section>
 
-    <!-- ============================= -->
-    <!-- EXERCICE 4                   -->
-    <!-- ============================= -->
+    <!-- EXERCICE 4 -->
     <section id="exo4" class="exo">
-      <!-- Carte de l’exercice 4 -->
       <h2>Exercice 4 — Placer la virgule</h2>
-      <!-- Titre -->
       <p class="consigne">Place la virgule pour que le <strong>chiffre 8</strong> soit le <strong>chiffre des centièmes</strong> (2e après la virgule).</p>
-      <!-- Consigne -->
       <div class="grid-3">
-        <!-- 6 champs correspondant aux 6 nombres donnés -->
-        <div>
-          <label for="input-e4-1">1458 → ?</label>
-          <input id="input-e4-1" data-key="e4-1" placeholder="1458 → ?" />
-        </div>
-        <div>
-          <label for="input-e4-2">651865 → ?</label>
-          <input id="input-e4-2" data-key="e4-2" placeholder="651865 → ?" />
-        </div>
-        <div>
-          <label for="input-e4-3">5163487 → ?</label>
-          <input id="input-e4-3" data-key="e4-3" placeholder="5163487 → ?" />
-        </div>
-        <div>
-          <label for="input-e4-4">8 → ?</label>
-          <input id="input-e4-4" data-key="e4-4" placeholder="8 → ?" />
-        </div>
-        <div>
-          <label for="input-e4-5">89 → ?</label>
-          <input id="input-e4-5" data-key="e4-5" placeholder="89 → ?" />
-        </div>
-        <div>
-          <label for="input-e4-6">3916825 → ?</label>
-          <input id="input-e4-6" data-key="e4-6" placeholder="3916825 → ?" />
-        </div>
+        <div><label for="input-e4-1">1458 → ?</label><input id="input-e4-1" data-key="e4-1" placeholder="1458 → ?" /></div>
+        <div><label for="input-e4-2">651865 → ?</label><input id="input-e4-2" data-key="e4-2" placeholder="651865 → ?" /></div>
+        <div><label for="input-e4-3">5163487 → ?</label><input id="input-e4-3" data-key="e4-3" placeholder="5163487 → ?" /></div>
+        <div><label for="input-e4-4">8 → ?</label><input id="input-e4-4" data-key="e4-4" placeholder="8 → ?" /></div>
+        <div><label for="input-e4-5">89 → ?</label><input id="input-e4-5" data-key="e4-5" placeholder="89 → ?" /></div>
+        <div><label for="input-e4-6">3916825 → ?</label><input id="input-e4-6" data-key="e4-6" placeholder="3916825 → ?" /></div>
       </div>
-      <div class="row" style="margin-top:10px;">
-        <!-- Ligne des boutons -->
-        <button class="btn alt" onclick="toggleHelp('h4')">Aide</button>
-        <!-- Bouton aide -->
+      <div class="row" style="margin-top:8px;">
+        <button class="btn alt" onclick="toggleHelp('h4')">Aide détaillée</button>
         <button class="btn" onclick="corriger4()">Correction</button>
-        <!-- Bouton correction -->
+        <button class="btn ghost" onclick="resetExo(4)">Recommencer</button>
         <span id="f4" class="feedback"></span>
-        <!-- Zone feedback -->
       </div>
       <div id="h4" class="help">
-        <!-- Bloc d’aide -->
-        <p>Le <strong>centième</strong> est le <em>deuxième</em> chiffre après la virgule. Donc, place la virgule <em>deux positions avant</em> le 8.</p>
-        <p>Exemple : pour 1458 → <strong>14,58</strong>.</p>
+        <p>Le <strong>centième</strong> est le 2e chiffre après la virgule.</p>
+        <p>Donc, place la virgule <strong>deux positions avant le 8</strong>.</p>
+        <p>Exemple : 1458 → <strong>14,58</strong> (8 est le 2e après la virgule).</p>
       </div>
     </section>
 
-    <!-- ============================= -->
-    <!-- EXERCICE 5                   -->
-    <!-- ============================= -->
+    <!-- EXERCICE 5 -->
     <section id="exo5" class="exo">
-      <!-- Carte de l’exercice 5 -->
       <h2>Exercice 5 — Écriture décimale</h2>
-      <!-- Titre -->
       <p class="consigne">Transforme la fraction en <strong>écriture décimale</strong>.</p>
-      <!-- Consigne -->
       <div class="grid-2">
-        <!-- Quatre couples fraction → réponse -->
-        <div>
-          <label for="input-e5-1">73/100 = ?</label>
-          <input id="input-e5-1" data-key="e5-1" placeholder="73/100 = ?" />
-        </div>
-        <div>
-          <label for="input-e5-2">7/10 = ?</label>
-          <input id="input-e5-2" data-key="e5-2" placeholder="7/10 = ?" />
-        </div>
-        <div>
-          <label for="input-e5-3">731/1000 = ?</label>
-          <input id="input-e5-3" data-key="e5-3" placeholder="731/1000 = ?" />
-        </div>
-        <div>
-          <label for="input-e5-4">28/1000 = ?</label>
-          <input id="input-e5-4" data-key="e5-4" placeholder="28/1000 = ?" />
-        </div>
+        <div><label for="input-e5-1">73/100 = ?</label><input id="input-e5-1" data-key="e5-1" placeholder="73/100 = ?" /></div>
+        <div><label for="input-e5-2">7/10 = ?</label><input id="input-e5-2" data-key="e5-2" placeholder="7/10 = ?" /></div>
+        <div><label for="input-e5-3">731/1000 = ?</label><input id="input-e5-3" data-key="e5-3" placeholder="731/1000 = ?" /></div>
+        <div><label for="input-e5-4">28/1000 = ?</label><input id="input-e5-4" data-key="e5-4" placeholder="28/1000 = ?" /></div>
       </div>
-      <div class="row" style="margin-top:10px;">
-        <!-- Boutons et feedback -->
-        <button class="btn alt" onclick="toggleHelp('h5')">Aide</button>
-        <!-- Aide -->
+      <div class="row" style="margin-top:8px;">
+        <button class="btn alt" onclick="toggleHelp('h5')">Aide détaillée</button>
         <button class="btn" onclick="corriger5()">Correction</button>
-        <!-- Correction -->
+        <button class="btn ghost" onclick="resetExo(5)">Recommencer</button>
         <span id="f5" class="feedback"></span>
-        <!-- Feedback -->
       </div>
       <div id="h5" class="help">
-        <!-- Aide -->
-        <p>Le dénominateur te dit combien de chiffres après la virgule :
-          <br>• /10 → 1 chiffre • /100 → 2 chiffres • /1000 → 3 chiffres.</p>
+        <p>Super question ! Voici comment transformer une fraction en nombre décimal :</p>
+        <div class="step">
+          <div class="step-title">Étape 1 : Regarde le dénominateur</div>
+          <p>Il te dit <strong>combien de chiffres après la virgule</strong> il faut :</p>
+          <ul>
+            <li><strong>/10</strong> → 1 chiffre après la virgule (dixièmes)</li>
+            <li><strong>/100</strong> → 2 chiffres (centièmes)</li>
+            <li><strong>/1000</strong> → 3 chiffres (millièmes)</li>
+          </ul>
+        </div>
+        <div class="step">
+          <div class="step-title">Étape 2 : Prends le numérateur</div>
+          <p>C’est lui qui va devenir le nombre après la virgule.</p>
+        </div>
+        <div class="step">
+          <div class="step-title">Étape 3 : Ajoute des zéros si besoin</div>
+          <p>Exemple : <strong>73/100</strong></p>
+          <ul>
+            <li>Dénominateur = 100 → <strong>2 chiffres après la virgule</strong></li>
+            <li>Numérateur = 73 → on écrit <strong>0,73</strong> (on ajoute un 0 devant)</li>
+          </ul>
+          <p>Exemple : <strong>7/10</strong></p>
+          <ul>
+            <li>Dénominateur = 10 → <strong>1 chiffre après la virgule</strong></li>
+            <li>Numérateur = 7 → on écrit <strong>0,7</strong></li>
+          </ul>
+        </div>
+        <div class="step">
+          <div class="step-title">Étape 4 : Si le numérateur est plus grand que le dénominateur</div>
+          <p>Exemple : <strong>28/1000</strong></p>
+          <ul>
+            <li>28 ÷ 1000 = 0,028 → <strong>0,028</strong></li>
+          </ul>
+        </div>
+        <p><strong>En résumé :</strong> Mets le numérateur après la virgule, et ajoute des zéros devant si besoin pour avoir le bon nombre de chiffres.</p>
+        <p>Tu vas y arriver ! Essaie avec un crayon si tu veux. Tu es sur la bonne voie !</p>
       </div>
     </section>
 
-    <!-- ============================= -->
-    <!-- EXERCICE 6                   -->
-    <!-- ============================= -->
+    <!-- EXERCICE 6 -->
     <section id="exo6" class="exo">
-      <!-- Carte de l’exercice 6 -->
       <h2>Exercice 6 — Quel est le rang du 3 ?</h2>
-      <!-- Titre -->
       <p class="consigne">Choisis le <strong>rang</strong> du chiffre 3 : unités / dizaines / centaines / dixièmes / centièmes / millièmes.</p>
-      <!-- Consigne -->
       <div class="grid-2">
-        <!-- Création de quatre listes déroulantes -->
-        <div>
-          <label for="select-e6-1">43,546 → rang du 3 ?</label>
-          <select id="select-e6-1" data-key="e6-1">
-            <!-- Menu pour 43,546 -->
-            <option value="">43,546 → rang du 3 ?</option>
-            <option>unités</option>
-            <option>dizaines</option>
-            <option>centaines</option>
-            <option>dixièmes</option>
-            <option>centièmes</option>
-            <option>millièmes</option>
-          </select>
-        </div>
-        <div>
-          <label for="select-e6-2">624,23 → rang du 3 ?</label>
-          <select id="select-e6-2" data-key="e6-2">
-            <!-- Menu pour 624,23 -->
-            <option value="">624,23 → rang du 3 ?</option>
-            <option>unités</option>
-            <option>dizaines</option>
-            <option>centaines</option>
-            <option>dixièmes</option>
-            <option>centièmes</option>
-            <option>millièmes</option>
-          </select>
-        </div>
-        <div>
-          <label for="select-e6-3">250,503 → rang du 3 ?</label>
-          <select id="select-e6-3" data-key="e6-3">
-            <!-- Menu pour 250,503 -->
-            <option value="">250,503 → rang du 3 ?</option>
-            <option>unités</option>
-            <option>dizaines</option>
-            <option>centaines</option>
-            <option>dixièmes</option>
-            <option>centièmes</option>
-            <option>millièmes</option>
-          </select>
-        </div>
-        <div>
-          <label for="select-e6-4">0,310 → rang du 3 ?</label>
-          <select id="select-e6-4" data-key="e6-4">
-            <!-- Menu pour 0,310 -->
-            <option value="">0,310 → rang du 3 ?</option>
-            <option>unités</option>
-            <option>dizaines</option>
-            <option>centaines</option>
-            <option>dixièmes</option>
-            <option>centièmes</option>
-            <option>millièmes</option>
-          </select>
-        </div>
+        <div><label for="select-e6-1">43,546 → rang du 3 ?</label><select id="select-e6-1" data-key="e6-1"><option value="">43,546 → rang du 3 ?</option><option>unités</option><option>dizaines</option><option>centaines</option><option>dixièmes</option><option>centièmes</option><option>millièmes</option></select></div>
+        <div><label for="select-e6-2">624,23 → rang du 3 ?</label><select id="select-e6-2" data-key="e6-2"><option value="">624,23 → rang du 3 ?</option><option>unités</option><option>dizaines</option><option>centaines</option><option>dixièmes</option><option>centièmes</option><option>millièmes</option></select></div>
+        <div><label for="select-e6-3">250,503 → rang du 3 ?</label><select id="select-e6-3" data-key="e6-3"><option value="">250,503 → rang du 3 ?</option><option>unités</option><option>dizaines</option><option>centaines</option><option>dixièmes</option><option>centièmes</option><option>millièmes</option></select></div>
+        <div><label for="select-e6-4">0,310 → rang du 3 ?</label><select id="select-e6-4" data-key="e6-4"><option value="">0,310 → rang du 3 ?</option><option>unités</option><option>dizaines</option><option>centaines</option><option>dixièmes</option><option>centièmes</option><option>millièmes</option></select></div>
       </div>
-      <div class="row" style="margin-top:10px;">
-        <!-- Boutons/feedback -->
-        <button class="btn alt" onclick="toggleHelp('h6')">Aide</button>
-        <!-- Aide -->
+      <div class="row" style="margin-top:8px;">
+        <button class="btn alt" onclick="toggleHelp('h6')">Aide détaillée</button>
         <button class="btn" onclick="corriger6()">Correction</button>
-        <!-- Correction -->
+        <button class="btn ghost" onclick="resetExo(6)">Recommencer</button>
         <span id="f6" class="feedback"></span>
-        <!-- Feedback -->
       </div>
       <div id="h6" class="help">
-        <!-- Aide -->
         <p>Dans 43,546 : 4= dizaines, 3= unités. Après la virgule : 5= dixièmes, 4= centièmes, 6= millièmes.</p>
       </div>
     </section>
 
-    <!-- ============================= -->
-    <!-- EXERCICE 7                   -->
-    <!-- ============================= -->
+    <!-- EXERCICE 7 -->
     <section id="exo7" class="exo">
-      <!-- Carte de l’exercice 7 -->
       <h2>Exercice 7 — Écrire sous forme décimale</h2>
-      <!-- Titre -->
-      <p class="consigne">Convertis chaque fraction en <strong>nombre décimal</strong>.</p>
-      <!-- Consigne -->
+      <p class="consigne">Convertis chaque fraction en <strong>nombre décimal</strong>. Tu vas voir, c’est comme transformer une fraction en pièce de puzzle !</p>
       <div class="grid-2">
-        <!-- Quatre champs de réponse -->
-        <div>
-          <label for="input-e7-1">84/100 = ?</label>
-          <input id="input-e7-1" data-key="e7-1" placeholder="84/100 = ?" />
-        </div>
-        <div>
-          <label for="input-e7-2">27/10 = ?</label>
-          <input id="input-e7-2" data-key="e7-2" placeholder="27/10 = ?" />
-        </div>
-        <div>
-          <label for="input-e7-3">71/1000 = ?</label>
-          <input id="input-e7-3" data-key="e7-3" placeholder="71/1000 = ?" />
-        </div>
-        <div>
-          <label for="input-e7-4">157/10 = ?</label>
-          <input id="input-e7-4" data-key="e7-4" placeholder="157/10 = ?" />
-        </div>
+        <div><label for="input-e7-1">84/100 = ?</label><input id="input-e7-1" data-key="e7-1" placeholder="84/100 = ?" /></div>
+        <div><label for="input-e7-2">27/10 = ?</label><input id="input-e7-2" data-key="e7-2" placeholder="27/10 = ?" /></div>
+        <div><label for="input-e7-3">71/1000 = ?</label><input id="input-e7-3" data-key="e7-3" placeholder="71/1000 = ?" /></div>
+        <div><label for="input-e7-4">157/10 = ?</label><input id="input-e7-4" data-key="e7-4" placeholder="157/10 = ?" /></div>
       </div>
-      <div class="row" style="margin-top:10px;">
-        <!-- Boutons/feedback -->
-        <button class="btn alt" onclick="toggleHelp('h7')">Aide</button>
-        <!-- Aide -->
+      <div class="row" style="margin-top:8px;">
+        <button class="btn alt" onclick="toggleHelp('h7')">Aide détaillée</button>
         <button class="btn" onclick="corriger7()">Correction</button>
-        <!-- Correction -->
+        <button class="btn ghost" onclick="resetExo(7)">Recommencer</button>
         <span id="f7" class="feedback"></span>
-        <!-- Feedback -->
       </div>
       <div id="h7" class="help">
-        <!-- Aide -->
-        <p>Rappel : /10 → 1 chiffre après la virgule, /100 → 2, /1000 → 3. Exemple : 27/10 = 2,7.</p>
+        <p>Salut ! On va transformer une fraction en nombre décimal. C’est facile avec cette méthode !</p>
+        <div class="step">
+          <div class="step-title">Étape 1 : Regarde le dénominateur</div>
+          <p>Il te dit <strong>combien de chiffres après la virgule</strong> :</p>
+          <ul>
+            <li><strong>/10</strong> → 1 chiffre après la virgule (dixièmes)</li>
+            <li><strong>/100</strong> → 2 chiffres (centièmes)</li>
+            <li><strong>/1000</strong> → 3 chiffres (millièmes)</li>
+          </ul>
+        </div>
+        <div class="step">
+          <div class="step-title">Étape 2 : Prends le numérateur</div>
+          <p>C’est lui qui va devenir le nombre après la virgule.</p>
+        </div>
+        <div class="step">
+          <div class="step-title">Étape 3 : Ajoute des zéros si besoin</div>
+          <p>Exemple : <strong>84/100</strong></p>
+          <ul>
+            <li>Dénominateur = 100 → <strong>2 chiffres après la virgule</strong></li>
+            <li>Numérateur = 84 → on écrit <strong>0,84</strong> (on ajoute un 0 devant)</li>
+          </ul>
+          <p>Exemple : <strong>27/10</strong></p>
+          <ul>
+            <li>Dénominateur = 10 → <strong>1 chiffre après la virgule</strong></li>
+            <li>Numérateur = 27 → on écrit <strong>2,7</strong> (le 2 avant, le 7 après)</li>
+          </ul>
+        </div>
+        <div class="step">
+          <div class="step-title">Étape 4 : Si le numérateur est plus grand que le dénominateur</div>
+          <p>Exemple : <strong>157/10</strong></p>
+          <ul>
+            <li>157 ÷ 10 = 15,7 → <strong>15,7</strong></li>
+            <li>Tu peux aussi penser : 157 dixièmes = 15 + 7 dixièmes = <strong>15,7</strong></li>
+          </ul>
+        </div>
+        <p><strong>En résumé :</strong> Mets le numérateur après la virgule, et ajoute des zéros devant si besoin pour avoir le bon nombre de chiffres.</p>
+        <p>Tu vas y arriver ! Essaie avec un crayon si tu veux. Tu es sur la bonne voie !</p>
       </div>
     </section>
 
-    <!-- ============================= -->
-    <!-- EXERCICE 8                   -->
-    <!-- ============================= -->
+    <!-- EXERCICE 8 -->
     <section id="exo8" class="exo">
-      <!-- Carte de l’exercice 8 -->
       <h2>Exercice 8 — Une seule fraction décimale</h2>
-      <!-- Titre -->
       <p class="consigne">Écris chaque somme <strong>sous la forme d’une seule fraction décimale</strong> (comme 527/100).</p>
-      <!-- Consigne -->
       <div class="grid-2">
-        <!-- Deux champs pour deux sommes -->
-        <div>
-          <label for="input-e8-1">5 + 2/10 + 7/100 = ?/ ?</label>
-          <input id="input-e8-1" data-key="e8-1" placeholder="5 + 2/10 + 7/100 = ?/ ?" />
-        </div>
-        <div>
-          <label for="input-e8-2">9 + 4/100 + 6/1000 = ?/ ?</label>
-          <input id="input-e8-2" data-key="e8-2" placeholder="9 + 4/100 + 6/1000 = ?/ ?" />
-        </div>
+        <div><label for="input-e8-1">5 + 2/10 + 7/100 = ?/ ?</label><input id="input-e8-1" data-key="e8-1" placeholder="5 + 2/10 + 7/100 = ?/ ?" /></div>
+        <div><label for="input-e8-2">9 + 4/100 + 6/1000 = ?/ ?</label><input id="input-e8-2" data-key="e8-2" placeholder="9 + 4/100 + 6/1000 = ?/ ?" /></div>
       </div>
-      <div class="row" style="margin-top:10px;">
-        <!-- Boutons/feedback -->
-        <button class="btn alt" onclick="toggleHelp('h8')">Aide</button>
-        <!-- Aide -->
+      <div class="row" style="margin-top:8px;">
+        <button class="btn alt" onclick="toggleHelp('h8')">Aide détaillée</button>
         <button class="btn" onclick="corriger8()">Correction</button>
-        <!-- Correction -->
+        <button class="btn ghost" onclick="resetExo(8)">Recommencer</button>
         <span id="f8" class="feedback"></span>
-        <!-- Feedback -->
       </div>
       <div id="h8" class="help">
-        <!-- Aide -->
-        <p>Prends le <strong>même dénominateur</strong> (100 ou 1000), transforme tout, puis additionne les numérateurs.</p>
+        <p>On va transformer une somme en <strong>une seule fraction</strong>. C’est comme ranger plusieurs pièces dans une seule boîte !</p>
+        <div class="step">
+          <div class="step-title">Étape 1 : Trouve le plus grand dénominateur</div>
+          <p>Regarde tous les dénominateurs : 10, 100, 1000 → le plus grand est <strong>1000</strong>.</p>
+        </div>
+        <div class="step">
+          <div class="step-title">Étape 2 : Transforme tout en millièmes</div>
+          <p>Exemple : <strong>5 + 2/10 + 7/100</strong></p>
+          <ul>
+            <li>5 = <strong>5000/1000</strong> (5 entiers = 5000 millièmes)</li>
+            <li>2/10 = <strong>200/1000</strong> (2 dixièmes = 200 millièmes)</li>
+            <li>7/100 = <strong>70/1000</strong> (7 centièmes = 70 millièmes)</li>
+          </ul>
+        </div>
+        <div class="step">
+          <div class="step-title">Étape 3 : Additionne les numérateurs</div>
+          <p>5000 + 200 + 70 = <strong>5270</strong></p>
+          <p>Résultat : <strong>5270/1000</strong></p>
+        </div>
+        <p><strong>En résumé :</strong> Mets tout sur le même dénominateur (le plus grand), puis additionne les numérateurs.</p>
+        <p>Tu es un génie des fractions !</p>
       </div>
     </section>
 
-    <!-- ============================= -->
-    <!-- EXERCICE 9                   -->
-    <!-- ============================= -->
+    <!-- EXERCICE 9 -->
     <section id="exo9" class="exo">
-      <!-- Carte de l’exercice 9 -->
       <h2>Exercice 9 — Lequel n’est pas égal ?</h2>
-      <!-- Titre -->
       <p class="consigne">Dans chaque ligne, <strong>coche</strong> le nombre qui n’est <em>pas</em> égal aux deux autres.</p>
-      <!-- Consigne -->
       <div>
-        <!-- Bloc regroupant les trois séries de choix -->
         <p><strong>1)</strong> 45 dixièmes — 45/10 — 0,45 — 4 + 5/10</p>
-        <!-- Énoncé 1 -->
         <div class="row">
-          <!-- Groupe de boutons radio pour le cas 1 -->
           <label><input type="radio" name="e9-1" value="A" /> 45/10</label>
-          <!-- Option A -->
           <label><input type="radio" name="e9-1" value="B" /> 0,45</label>
-          <!-- Option B -->
           <label><input type="radio" name="e9-1" value="C" /> 4 + 5/10</label>
-          <!-- Option C -->
         </div>
         <p><strong>2)</strong> 583 centièmes — 5 + 83/10 — 5 + 83/100 — 5,83</p>
-        <!-- Énoncé 2 -->
         <div class="row">
-          <!-- Groupe de boutons radio pour le cas 2 -->
           <label><input type="radio" name="e9-2" value="A" /> 5 + 83/10</label>
-          <!-- Option A -->
           <label><input type="radio" name="e9-2" value="B" /> 5 + 83/100</label>
-          <!-- Option B -->
           <label><input type="radio" name="e9-2" value="C" /> 5,83</label>
-          <!-- Option C -->
         </div>
         <p><strong>3)</strong> 307 millièmes — 3/10 + 7/1000 — 307/1000 — 3 + 7/1000</p>
-        <!-- Énoncé 3 -->
         <div class="row">
-          <!-- Groupe de boutons radio pour le cas 3 -->
           <label><input type="radio" name="e9-3" value="A" /> 3/10 + 7/1000</label>
-          <!-- Option A -->
           <label><input type="radio" name="e9-3" value="B" /> 307/1000</label>
-          <!-- Option B -->
           <label><input type="radio" name="e9-3" value="C" /> 3 + 7/1000</label>
-          <!-- Option C -->
         </div>
       </div>
-      <div class="row" style="margin-top:10px;">
-        <!-- Boutons/feedback -->
-        <button class="btn alt" onclick="toggleHelp('h9')">Aide</button>
-        <!-- Aide -->
+      <div class="row" style="margin-top:8px;">
+        <button class="btn alt" onclick="toggleHelp('h9')">Aide détaillée</button>
         <button class="btn" onclick="corriger9()">Correction</button>
-        <!-- Correction -->
+        <button class="btn ghost" onclick="resetExo(9)">Recommencer</button>
         <span id="f9" class="feedback"></span>
-        <!-- Feedback -->
       </div>
       <div id="h9" class="help">
-        <!-- Aide -->
-        <p>Transforme tout en <em>même forme</em> (ex. en décimal) puis compare. Un seul est différent !</p>
+        <p>Trouve le <strong>différent</strong> ! Transforme tout en <strong>décimal</strong> pour comparer.</p>
+        <div class="step">
+          <div class="step-title">Exemple : ligne 1</div>
+          <ul>
+            <li>45 dixièmes = <strong>4,5</strong></li>
+            <li>45/10 = <strong>4,5</strong></li>
+            <li>0,45 = <strong>0,45</strong> → c’est le différent !</li>
+            <li>4 + 5/10 = 4 + 0,5 = <strong>4,5</strong></li>
+          </ul>
+        </div>
+        <p><strong>Méthode :</strong> Transforme tout en décimal, puis coche le seul qui ne donne pas le même nombre.</p>
+        <p>Tu es un détective des nombres !</p>
       </div>
     </section>
 
-    <!-- ============================= -->
-    <!-- EXERCICE 10                  -->
-    <!-- ============================= -->
+    <!-- EXERCICE 10 -->
     <section id="exo10" class="exo">
-      <!-- Carte de l’exercice 10 -->
       <h2>Exercice 10 — Compléter les fractions</h2>
-      <!-- Titre -->
       <p class="consigne">Écris les <strong>numérateurs manquants</strong>.</p>
-      <!-- Consigne -->
       <div class="grid-3">
-        <!-- Six champs à compléter -->
-        <div>
-          <label for="input-e10-1">1 = … /10</label>
-          <input id="input-e10-1" data-key="e10-1" placeholder="1 = … /10" />
-        </div>
-        <div>
-          <label for="input-e10-2">8 = … /10</label>
-          <input id="input-e10-2" data-key="e10-2" placeholder="8 = … /10" />
-        </div>
-        <div>
-          <label for="input-e10-3">0,05 = … /100</label>
-          <input id="input-e10-3" data-key="e10-3" placeholder="0,05 = … /100" />
-        </div>
-        <div>
-          <label for="input-e10-4">0,7 = … /10</label>
-          <input id="input-e10-4" data-key="e10-4" placeholder="0,7 = … /10" />
-        </div>
-        <div>
-          <label for="input-e10-5">2 = … /100</label>
-          <input id="input-e10-5" data-key="e10-5" placeholder="2 = … /100" />
-        </div>
-        <div>
-          <label for="input-e10-6">3,54 = … /100</label>
-          <input id="input-e10-6" data-key="e10-6" placeholder="3,54 = … /100" />
-        </div>
+        <div><label for="input-e10-1">1 = … /10</label><input id="input-e10-1" data-key="e10-1" placeholder="1 = … /10" /></div>
+        <div><label for="input-e10-2">8 = … /10</label><input id="input-e10-2" data-key="e10-2" placeholder="8 = … /10" /></div>
+        <div><label for="input-e10-3">0,05 = … /100</label><input id="input-e10-3" data-key="e10-3" placeholder="0,05 = … /100" /></div>
+        <div><label for="input-e10-4">0,7 = … /10</label><input id="input-e10-4" data-key="e10-4" placeholder="0,7 = … /10" /></div>
+        <div><label for="input-e10-5">2 = … /100</label><input id="input-e10-5" data-key="e10-5" placeholder="2 = … /100" /></div>
+        <div><label for="input-e10-6">3,54 = … /100</label><input id="input-e10-6" data-key="e10-6" placeholder="3,54 = … /100" /></div>
       </div>
-      <div class="row" style="margin-top:10px;">
-        <!-- Boutons/feedback -->
-        <button class="btn alt" onclick="toggleHelp('h10')">Aide</button>
-        <!-- Aide -->
+      <div class="row" style="margin-top:8px;">
+        <button class="btn alt" onclick="toggleHelp('h10')">Aide détaillée</button>
         <button class="btn" onclick="corriger10()">Correction</button>
-        <!-- Correction -->
+        <button class="btn ghost" onclick="resetExo(10)">Recommencer</button>
         <span id="f10" class="feedback"></span>
-        <!-- Feedback -->
       </div>
       <div id="h10" class="help">
-        <!-- Aide -->
-        <p>1 entier = 10/10. Observe le nombre de <em>chiffres après la virgule</em> pour choisir le bon numérateur.</p>
+        <p>Complète la fraction en trouvant le numérateur manquant !</p>
+        <div class="step">
+          <div class="step-title">Règle simple :</div>
+          <p>Enlève la virgule et mets le nombre comme numérateur, selon le dénominateur :</p>
+          <ul>
+            <li><strong>/10</strong> → 1 chiffre après la virgule → enlève la virgule → <strong>numérateur = le nombre entier</strong></li>
+            <li><strong>/100</strong> → 2 chiffres → <strong>numérateur = le nombre sans virgule</strong></li>
+          </ul>
+        </div>
+        <div class="step">
+          <div class="step-title">Exemples :</div>
+          <ul>
+            <li><strong>1 = ? /10</strong> → 1 = 10/10 → <strong>10</strong></li>
+            <li><strong>0,05 = ? /100</strong> → 0,05 = 5/100 → <strong>5</strong></li>
+            <li><strong>3,54 = ? /100</strong> → 3,54 = 354/100 → <strong>354</strong></li>
+          </ul>
+        </div>
+        <p>Tu es un as des fractions !</p>
       </div>
     </section>
 
-    <!-- ============================= -->
-    <!-- EXERCICE 11                  -->
-    <!-- ============================= -->
+    <!-- EXERCICE 11 -->
     <section id="exo11" class="exo">
-      <!-- Carte de l’exercice 11 -->
       <h2>Exercice 11 — Ajouter deux dixièmes</h2>
-      <!-- Titre -->
       <p class="consigne">À chaque nombre, ajoute <strong>0,2</strong> (deux dixièmes).</p>
-      <!-- Consigne -->
       <div class="grid-2">
-        <!-- Quatre nombres à compléter -->
-        <div>
-          <label for="input-e11-1">198,04 + 0,2 = ?</label>
-          <input id="input-e11-1" data-key="e11-1" placeholder="198,04 + 0,2 = ?" />
-        </div>
-        <div>
-          <label for="input-e11-2">134102,84 + 0,2 = ?</label>
-          <input id="input-e11-2" data-key="e11-2" placeholder="134102,84 + 0,2 = ?" />
-        </div>
-        <div>
-          <label for="input-e11-3">321,8 + 0,2 = ?</label>
-          <input id="input-e11-3" data-key="e11-3" placeholder="321,8 + 0,2 = ?" />
-        </div>
-        <div>
-          <label for="input-e11-4">417,437 + 0,2 = ?</label>
-          <input id="input-e11-4" data-key="e11-4" placeholder="417,437 + 0,2 = ?" />
-        </div>
+        <div><label for="input-e11-1">198,04 + 0,2 = ?</label><input id="input-e11-1" data-key="e11-1" placeholder="198,04 + 0,2 = ?" /></div>
+        <div><label for="input-e11-2">134102,84 + 0,2 = ?</label><input id="input-e11-2" data-key="e11-2" placeholder="134102,84 + 0,2 = ?" /></div>
+        <div><label for="input-e11-3">321,8 + 0,2 = ?</label><input id="input-e11-3" data-key="e11-3" placeholder="321,8 + 0,2 = ?" /></div>
+        <div><label for="input-e11-4">417,437 + 0,2 = ?</label><input id="input-e11-4" data-key="e11-4" placeholder="417,437 + 0,2 = ?" /></div>
       </div>
-      <div class="row" style="margin-top:10px;">
-        <!-- Boutons/feedback -->
-        <button class="btn alt" onclick="toggleHelp('h11')">Aide</button>
-        <!-- Aide -->
+      <div class="row" style="margin-top:8px;">
+        <button class="btn alt" onclick="toggleHelp('h11')">Aide détaillée</button>
         <button class="btn" onclick="corriger11()">Correction</button>
-        <!-- Correction -->
+        <button class="btn ghost" onclick="resetExo(11)">Recommencer</button>
         <span id="f11" class="feedback"></span>
-        <!-- Feedback -->
       </div>
       <div id="h11" class="help">
-        <!-- Aide -->
-        <p>Ajoute 0,2 aux dixièmes. S’il y a dépassement (ex. 0,8 + 0,2 = 1,0), on ajoute 1 à la partie entière.</p>
+        <p>Ajouter 0,2, c’est comme ajouter 2 dixièmes. On travaille sur le chiffre des dixièmes !</p>
+        <div class="step">
+          <div class="step-title">Méthode :</div>
+          <ul>
+            <li>Regarde le <strong>chiffre des dixièmes</strong> (1er après la virgule)</li>
+            <li>Ajoute 2</li>
+            <li>Si le résultat ≥ 10 → retiens 1 pour les unités</li>
+          </ul>
+        </div>
+        <div class="step">
+          <div class="step-title">Exemple : 321,8 + 0,2</div>
+          <ul>
+            <li>Dixièmes = 8</li>
+            <li>8 + 2 = 10 → on écrit 0, et on ajoute 1 aux unités</li>
+            <li>321 + 1 = 322 → <strong>322,0</strong></li>
+          </ul>
+        </div>
+        <p>Tu es un pro de l’addition décimale !</p>
       </div>
     </section>
 
-    <!-- ============================= -->
-    <!-- EXERCICE 12                  -->
-    <!-- ============================= -->
+    <!-- EXERCICE 12 -->
     <section id="exo12" class="exo">
-      <!-- Carte de l’exercice 12 -->
       <h2>Exercice 12 — Nombre mystère à 4 chiffres</h2>
-      <!-- Titre -->
-      <p class="consigne">Trouve le nombre entier (4 chiffres). Indices : dizaines = unités de millions de 49 605 032,3 ; unités = millièmes de 45,128 ; centaines = dixièmes de 0,743 ; milliers = centièmes de 24 031,5434.</p>
-      <!-- Consigne détaillée -->
+      <p class="consigne">Trouve le nombre entier (4 chiffres). Indices :</p>
+      <ul>
+        <li>dizaines = unités de millions de 49 605 032,3</li>
+        <li>unités = millièmes de 45,128</li>
+        <li>centaines = dixièmes de 0,743</li>
+        <li>milliers = centièmes de 24 031,5434</li>
+      </ul>
       <div>
-        <!-- Champ de réponse unique -->
         <label for="input-e12">Nombre mystère = ?</label>
         <input id="input-e12" data-key="e12" class="short" placeholder="Nombre mystère = ?" />
-        <!-- Champ pour écrire le nombre -->
       </div>
-      <div class="row" style="margin-top:10px;">
-        <!-- Boutons/feedback -->
-        <button class="btn alt" onclick="toggleHelp('h12')">Aide</button>
-        <!-- Aide -->
+      <div class="row" style="margin-top:8px;">
+        <button class="btn alt" onclick="toggleHelp('h12')">Aide détaillée</button>
         <button class="btn" onclick="corriger12()">Correction</button>
-        <!-- Correction -->
+        <button class="btn ghost" onclick="resetExo(12)">Recommencer</button>
         <span id="f12" class="feedback"></span>
-        <!-- Feedback -->
       </div>
       <div id="h12" class="help">
-        <!-- Aide -->
-        <p>Lis chaque <em>indice</em> séparément puis place chaque chiffre au bon rang (milliers / centaines / dizaines / unités).</p>
+        <p>Tu es un détective ! Résous chaque indice un par un.</p>
+        <div class="step">
+          <div class="step-title">Indice 1 : dizaines = unités de millions de 49 605 032,3</div>
+          <p>Unités de millions = dernier chiffre avant la virgule → <strong>2</strong> → dizaines = 2</p>
+        </div>
+        <div class="step">
+          <div class="step-title">Indice 2 : unités = millièmes de 45,128</div>
+          <p>Millièmes = 3e chiffre après la virgule → <strong>8</strong> → unités = 8</p>
+        </div>
+        <div class="step">
+          <div class="step-title">Indice 3 : centaines = dixièmes de 0,743</div>
+          <p>Dixièmes = 1er après la virgule → <strong>7</strong> → centaines = 7</p>
+        </div>
+        <div class="step">
+          <div class="step-title">Indice 4 : milliers = centièmes de 24 031,5434</div>
+          <p>Centièmes = 2e après la virgule → <strong>4</strong> → milliers = 4</p>
+        </div>
+        <p>Nombre : <strong>4 7 9 8</strong> → <strong>4798</strong></p>
+        <p>Tu as résolu le mystère !</p>
       </div>
     </section>
 
-    <!-- ============================= -->
-    <!-- EXERCICE 13                  -->
-    <!-- ============================= -->
+    <!-- EXERCICE 13 -->
     <section id="exo13" class="exo">
-      <!-- Carte de l’exercice 13 -->
       <h2>Exercice 13 — Écrire en toutes lettres</h2>
-      <!-- Titre -->
       <p class="consigne">Écris les nombres en lettres (on te donnera un exemple lors de la correction).</p>
-      <!-- Consigne -->
       <div class="grid-3">
-        <!-- Trois champs pour trois nombres -->
-        <div>
-          <label for="input-e13-1">10,013 → en lettres</label>
-          <input id="input-e13-1" data-key="e13-1" placeholder="10,013 → en lettres" />
-        </div>
-        <div>
-          <label for="input-e13-2">750103,00083 → en lettres</label>
-          <input id="input-e13-2" data-key="e13-2" placeholder="750103,00083 → en lettres" />
-        </div>
-        <div>
-          <label for="input-e13-3">276,053 → en lettres</label>
-          <input id="input-e13-3" data-key="e13-3" placeholder="276,053 → en lettres" />
-        </div>
+        <div><label for="input-e13-1">10,013 → en lettres</label><input id="input-e13-1" data-key="e13-1" placeholder="10,013 → en lettres" /></div>
+        <div><label for="input-e13-2">750103,00083 → en lettres</label><input id="input-e13-2" data-key="e13-2" placeholder="750103,00083 → en lettres" /></div>
+        <div><label for="input-e13-3">276,053 → en lettres</label><input id="input-e13-3" data-key="e13-3" placeholder="276,053 → en lettres" /></div>
       </div>
-      <div class="row" style="margin-top:10px;">
-        <!-- Boutons/feedback -->
-        <button class="btn alt" onclick="toggleHelp('h13')">Aide</button>
-        <!-- Aide -->
+      <div class="row" style="margin-top:8px;">
+        <button class="btn alt" onclick="toggleHelp('h13')">Aide détaillée</button>
         <button class="btn" onclick="corriger13()">Correction</button>
-        <!-- Correction (affiche un exemple de formulation) -->
+        <button class="btn ghost" onclick="resetExo(13)">Recommencer</button>
         <span id="f13" class="feedback"></span>
-        <!-- Feedback -->
       </div>
       <div id="h13" class="help">
-        <!-- Aide -->
-        <p>On peut dire : « <em>partie entière</em> virgule <em>partie décimale en millièmes/centièmes…</em> ».
-          Exemple : 0,053 = « zéro virgule cinquante-trois millièmes ».</p>
+        <p>On lit le nombre comme on le dit à voix haute !</p>
+        <div class="step">
+          <div class="step-title">Règle :</div>
+          <ul>
+            <li>Partie entière → comme un nombre normal</li>
+            <li>Virgule → on dit "virgule"</li>
+            <li>Partie décimale → on lit les chiffres un par un + le rang</li>
+          </ul>
+        </div>
+        <div class="step">
+          <div class="step-title">Exemple : 10,013</div>
+          <ul>
+            <li>10 → dix</li>
+            <li>virgule</li>
+            <li>013 → zéro un trois <strong>millièmes</strong></li>
+            <li><strong>dix virgule zéro treize millièmes</strong></li>
+          </ul>
+        </div>
+        <p>Tu es un champion de l’écriture !</p>
       </div>
     </section>
 
-    <!-- ============================= -->
-    <!-- EXERCICE 14                  -->
-    <!-- ============================= -->
+    <!-- EXERCICE 14 -->
     <section id="exo14" class="exo">
-      <!-- Carte de l’exercice 14 -->
       <h2>Exercice 14 — Une seule fraction (suite)</h2>
-      <!-- Titre -->
       <p class="consigne">Réécris chaque expression avec <strong>une seule fraction</strong> (numérateur / dénominateur).</p>
-      <!-- Consigne -->
       <div class="grid-2">
-        <!-- Quatre champs à compléter -->
-        <div>
-          <label for="input-e14-1">1 + 84/100 = ?/ ?</label>
-          <input id="input-e14-1" data-key="e14-1" placeholder="1 + 84/100 = ?/ ?" />
-        </div>
-        <div>
-          <label for="input-e14-2">14/10 + 7/100 = ?/ ?</label>
-          <input id="input-e14-2" data-key="e14-2" placeholder="14/10 + 7/100 = ?/ ?" />
-        </div>
-        <div>
-          <label for="input-e14-3">3 + 71/1000 = ?/ ?</label>
-          <input id="input-e14-3" data-key="e14-3" placeholder="3 + 71/1000 = ?/ ?" />
-        </div>
-        <div>
-          <label for="input-e14-4">2 + 7/10 + 157/1000 = ?/ ?</label>
-          <input id="input-e14-4" data-key="e14-4" placeholder="2 + 7/10 + 157/1000 = ?/ ?" />
-        </div>
+        <div><label for="input-e14-1">1 + 84/100 = ?/ ?</label><input id="input-e14-1" data-key="e14-1" placeholder="1 + 84/100 = ?/ ?" /></div>
+        <div><label for="input-e14-2">14/10 + 7/100 = ?/ ?</label><input id="input-e14-2" data-key="e14-2" placeholder="14/10 + 7/100 = ?/ ?" /></div>
+        <div><label for="input-e14-3">3 + 71/1000 = ?/ ?</label><input id="input-e14-3" data-key="e14-3" placeholder="3 + 71/1000 = ?/ ?" /></div>
+        <div><label for="input-e14-4">2 + 7/10 + 157/1000 = ?/ ?</label><input id="input-e14-4" data-key="e14-4" placeholder="2 + 7/10 + 157/1000 = ?/ ?" /></div>
       </div>
-      <div class="row" style="margin-top:10px;">
-        <!-- Boutons/feedback -->
-        <button class="btn alt" onclick="toggleHelp('h14')">Aide</button>
-        <!-- Aide -->
+      <div class="row" style="margin-top:8px;">
+        <button class="btn alt" onclick="toggleHelp('h14')">Aide détaillée</button>
         <button class="btn" onclick="corriger14()">Correction</button>
-        <!-- Correction -->
+        <button class="btn ghost" onclick="resetExo(14)">Recommencer</button>
         <span id="f14" class="feedback"></span>
-        <!-- Feedback -->
       </div>
       <div id="h14" class="help">
-        <!-- Aide -->
-        <p>Met tout sur le <strong>même dénominateur</strong>, additionne les numérateurs et simplifie si tu veux.</p>
+        <p>On remet tout sur le même dénominateur !</p>
+        <div class="step">
+          <div class="step-title">Exemple : 1 + 84/100</div>
+          <ul>
+            <li>1 = <strong>100/100</strong></li>
+            <li>84/100 reste</li>
+            <li>100/100 + 84/100 = <strong>184/100</strong></li>
+          </ul>
+        </div>
+        <p><strong>Méthode :</strong> Transforme les entiers en fractions avec le même dénominateur, puis additionne.</p>
+        <p>Tu es un maître des fractions !</p>
       </div>
     </section>
 
   </main>
 
   <script>
-    // =============================
-    // 🧠 Utilitaires communs
-    // =============================
-
-    const $$ = (sel, root = document) => root.querySelector(sel); // Sélecteur unique pratique
-    const $$$ = (sel, root = document) => Array.from(root.querySelectorAll(sel)); // Sélecteur multiple pratique
-
-    const nrm = s => { // Fonction de normalisation des réponses texte
-      if (s == null) return ""; // Si s est null/undefined → chaîne vide
-      return String(s) // Convertit en chaîne pour être sûr
-        .trim() // Supprime les espaces aux extrémités
-        .replace(/\s+/g, "") // Retire les espaces internes superflus
-        .replace(/,/g, ".") // Remplace la virgule par point pour comparer facilement
-        .toLowerCase(); // Met en minuscules (utile pour les mots comme « unités »)
-    };
-
-    const eqAny = (val, arr) => arr.map(nrm).includes(nrm(val)); // Vérifie si une valeur égale l’une des valeurs autorisées
-
-    const setFb = (id, ok, msgOK = "Bravo ✔", msgNO = "À revoir ✍️") => { // Affiche un feedback standard
-      const zone = $$(id); // Récupère la zone d’affichage
-      zone.textContent = ok ? msgOK : msgNO; // Définit le texte selon réussite/échec
-      zone.className = "feedback " + (ok ? "ok" : "no"); // Ajoute la classe de couleur correspondante
-    };
-
-    const toggleHelp = id => { // Montre/masque un bloc d’aide
-      const el = $$("#" + id); // Cible le bloc par son identifiant
-      el.style.display = (el.style.display === "block") ? "none" : "block"; // Bascule l’affichage
-    };
-
-    const get = key => nrm($$(`[data-key="${key}"]`)?.value || ""); // Récupère la valeur normalisée d’un champ data-key
-    const set = (key, val) => { const el = $$(`[data-key="${key}"]`); if (el) el.value = val; }; // Affecte une valeur à un champ data-key
-
+    // === UTILITAIRES ===
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+    const nrm = s => (s == null ? "" : String(s).trim().replace(/\s+/g, "").replace(/,/g, ".").toLowerCase());
+    const eqAny = (val, arr) => arr.map(nrm).includes(nrm(val));
+    const toggleHelp = id => { const el = $("#" + id); el.style.display = (el.style.display === "block") ? "none" : "block"; };
+    const get = key => nrm($(`[data-key="${key}"]`)?.value || "");
     const getRadio = name => nrm(document.querySelector(`input[name="${name}"]:checked`)?.value || "");
+    const resetExo = (n) => {
+      $$(`[data-key^="e${n}"]`).forEach(el => el.value = '');
+      if (n === 9) $$(`input[name^="e9-"]`).forEach(el => el.checked = false);
+      $(`#f${n}`).textContent = '';
+      $(`#f${n}`).className = 'feedback';
+      if (n === 2) generateExo2();
+    };
 
-    // =============================
-    // ✅ Corrections par exercice
-    // =============================
+    // === CONFETTIS ===
+    const canvas = $('#confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+    let confetti = [];
+    const launchConfetti = () => {
+      confetti = [];
+      for (let i = 0; i < 300; i++) {
+        confetti.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          r: Math.random() * 4 + 1,
+          d: Math.random() * 300,
+          color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+          tilt: Math.random() * 10 - 10,
+          tiltAngleIncrement: Math.random() * 0.07 + 0.05,
+          tiltAngle: 0
+        });
+      }
+      let animationFrame;
+      const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        confetti.forEach(p => {
+          p.tiltAngle += p.tiltAngleIncrement;
+          p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+          p.tilt = Math.sin(p.tiltAngle) * 15;
+          if (p.y <= canvas.height) {
+            ctx.beginPath();
+            ctx.lineWidth = p.r;
+            ctx.strokeStyle = p.color;
+            ctx.moveTo(p.x + p.tilt + p.r / 4, p.y);
+            ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 4);
+            ctx.stroke();
+          }
+        });
+        confetti = confetti.filter(p => p.y <= canvas.height);
+        if (confetti.length > 0) animationFrame = requestAnimationFrame(animate);
+      };
+      animate();
+    };
 
-    function corriger1(){ // Correction Exercice 1
-      const ok = (
-        eqAny(get('e1a-ent'), ['4']) && // Partie entière de 4,53
-        eqAny(get('e1a-dec'), ['53/100','0.53','53']) && // Partie décimale de 4,53
-        eqAny(get('e1b-ent'), ['529']) && // Partie entière de 529,5
-        eqAny(get('e1b-dec'), ['5/10','0.5','5']) && // Partie décimale de 529,5
-        eqAny(get('e1c-ent'), ['0']) && // Partie entière de 0,83
-        eqAny(get('e1c-dec'), ['83/100','0.83','83']) // Partie décimale de 0,83
-      );
-      setFb('#f1', ok); // Affiche le résultat global pour l’exercice 1
+    // === CHRONOMÈTRE ===
+    let timerInterval, startTime;
+    const updateTimer = () => {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
+      const secs = String(elapsed % 60).padStart(2, '0');
+      $('#timer').textContent = `Temps : ${mins}:${secs}`;
+    };
+    $('#timer-mode').addEventListener('change', () => {
+      if ($('#timer-mode').checked) {
+        startTime = Date.now();
+        timerInterval = setInterval(updateTimer, 1000);
+        updateTimer();
+      } else {
+        clearInterval(timerInterval);
+        $('#timer').textContent = 'Mode chronométré désactivé';
+      }
+    });
+    if ($('#timer-mode').checked) {
+      startTime = Date.now();
+      timerInterval = setInterval(updateTimer, 1000);
     }
 
-    function corriger2(){ // Correction Exercice 2
-      const ok = (
-        eqAny(get('e2a-cens'), ['5']) && // 13564 → centaines = 5
-        eqAny(get('e2a-centiemes'), ['8']) && // 0,981 → centièmes = 8
-        eqAny(get('e2b-cens'), ['4']) && // 5462 → centaines = 4
-        eqAny(get('e2b-centiemes'), ['3']) && // 0,137 → centièmes = 3
-        eqAny(get('e2c-cens'), ['0']) && // 2 → centaines = 0
-        eqAny(get('e2c-centiemes'), ['1']) && // 0,3157 → centièmes = 1
-        eqAny(get('e2d-cens'), ['5']) && // 581 → centaines = 5
-        eqAny(get('e2d-centiemes'), ['5']) // 0,35 → centièmes = 5
-      );
-      setFb('#f2', ok); // Feedback exo 2
-    }
+    // === SAUVEGARDE ===
+    const saveProgress = () => {
+      const data = { totalScore, maxScore, earnedBadges: Array.from(earnedBadges) };
+      localStorage.setItem('decimalProgress', JSON.stringify(data));
+    };
+    const loadProgress = () => {
+      const data = JSON.parse(localStorage.getItem('decimalProgress') || '{}');
+      totalScore = data.totalScore || 0;
+      maxScore = data.maxScore || 0;
+      earnedBadges = new Set(data.earnedBadges || []);
+      updateGlobalScore();
+      updateBadges(Math.round((totalScore / maxScore) * 100) || 0);
+    };
+    window.addEventListener('beforeunload', saveProgress);
+    window.addEventListener('load', loadProgress);
 
-    function corriger3(){ // Correction Exercice 3
-      const ok = (
-        eqAny(get('e3-1'), ['9']) && // 009 → 9
-        eqAny(get('e3-2'), ['5900']) && // 05900 → 5900
-        eqAny(get('e3-3'), ['500']) && // 500 → 500
-        eqAny(get('e3-4'), ['2.075','2,075']) && // 02,07500 → 2,075
-        eqAny(get('e3-5'), ['8000']) && // 08000 → 8000
-        eqAny(get('e3-6'), ['70']) && // 0070 → 70
-        eqAny(get('e3-7'), ['23.0056','23,0056']) // 023,005600 → 23,0056
-      );
-      setFb('#f3', ok); // Feedback exo 3
-    }
+    // === MODE FACILE & EXO 2 ===
+    const easyMode = $('#easy-mode');
+    easyMode.addEventListener('change', generateExo2);
+    let expected2 = {};
+    const generateExo2 = () => {
+      const isEasy = easyMode.checked;
+      const rangs = [
+        {name: 'unit', minInt: isEasy ? 0 : 0, maxInt: isEasy ? 99 : 9999, decDigits: isEasy ? 1 : 3, isDecimal: false},
+        {name: 'diz', minInt: isEasy ? 10 : 10, maxInt: isEasy ? 99 : 9999, decDigits: isEasy ? 1 : 3, isDecimal: false},
+        {name: 'cens', minInt: isEasy ? 0 : 100, maxInt: isEasy ? 999 : 9999, decDigits: isEasy ? 1 : 3, isDecimal: false},
+        {name: 'mil', minInt: isEasy ? 0 : 1000, maxInt: isEasy ? 9999 : 99999, decDigits: isEasy ? 1 : 3, isDecimal: false},
+        {name: 'dix', minInt: 0, maxInt: isEasy ? 9 : 999, decDigits: 1, isDecimal: true},
+        {name: 'cent', minInt: 0, maxInt: isEasy ? 99 : 999, decDigits: 2, isDecimal: true},
+        {name: 'mill', minInt: 0, maxInt: isEasy ? 999 : 999, decDigits: 3, isDecimal: true},
+      ];
+      rangs.forEach(r => {
+        let intPart = Math.floor(Math.random() * (r.maxInt - r.minInt + 1)) + r.minInt;
+        let decPart = '';
+        for (let i = 0; i < r.decDigits; i++) decPart += Math.floor(Math.random() * 10);
+        let nbStr = String(intPart);
+        if (r.isDecimal || Math.random() < 0.7) nbStr += ',' + decPart;
+        const span = $(`#nb-${r.name}`);
+        span.textContent = '';
+        animateNumber(span, nbStr);
+        const [intStr, decStr = ''] = nbStr.split(',');
+        const intNum = parseInt(intStr, 10) || 0;
+        let chiffre;
+        if (r.name === 'unit') chiffre = intNum % 10;
+        else if (r.name === 'diz') chiffre = Math.floor((intNum % 100) / 10);
+        else if (r.name === 'cens') chiffre = Math.floor((intNum % 1000) / 100);
+        else if (r.name === 'mil') chiffre = Math.floor((intNum % 10000) / 1000);
+        else if (r.name === 'dix') chiffre = decStr[0] || 0;
+        else if (r.name === 'cent') chiffre = decStr[1] || 0;
+        else if (r.name === 'mill') chiffre = decStr[2] || 0;
+        expected2[`e2-${r.name}`] = String(chiffre);
+      });
+    };
+    window.addEventListener('load', generateExo2);
 
-    function corriger4(){ // Correction Exercice 4
-      const ok = (
-        eqAny(get('e4-1'), ['14.58','14,58']) && // 1458 → 14,58
-        eqAny(get('e4-2'), ['65.1865','65,1865']) && // 651865 → 65,1865
-        eqAny(get('e4-3'), ['5163.487','5163,487']) && // 5163487 → 5163,487
-        eqAny(get('e4-4'), ['0.08','0,08']) && // 8 → 0,08
-        eqAny(get('e4-5'), ['0.089','0,089']) && // 89 → 0,089
-        eqAny(get('e4-6'), ['391.6825','391,6825']) // 3916825 → 391,6825
-      );
-      setFb('#f4', ok); // Feedback exo 4
-    }
+    // === ANIMATIONS CHIFFRES ===
+    const animateNumber = (element, value) => {
+      element.innerHTML = '';
+      value.split('').forEach(char => {
+        const span = document.createElement('span');
+        span.textContent = char;
+        span.className = 'number-animation';
+        element.appendChild(span);
+        setTimeout(() => span.classList.remove('number-animation'), 500);
+      });
+    };
 
-    function corriger5(){ // Correction Exercice 5
-      const ok = (
-        eqAny(get('e5-1'), ['0.73','0,73']) && // 73/100 = 0.73
-        eqAny(get('e5-2'), ['0.7','0,7']) && // 7/10 = 0.7
-        eqAny(get('e5-3'), ['0.731','0,731']) && // 731/1000 = 0.731
-        eqAny(get('e5-4'), ['0.028','0,028']) // 28/1000 = 0.028
-      );
-      setFb('#f5', ok);
-    }
+    // === SCORE & BADGES ===
+    let totalScore = 0, maxScore = 0;
+    const updateGlobalScore = () => {
+      const percent = maxScore ? Math.round((totalScore / maxScore) * 100) : 0;
+      $('#global-score').textContent = `Score total : ${totalScore} / ${maxScore} (${percent}%)`;
+      updateBadges(percent);
+    };
+    const badges = [
+      { min: 0,   name: "Débutant en décimales" },
+      { min: 30,  name: "Apprenti des virgules" },
+      { min: 60,  name: "Champion des fractions" },
+      { min: 80,  name: "Maître des décimaux" },
+      { min: 95,  name: "Légende des nombres" }
+    ];
+    let earnedBadges = new Set();
+    const updateBadges = (percent) => {
+      badges.forEach(b => {
+        if (percent >= b.min && !earnedBadges.has(b.name)) {
+          earnedBadges.add(b.name);
+          const span = document.createElement('span');
+          span.className = 'badge-earned';
+          span.textContent = ` ${b.name} `;
+          $('#badges').appendChild(span);
+          playSound(true);
+        }
+      });
+    };
+    const addScore = (points, max) => {
+      totalScore += points; maxScore += max;
+      updateGlobalScore();
+      if (getPercent() === 100) {
+        launchConfetti();
+        playSound(true);
+      }
+    };
+    const getPercent = () => maxScore ? Math.round((totalScore / maxScore) * 100) : 0;
 
-    function corriger6(){ // Correction Exercice 6
-      const ok = (
-        eqAny(get('e6-1'), ['unités']) && // 43,546 → unités
-        eqAny(get('e6-2'), ['centièmes']) && // 624,23 → centièmes
-        eqAny(get('e6-3'), ['millièmes']) && // 250,503 → millièmes
-        eqAny(get('e6-4'), ['dixièmes']) // 0,310 → dixièmes
-      );
-      setFb('#f6', ok);
-    }
+    // === SONS ===
+    const playSound = (success) => {
+      const audio = success ? $('#sound-success') : $('#sound-error');
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
+    };
 
-    function corriger7(){ // Correction Exercice 7
-      const ok = (
-        eqAny(get('e7-1'), ['0.84','0,84']) && // 84/100 = 0.84
-        eqAny(get('e7-2'), ['2.7','2,7']) && // 27/10 = 2.7
-        eqAny(get('e7-3'), ['0.071','0,071']) && // 71/1000 = 0.071
-        eqAny(get('e7-4'), ['15.7','15,7']) // 157/10 = 15.7
-      );
-      setFb('#f7', ok);
-    }
+    // === CORRECTIONS ===
+    const corriger1 = () => {
+      let feedback = "Voici ton feedback détaillé :\n", count = 0;
+      const check = (key, correct, label) => {
+        const input = $(`[data-key="${key}"]`);
+        if (eqAny(get(key), correct)) {
+          feedback += `${label} : <span class="number-animation">Correct !</span>\n`;
+          count++;
+          input.style.borderColor = 'var(--good)';
+        } else {
+          feedback += `${label} : Presque ! C'est <span class="number-animation">${correct[0]}</span>.\n`;
+          input.style.borderColor = 'var(--bad)';
+        }
+      };
+      check('e1a-ent', ['4'], '1a entière');
+      check('e1a-dec', ['53/100','0.53','53'], '1a décimale');
+      check('e1b-ent', ['529'], '1b entière');
+      check('e1b-dec', ['5/10','0.5','5'], '1b décimale');
+      check('e1c-ent', ['0'], '1c entière');
+      check('e1c-dec', ['83/100','0.83','83'], '1c décimale');
+      const enc = count === 6 ? "Parfait !" : "Tu y es presque !";
+      feedback += `\nScore : ${count}/6. ${enc}`;
+      $('#f1').innerHTML = feedback;
+      $('#f1').className = 'feedback ' + (count === 6 ? 'ok' : 'no');
+      playSound(count === 6);
+      addScore(count, 6);
+    };
 
-    function corriger8(){ // Correction Exercice 8
-      const ok = (
-        eqAny(get('e8-1'), ['527/100']) && // 5 + 2/10 + 7/100 = 527/100
-        eqAny(get('e8-2'), ['9046/1000']) // 9 + 4/100 + 6/1000 = 9046/1000
-      );
-      setFb('#f8', ok);
-    }
+    const corriger2 = () => {
+      let feedback = "Feedback détaillé :\n", count = 0;
+      ['unit', 'diz', 'cens', 'mil', 'dix', 'cent', 'mill'].forEach(name => {
+        const key = `e2-${name}`;
+        const label = $(`label[for="input-${key}"] .rank-label`).textContent;
+        if (eqAny(get(key), [expected2[key]])) {
+          feedback += `${label} : Correct !\n`;
+          count++;
+        } else {
+          feedback += `${label} : Faux, c'est ${expected2[key]}. Regarde bien le chiffre en <strong>${label}</strong>.\n`;
+        }
+      });
+      const enc = count === 7 ? "Parfait ! Tu es un pro des rangs !" : "Presque ! Recommence pour tout maîtriser !";
+      feedback += `\nScore : ${count}/7. ${enc}`;
+      $('#f2').textContent = feedback;
+      $('#f2').className = 'feedback ' + (count === 7 ? 'ok' : 'no');
+      playSound(count === 7);
+      addScore(count, 7);
+    };
 
-    function corriger9(){ // Correction Exercice 9
-      const ok = (
-        eqAny(getRadio('e9-1'), ['B']) && // 0,45
-        eqAny(getRadio('e9-2'), ['A']) && // 5 + 83/10
-        eqAny(getRadio('e9-3'), ['C']) // 3 + 7/1000
-      );
-      setFb('#f9', ok);
-    }
+    const corriger3 = () => {
+      let feedback = "Feedback détaillé :\n", count = 0;
+      const check = (key, correct, label) => {
+        if (eqAny(get(key), correct)) {
+          feedback += `${label} : Correct !\n`;
+          count++;
+        } else {
+          feedback += `${label} : Faux, c'est ${correct[0]}.\n`;
+        }
+      };
+      check('e3-1', ['9'], '1');
+      check('e3-2', ['5900'], '2');
+      check('e3-3', ['500'], '3');
+      check('e3-4', ['2.075','2,075'], '4');
+      check('e3-5', ['8000'], '5');
+      check('e3-6', ['70'], '6');
+      check('e3-7', ['23.0056','23,0056'], '7');
+      feedback += `\nScore : ${count}/7. Bravo !`;
+      $('#f3').textContent = feedback;
+      $('#f3').className = 'feedback ' + (count === 7 ? 'ok' : 'no');
+      playSound(count === 7);
+      addScore(count, 7);
+    };
 
-    function corriger10(){ // Correction Exercice 10
-      const ok = (
-        eqAny(get('e10-1'), ['10']) && // 1 = 10/10
-        eqAny(get('e10-2'), ['80']) && // 8 = 80/10
-        eqAny(get('e10-3'), ['5']) && // 0,05 = 5/100
-        eqAny(get('e10-4'), ['7']) && // 0,7 = 7/10
-        eqAny(get('e10-5'), ['200']) && // 2 = 200/100
-        eqAny(get('e10-6'), ['354']) // 3,54 = 354/100
-      );
-      setFb('#f10', ok);
-    }
+    const corriger4 = () => {
+      let feedback = "Feedback détaillé :\n", count = 0;
+      const check = (key, correct, label) => {
+        if (eqAny(get(key), correct)) {
+          feedback += `${label} : Correct !\n`;
+          count++;
+        } else {
+          feedback += `${label} : Faux, c'est ${correct[0]}.\n`;
+        }
+      };
+      check('e4-1', ['14.58','14,58'], '1');
+      check('e4-2', ['65.1865','65,1865'], '2');
+      check('e4-3', ['5163.487','5163,487'], '3');
+      check('e4-4', ['0.08','0,08'], '4');
+      check('e4-5', ['0.089','0,089'], '5');
+      check('e4-6', ['391.6825','391,6825'], '6');
+      feedback += `\nScore : ${count}/6. Super !`;
+      $('#f4').textContent = feedback;
+      $('#f4').className = 'feedback ' + (count === 6 ? 'ok' : 'no');
+      playSound(count === 6);
+      addScore(count, 6);
+    };
 
-    function corriger11(){ // Correction Exercice 11
-      const ok = (
-        eqAny(get('e11-1'), ['198.24','198,24']) && // 198,04 + 0,2 = 198,24
-        eqAny(get('e11-2'), ['134103.04','134103,04']) && // 134102,84 + 0,2 = 134103,04
-        eqAny(get('e11-3'), ['322','322.0','322,0']) && // 321,8 + 0,2 = 322
-        eqAny(get('e11-4'), ['417.637','417,637']) // 417,437 + 0,2 = 417,637
-      );
-      setFb('#f11', ok);
-    }
+    const corriger5 = () => {
+      let feedback = "Feedback détaillé :\n", count = 0;
+      const check = (key, correct, label) => {
+        if (eqAny(get(key), correct)) {
+          feedback += `${label} : Parfait !\n`;
+          count++;
+        } else {
+          feedback += `${label} : Presque ! Rappelle-toi : /100 = 2 chiffres après la virgule.\n`;
+        }
+      };
+      check('e5-1', ['0.73','0,73'], '73/100');
+      check('e5-2', ['0.7','0,7'], '7/10');
+      check('e5-3', ['0.731','0,731'], '731/1000');
+      check('e5-4', ['0.028','0,028'], '28/1000');
+      const enc = count === 4 ? "Tu es un expert des décimales !" : "Tu y es presque ! Recommence pour tout maîtriser !";
+      feedback += `\nScore : ${count}/4. ${enc}`;
+      $('#f5').textContent = feedback;
+      $('#f5').className = 'feedback ' + (count === 4 ? 'ok' : 'no');
+      playSound(count === 4);
+      addScore(count, 4);
+    };
 
-    function corriger12(){ // Correction Exercice 12
-      const ok = eqAny(get('e12'), ['4798']);
-      setFb('#f12', ok);
-    }
+    const corriger6 = () => {
+      let feedback = "Feedback détaillé :\n", count = 0;
+      const check = (key, correct, label) => {
+        if (eqAny(get(key), correct)) {
+          feedback += `${label} : Correct !\n`;
+          count++;
+        } else {
+          feedback += `${label} : Faux, c'est ${correct[0]}.\n`;
+        }
+      };
+      check('e6-1', ['unités'], '1');
+      check('e6-2', ['centièmes'], '2');
+      check('e6-3', ['millièmes'], '3');
+      check('e6-4', ['dixièmes'], '4');
+      feedback += `\nScore : ${count}/4. Bravo !`;
+      $('#f6').textContent = feedback;
+      $('#f6').className = 'feedback ' + (count === 4 ? 'ok' : 'no');
+      playSound(count === 4);
+      addScore(count, 4);
+    };
 
-    function corriger13(){ // Correction Exercice 13
-      // Pour simplifier, on accepte plusieurs variantes normalisées
-      const ok = (
-        eqAny(get('e13-1'), ['dixvirgulezero13milliemes', 'dixvirguletreizemilliemes', 'dixvirgule013']) && 
-        eqAny(get('e13-2'), ['septcentcinquantemillecenttroisvirgulezerozerozerohuittroismilliemes', '750103virgule00083']) && 
-        eqAny(get('e13-3'), ['deuxcentsoixante-seizevirgulezerocinquante-troismilliemes', 'deuxcentsoixante-seizevirgulecinquante-troismilliemes', '276virgule053'])
-      );
-      setFb('#f13', ok, "Bravo ✔ (Exemple pour 10,013 : dix virgule zéro treize millièmes)");
-    }
+    const corriger7 = () => {
+      let feedback = "Feedback détaillé :\n", count = 0;
+      const check = (key, correct, label) => {
+        if (eqAny(get(key), correct)) {
+          feedback += `${label} : Correct !\n`;
+          count++;
+        } else {
+          feedback += `${label} : Faux, c'est ${correct[0]}.\n`;
+        }
+      };
+      check('e7-1', ['0.84','0,84'], '84/100');
+      check('e7-2', ['2.7','2,7'], '27/10');
+      check('e7-3', ['0.071','0,071'], '71/1000');
+      check('e7-4', ['15.7','15,7'], '157/10');
+      feedback += `\nScore : ${count}/4. Super !`;
+      $('#f7').textContent = feedback;
+      $('#f7').className = 'feedback ' + (count === 4 ? 'ok' : 'no');
+      playSound(count === 4);
+      addScore(count, 4);
+    };
 
-    function corriger14(){ // Correction Exercice 14
-      const ok = (
-        eqAny(get('e14-1'), ['184/100']) && // 1 + 84/100 = 184/100
-        eqAny(get('e14-2'), ['147/100']) && // 14/10 + 7/100 = 147/100
-        eqAny(get('e14-3'), ['3071/1000']) && // 3 + 71/1000 = 3071/1000
-        eqAny(get('e14-4'), ['2857/1000']) // 2 + 7/10 + 157/1000 = 2857/1000
-      );
-      setFb('#f14', ok);
-    }
+    const corriger8 = () => {
+      let feedback = "Feedback détaillé :\n", count = 0;
+      const check = (key, correct, label) => {
+        if (eqAny(get(key), correct)) {
+          feedback += `${label} : Correct !\n`;
+          count++;
+        } else {
+          feedback += `${label} : Faux, c'est ${correct[0]}.\n`;
+        }
+      };
+      check('e8-1', ['527/100'], '1');
+      check('e8-2', ['9046/1000'], '2');
+      feedback += `\nScore : ${count}/2. Génial !`;
+      $('#f8').textContent = feedback;
+      $('#f8').className = 'feedback ' + (count === 2 ? 'ok' : 'no');
+      playSound(count === 2);
+      addScore(count, 2);
+    };
 
-    function corrigerTout() {
-      corriger1();
-      corriger2();
-      corriger3();
-      corriger4();
-      corriger5();
-      corriger6();
-      corriger7();
-      corriger8();
-      corriger9();
-      corriger10();
-      corriger11();
-      corriger12();
-      corriger13();
-      corriger14();
-    }
+    const corriger9 = () => {
+      let feedback = "Feedback détaillé :\n", count = 0;
+      const check = (name, correct, label) => {
+        if (eqAny(getRadio(name), correct)) {
+          feedback += `${label} : Correct !\n`;
+          count++;
+        } else {
+          feedback += `${label} : Faux, c'est ${correct[0]}.\n`;
+        }
+      };
+      check('e9-1', ['B'], '1');
+      check('e9-2', ['A'], '2');
+      check('e9-3', ['C'], '3');
+      feedback += `\nScore : ${count}/3. Bravo !`;
+      $('#f9').textContent = feedback;
+      $('#f9').className = 'feedback ' + (count === 3 ? 'ok' : 'no');
+      playSound(count === 3);
+      addScore(count, 3);
+    };
 
+    const corriger10 = () => {
+      let feedback = "Feedback détaillé :\n", count = 0;
+      const check = (key, correct, label) => {
+        if (eqAny(get(key), correct)) {
+          feedback += `${label} : Correct !\n`;
+          count++;
+        } else {
+          feedback += `${label} : Faux, c'est ${correct[0]}.\n`;
+        }
+      };
+      check('e10-1', ['10'], '1');
+      check('e10-2', ['80'], '2');
+      check('e10-3', ['5'], '3');
+      check('e10-4', ['7'], '4');
+      check('e10-5', ['200'], '5');
+      check('e10-6', ['354'], '6');
+      feedback += `\nScore : ${count}/6. Super !`;
+      $('#f10').textContent = feedback;
+      $('#f10').className = 'feedback ' + (count === 6 ? 'ok' : 'no');
+      playSound(count === 6);
+      addScore(count, 6);
+    };
+
+    const corriger11 = () => {
+      let feedback = "Feedback détaillé :\n", count = 0;
+      const check = (key, correct, label) => {
+        if (eqAny(get(key), correct)) {
+          feedback += `${label} : Correct !\n`;
+          count++;
+        } else {
+          feedback += `${label} : Faux, c'est ${correct[0]}.\n`;
+        }
+      };
+      check('e11-1', ['198.24','198,24'], '1');
+      check('e11-2', ['134103.04','134103,04'], '2');
+      check('e11-3', ['322','322.0','322,0'], '3');
+      check('e11-4', ['417.637','417,637'], '4');
+      feedback += `\nScore : ${count}/4. Bravo !`;
+      $('#f11').textContent = feedback;
+      $('#f11').className = 'feedback ' + (count === 4 ? 'ok' : 'no');
+      playSound(count === 4);
+      addScore(count, 4);
+    };
+
+    const corriger12 = () => {
+      let feedback = "Feedback détaillé :\n", count = 0;
+      if (eqAny(get('e12'), ['4798'])) {
+        feedback += "Correct !\n";
+        count++;
+      } else {
+        feedback += "Faux, c'est 4798.\n";
+      }
+      feedback += `\nScore : ${count}/1. Génial !`;
+      $('#f12').textContent = feedback;
+      $('#f12').className = 'feedback ' + (count === 1 ? 'ok' : 'no');
+      playSound(count === 1);
+      addScore(count, 1);
+    };
+
+    const corriger13 = () => {
+      let feedback = "Feedback détaillé :\n", count = 0;
+      const check = (key, correct, label) => {
+        if (eqAny(get(key), correct)) {
+          feedback += `${label} : Correct !\n`;
+          count++;
+        } else {
+          feedback += `${label} : Faux, exemple : ${correct[0]}.\n`;
+        }
+      };
+      check('e13-1', ['dixvirgulezero13milliemes', 'dixvirguletreizemilliemes', 'dixvirgule013'], '1');
+      check('e13-2', ['septcentcinquantemillecenttroisvirgulezerozerozerohuittroismilliemes', '750103virgule00083'], '2');
+      check('e13-3', ['deuxcentsoixante-seizevirgulezerocinquante-troismilliemes', 'deuxcentsoixante-seizevirgulecinquante-troismilliemes', '276virgule053'], '3');
+      feedback += `\nScore : ${count}/3. Super !`;
+      $('#f13').textContent = feedback;
+      $('#f13').className = 'feedback ' + (count === 3 ? 'ok' : 'no');
+      playSound(count === 3);
+      addScore(count, 3);
+    };
+
+    const corriger14 = () => {
+      let feedback = "Feedback détaillé :\n", count = 0;
+      const check = (key, correct, label) => {
+        if (eqAny(get(key), correct)) {
+          feedback += `${label} : Correct !\n`;
+          count++;
+        } else {
+          feedback += `${label} : Faux, c'est ${correct[0]}.\n`;
+        }
+      };
+      check('e14-1', ['184/100'], '1');
+      check('e14-2', ['147/100'], '2');
+      check('e14-3', ['3071/1000'], '3');
+      check('e14-4', ['2857/1000'], '4');
+      feedback += `\nScore : ${count}/4. Bravo !`;
+      $('#f14').textContent = feedback;
+      $('#f14').className = 'feedback ' + (count === 4 ? 'ok' : 'no');
+      playSound(count === 4);
+      addScore(count, 4);
+    };
+
+    const corrigerTout = () => {
+      totalScore = 0; maxScore = 0;
+      [1,2,3,4,5,6,7,8,9,10,11,12,13,14].forEach(n => window[`corriger${n}`]());
+    };
   </script>
 </body>
 </html>
