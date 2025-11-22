@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"><!-- Encodage UTF-8 pour les accents -->
+  <title>6e – Droites parallèles, perpendiculaires et figures</title><!-- Titre de la page -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><!-- Affichage adapté au mobile -->
+
+  <style>
+    /* ====== STYLE GÉNÉRAL DE LA PAGE ====== */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Verdana, Arial, sans-serif;
+      background: #0b1020;      /* fond sombre */
+      color: #f5f5f5;           /* texte clair */
+    }
+
+    /* Bandeau de titre */
+    header {
+      background: linear-gradient(90deg, #1b2a4a, #284b63);
+      padding: 15px 10px;
+      text-align: center;
+      border-bottom: 3px solid #00b4d8;
+    }
+
+    header h1 {
+      margin: 4px 0;
+      font-size: 1.6rem;
+      color: #ffffff;
+    }
+
+    header p {
+      margin: 2px 0;
+      font-size: 0.95rem;
+      color: #e0e0e0;
+    }
+
+    /* Conteneur central */
+    .container {
+      max-width: 1100px;
+      margin: 20px auto;
+      padding: 0 10px;
+    }
+
+    /* Encadré "fiche élève" Nom / Prénom / Classe */
+    .fiche-eleve {
+      background: #111827;
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 15px;
+      border: 1px solid #1f2937;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+
+    .fiche-eleve label {
+      display: block;
+      margin-bottom: 4px;
+      color: #e5e7eb;
+    }
+
+    .fiche-eleve input {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #374151;
+      background: #020617;
+      color: #f9fafb;
+    }
+
+    /* Encadré d’introduction rapide */
+    .info {
+      background: #152238;
+      border-left: 6px solid #00b4d8;
+      padding: 12px 14px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+
+    /* Bloc lexique + mini cours */
+    .lexique {
+      background: #111827;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+      border: 1px solid #1f2937;
+      font-size: 0.9rem;
+    }
+
+    .lexique h2 {
+      margin-top: 0;
+      color: #fbbf24;
+      font-size: 1.1rem;
+    }
+
+    .lexique h3 {
+      margin-bottom: 4px;
+      margin-top: 10px;
+      color: #4dd0e1;
+      font-size: 1rem;
+    }
+
+    .lexique ul {
+      margin-top: 2px;
+      margin-bottom: 6px;
+      padding-left: 20px;
+    }
+
+    .lexique li {
+      margin-bottom: 2px;
+    }
+
+    /* Titre d’exercice */
+    h2 {
+      margin-top: 20px;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+      color: #4dd0e1;
+    }
+
+    /* Bloc exercice complet */
+    .exercice {
+      background: #111827;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      border: 1px solid #1f2937;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.35);
+    }
+
+    /* Encadré de consignes */
+    .consigne {
+      background: #0e1630;
+      border-left: 5px solid #b07d62;
+      padding: 10px 12px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+
+    /* Ligne des outils indiqués */
+    .outils {
+      font-size: 0.85rem;
+      color: #c0c0c0;
+      margin-top: 5px;
+    }
+
+    /* Ligne de boutons Aide / Correction */
+    .btn-row {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    /* Bouton interactif */
+    .btn {
+      padding: 6px 10px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.85rem;
+      background: #00b4d8;
+      color: #0b1020;
+      font-weight: bold;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Bloc aide ou correction (caché/affiché) */
+    .aide, .correction {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      background: #111827;
+      border-radius: 6px;
+      padding: 8px 10px;
+      border: 1px dashed #374151;
+    }
+
+    .aide { border-left: 4px solid #fbbf24; }     /* bord jaune */
+    .correction { border-left: 4px solid #34d399; }/* bord vert */
+
+    .hidden { display: none; }                    /* pour cacher */
+
+    /* Bloc figure (départ ou finale) */
+    .figure-depart,
+    .figure-attendue {
+      margin-top: 8px;
+      text-align: center;
+      background: #020617;
+      padding: 8px;
+      border-radius: 6px;
+    }
+
+    .figure-depart p,
+    .figure-attendue p {
+      font-size: 0.8rem;
+      color: #e5e7eb;
+      margin-top: 6px;
+    }
+
+    /* Titre interne dans l’aide */
+    .sous-titre-aide {
+      font-weight: bold;
+      margin-top: 4px;
+      margin-bottom: 2px;
+      color: #facc15;
+    }
+
+    /* Ligne sur les compétences */
+    .competences {
+      font-size: 0.8rem;
+      color: #c7d2fe;
+      margin-top: 6px;
+    }
+
+    /* Note enseignant en bas de page */
+    .note-enseignant {
+      margin-top: 30px;
+      font-size: 0.9rem;
+      color: #d1d5db;
+      background: #111827;
+      border-radius: 8px;
+      padding: 12px 14px;
+      border: 1px solid #1f2937;
+    }
+
+    ul { margin-top: 4px; margin-bottom: 4px; }
+  </style>
+</head>
+
+<body>
+<!-- ===== Bandeau principal ===== -->
+<header>
+  <h1>6e – Droites parallèles, perpendiculaires et figures 📐</h1>
+  <p>Chaque exercice : je regarde la figure de départ, je construis, puis je compare avec la figure attendue.</p>
+</header>
+
+<main class="container">
+  <!-- ===== Encart NOM / PRÉNOM / CLASSE ===== -->
+  <section class="fiche-eleve">
+    <div>
+      <label for="nom-eleve">Nom :</label>
+      <input id="nom-eleve" type="text" placeholder="Écris ton NOM ici">
+    </div>
+    <div>
+      <label for="prenom-eleve">Prénom :</label>
+      <input id="prenom-eleve" type="text" placeholder="Écris ton prénom ici">
+    </div>
+    <div>
+      <label for="classe-eleve">Classe :</label>
+      <input id="classe-eleve" type="text" placeholder="Ex : 6e A, 6e 3, 6e G2…">
+    </div>
+  </section>
+
+  <!-- ===== Info générale courte ===== -->
+  <section class="info">
+    <p>🎯 <strong>But :</strong> apprendre à reconnaître et tracer des <strong>droites parallèles</strong>, des <strong>droites perpendiculaires</strong> et des <strong>sécantes</strong> dans des rectangles, des carrés, des losanges et des cercles.</p>
+    <p>🧠 Tu vas travailler alternativement  :</p>
+    <ul>
+      <li>📄 sur une <strong>feuille</strong> avec ta règle, ton compas et ton équerre ;</li>
+      <li>💻 puis avec <strong>GeoGebra</strong> (mêmes constructions, mais sur ordinateur).</li>
+      <li>📌 <strong>à la maison, tu referas les exercices sur feuilles et sur GeoGebra</strong>.</li>
+    </ul>
+  </section>
+
+  <!-- ===== Lexique + Rappel de cours très vulgarisé ===== -->
+  <section class="lexique">
+    <h2>Lexique – Rappel de cours (version très simple)</h2>
+
+    <h3>1. Droite, segment, demi-droite</h3>
+    <ul>
+      <li><strong>Droite</strong> : ligne qui ne s’arrête jamais (elle va à l’infini des deux côtés).</li>
+      <li><strong>Segment</strong> : morceau de droite entre deux points.  
+          👉 Exemple : [AB] est le segment entre A et B.</li>
+      <li><strong>Demi-droite</strong> : part d’un point et va à l’infini de l’autre côté.</li>
+    </ul>
+
+    <h3>2. Droites parallèles</h3>
+    <ul>
+      <li>Deux droites sont <strong>parallèles</strong> quand elles ne se rencontrent <strong>jamais</strong>.</li>
+      <li>Synonymes / images : « <strong>toujours à la même distance</strong> », « <strong>rails de train</strong> », « <strong>lignes d’un cahier</strong> ».</li>
+      <li>Écriture maths : (d₁) ∥ (d₂).</li>
+    </ul>
+
+    <h3>3. Droites perpendiculaires</h3>
+    <ul>
+      <li>Deux droites sont <strong>perpendiculaires</strong> quand elles se coupent en faisant un <strong>angle droit</strong>.</li>
+      <li>Synonymes / mots qui veulent dire presque la même chose :  
+        <ul>
+          <li><strong>90°</strong> ;</li>
+          <li><strong>angle droit</strong> ;</li>
+          <li><strong>en forme de L</strong> ;</li>
+          <li><strong>coin de la feuille</strong>.</li>
+        </ul>
+      </li>
+      <li>Écriture maths : (d₁) ⟂ (d₂).</li>
+    </ul>
+
+    <h3>4. Droites sécantes</h3>
+    <ul>
+      <li>Deux droites sont <strong>sécantes</strong> quand elles se <strong>coupent</strong> en un point.</li>
+      <li>Elles peuvent faire un angle droit (perpendiculaires) ou un autre angle (non perpendiculaires).</li>
+      <li>Synonymes / images : « se croisent », « se rencontrent ».</li>
+    </ul>
+
+    <h3>5. Diagonale</h3>
+    <ul>
+      <li>Dans un quadrilatère (rectangle, carré, losange, parallélogramme), une <strong>diagonale</strong> relie deux <strong>sommets opposés</strong>.</li>
+      <li>Exemple : dans un carré ABCD, les diagonales sont [AC] et [BD].</li>
+    </ul>
+
+    <h3>6. Cercle, centre, rayon, diamètre</h3>
+    <ul>
+      <li><strong>Cercle</strong> : « rond » tracé au compas.</li>
+      <li><strong>Centre</strong> : point du milieu (là où on plante la pointe du compas).</li>
+      <li><strong>Rayon</strong> : segment qui va du <strong>centre</strong> jusqu’au cercle.  
+        👉 Longueur : toujours la même partout.</li>
+      <li><strong>Diamètre</strong> : segment qui passe par le centre et relie deux points du cercle.  
+        👉 C’est comme « deux rayons bout à bout ».</li>
+    </ul>
+
+    <h3>7. Figures usuelles</h3>
+    <ul>
+      <li><strong>Rectangle</strong> : 4 côtés, 4 angles droits, côtés opposés parallèles.</li>
+      <li><strong>Carré</strong> : rectangle avec les 4 côtés de même longueur.</li>
+      <li><strong>Losange</strong> : 4 côtés de même longueur, côtés opposés parallèles (mais pas forcément d’angles droits).</li>
+      <li><strong>Parallélogramme</strong> : quadrilatère où les côtés opposés sont parallèles.</li>
+    </ul>
+
+    <p><em>Important :</em> dans plusieurs exercices, les droites que tu construis seront des <strong>diagonales</strong>, des <strong>parallèles</strong> ou des <strong>perpendiculaires</strong>. Tu peux revenir à ce lexique à tout moment.</p>
+  </section>
+
+  <!-- ================= EXERCICE 1 ================= -->
+  <section class="exercice" id="ex1">
+    <h2>Exercice 1 – Rectangle EFGH (figure 1)</h2>
+
+    <div class="consigne">
+      <p>On considère le rectangle <strong>EFGH</strong> de la figure 1.</p>
+      <ol>
+        <li>Tracer deux droites <strong>perpendiculaires</strong> dans ce rectangle, les nommer, coder le schéma et les noter mathématiquement.</li>
+        <li>Tracer deux droites <strong>parallèles</strong> dans ce rectangle, les nommer et les noter mathématiquement.</li>
+        <li>Tracer deux droites de cette même figure qui sont <strong>sécantes au centre O</strong> du rectangle mais qui ne sont <strong>pas perpendiculaires</strong>. Comment appelle-t-on ces deux sécantes&nbsp;?</li>
+      </ol>
+      <p class="outils">✏️ Sur feuille : règle, équerre &nbsp;&nbsp;|&nbsp;&nbsp; 💻 GeoGebra : « Droite », « Parallèle », « Perpendiculaire ».</p>
+
+      <!-- Figure 2  : rectangle EFGH -->
+      <div class="figure-depart">
+        <svg width="240" height="160" viewBox="0 0 240 160">
+          <polygon points="50,40 190,40 190,120 50,120"
+                   fill="none" stroke="#9ca3af" stroke-width="2"/>
+          <circle cx="50" cy="40" r="3" fill="#facc15"/><text x="40" y="35" font-size="11" fill="#facc15">E</text>
+          <circle cx="190" cy="40" r="3" fill="#facc15"/><text x="192" y="35" font-size="11" fill="#facc15">F</text>
+          <circle cx="190" cy="120" r="3" fill="#facc15"/><text x="192" y="135" font-size="11" fill="#facc15">G</text>
+          <circle cx="50" cy="120" r="3" fill="#facc15"/><text x="40" y="135" font-size="11" fill="#facc15">H</text>
+        </svg>
+        <p>Figure 1 : rectangle EFGH (figure 1 de l’annexe).</p>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" onclick="toggle('aide-ex1')">🔍 Aide</button>
+      <button class="btn" onclick="toggle('corr-ex1')">✅ Correction (figure attendue)</button>
+      <span class="competences">Rectangle ; droites parallèles / perpendiculaires / sécantes ; diagonales.</span>
+    </div>
+
+    <div id="aide-ex1" class="aide hidden">
+      <p class="sous-titre-aide">📏 Sur feuille</p>
+      <ul>
+        <li>Q1 : choisis par exemple les côtés <strong>(EH)</strong> et <strong>(EF)</strong> qui se coupent en angle droit au sommet E.</li>
+        <li>Q2 : choisis les côtés opposés <strong>(EF)</strong> et <strong>(HG)</strong> (ils ne se rencontrent jamais).</li>
+        <li>Q3 : relie E à G puis F à H : les deux segments se coupent au centre du rectangle.</li>
+      </ul>
+      <p class="sous-titre-aide">💻 Avec GeoGebra</p>
+      <ul>
+        <li>Trace les côtés si besoin avec l’outil « Segment ».</li>
+        <li>Utilise « Perpendiculaire » ou « Parallèle » pour vérifier les propriétés.</li>
+      </ul>
+    </div>
+
+    <div id="corr-ex1" class="correction hidden">
+<ul>
+  <li>
+    <strong>Q1 :</strong>
+    Dans le rectangle <strong>EFGH</strong>, l’angle en E est droit.
+    Les côtés <strong>(EH)</strong> et <strong>(EF)</strong> sont donc
+    <strong>perpendiculaires</strong> : (EH) &perp; (EF).<br>
+    <em>Théorème / définition :</em> un rectangle est un quadrilatère
+    qui possède quatre angles droits ; les côtés qui forment un angle droit
+    sont perpendiculaires.
+  </li>
+
+  <li>
+    <strong>Q2 :</strong>
+    Dans un rectangle (qui est un cas particulier de parallélogramme),
+    les côtés opposés sont <strong>parallèles</strong>. Ainsi
+    <strong>(EF)</strong> est parallèle à <strong>(HG)</strong>
+    et <strong>(EH)</strong> est parallèle à <strong>(FG)</strong>. <br>
+    <em>Théorème :</em> dans tout parallélogramme, les côtés opposés sont parallèles.
+  </li>
+
+  <li>
+    <strong>Q3 :</strong>
+    Les diagonales <strong>[EG]</strong> et <strong>[FH]</strong>
+    se coupent en leur milieu en un point noté O.
+    Ce point O est donc le <strong>centre du rectangle</strong>. <br>
+    <em>Théorème :</em> dans tout parallélogramme, les diagonales se coupent en leur milieu.
+  </li>
+</ul>
+
+
+  <div class="figure-attendue">
+  <svg width="240" height="160" viewBox="0 0 390 260" xmlns="http://www.w3.org/2000/svg">
+    <!-- Rectangle EFGH -->
+    <polygon points="50,40 190,40 190,120 50,120"
+             fill="none" stroke="#9ca3af" stroke-width="2"/>
+
+    <!-- Sommets sous forme de croix, centrées exactement sur les sommets du rectangle -->
+
+    <!-- E (50,40) -->
+    <line x1="46" y1="36" x2="54" y2="44" stroke="#facc15" stroke-width="2.5"/>
+    <line x1="46" y1="44" x2="54" y2="36" stroke="#facc15" stroke-width="2.5"/>
+    <text x="38" y="28" font-size="11" fill="#facc15" font-weight="bold">E (50 ; 40)</text>
+
+    <!-- F (190,40) -->
+    <line x1="186" y1="36" x2="194" y2="44" stroke="#facc15" stroke-width="2.5"/>
+    <line x1="186" y1="44" x2="194" y2="36" stroke="#facc15" stroke-width="2.5"/>
+    <text x="195" y="28" font-size="11" fill="#facc15" font-weight="bold">F (190 ; 40)</text>
+
+    <!-- G (190,120) -->
+    <line x1="186" y1="116" x2="194" y2="124" stroke="#facc15" stroke-width="2.5"/>
+    <line x1="186" y1="124" x2="194" y2="116" stroke="#facc15" stroke-width="2.5"/>
+    <text x="200" y="140" font-size="11" fill="#facc15" font-weight="bold">G (190 ; 120)</text>
+
+    <!-- H (50,120) -->
+    <line x1="46" y1="116" x2="54" y2="124" stroke="#facc15" stroke-width="2.5"/>
+    <line x1="46" y1="124" x2="54" y2="116" stroke="#facc15" stroke-width="2.5"/>
+    <text x="30" y="140" font-size="11" fill="#facc15" font-weight="bold">H (50 ; 120)</text>
+
+    <!-- Centre O (120,80) -->
+    <line x1="116" y1="76" x2="124" y2="84" stroke="#f97316" stroke-width="3"/>
+    <line x1="116" y1="84" x2="124" y2="76" stroke="#f97316" stroke-width="3"/>
+    <text x="115" y="70" font-size="11" fill="#f97316" font-weight="bold">O</text>
+
+    <!-- Diagonales (segments) -->
+    <line x1="50" y1="40" x2="190" y2="120" stroke="#34d399" stroke-width="2.5"/>
+    <line x1="190" y1="40" x2="50" y2="120" stroke="#34d399" stroke-width="2.5"/>
+
+    <!-- Droites infinies en pointillés -->
+    <!-- (EH) verticale -->
+    <line x1="50" y1="0"   x2="50" y2="160" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,4"/>
+    <!-- (EF) horizontale -->
+    <line x1="0"  y1="40"  x2="240" y2="40" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,4"/>
+    <!-- (EG) et (FH) diagonales infinies -->
+    <line x1="0"   y1="10"   x2="240" y2="150" stroke="#ec4899" stroke-width="2" stroke-dasharray="5,4"/>
+    <line x1="240" y1="10"   x2="0"   y2="150" stroke="#ec4899" stroke-width="2" stroke-dasharray="5,4"/>
+
+   
+
+    <!-- Marque d’angle droit en E : quart de carré (forme en L) -->
+    <!-- On part du point E (50,40) vers l’intérieur du rectangle (vers la droite et vers le bas) -->
+    <polyline points="50,52 62,52 62,40"
+              fill="none" stroke="#fbbf24" stroke-width="2.5"/>
+
+  </svg>
+
+ <p style="font-size:16px; line-height:1.55; color:white;">
+  Figure attendue Solution 1 : rectangle EFGH avec diagonales [EG] et [FH] se coupant en leur milieu O.<br><br>
+
+  Tous les points sont marqués par des croix centrées sur les sommets.<br>
+  L’angle droit en E est représenté par un petit « L » (quart de carré jaune) partant du point E à l’intérieur du rectangle.<br>
+  Les droites sont montrées par des pointillés colorés, comme dans la figure SVG.<br><br>
+
+  Les quatre coins E, F, G et H sont des angles droits : on peut donc choisir pour tracer deux droites perpendiculaires :<br><br>
+
+  <span style="color:#8b5cf6; font-weight:bold;">(EH)</span> ⟂ 
+  <span style="color:#8b5cf6; font-weight:bold;">(EF) : Solution 1 </span>,<br>
+
+  <span style="color:#8b5cf6; font-weight:bold;">(EF)</span> ⟂ 
+  <span style="color:#ec4899; font-weight:bold;">(FG) : Solution 2</span>,<br>
+
+  <span style="color:#ec4899; font-weight:bold;">(FG)</span> ⟂ 
+  <span style="color:#ec4899; font-weight:bold;">(GH) : Solution 3</span>,<br>
+
+  <span style="color:#ec4899; font-weight:bold;">(GH)</span> ⟂ 
+  <span style="color:#8b5cf6; font-weight:bold;">(HE) : Solution 4</span>.
+</p>
+
+      <!-- === Figures supplémentaires : Solutions 2, 3 et 4 === -->
+
+      <!-- Solution 2 : (EF) ⟂ (FG) -->
+      <div class="figure-attendue">
+        <svg width="240" height="160" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
+          <!-- Rectangle -->
+          <polygon points="50,40 190,40 190,120 50,120"
+                   fill="none" stroke="#9ca3af" stroke-width="2"/>
+
+
+           <!-- Centre O (120,80) -->
+    <line x1="116" y1="76" x2="124" y2="84" stroke="#f97316" stroke-width="3"/>
+    <line x1="116" y1="84" x2="124" y2="76" stroke="#f97316" stroke-width="3"/>
+    <text x="115" y="70" font-size="11" fill="#f97316" font-weight="bold">O</text>
+
+<!-- Diagonale (EG) infinie : passe par E, O et G -->
+<line x1="-20" y1="0" x2="260" y2="160"
+      stroke="#34d399" stroke-width="2.5" stroke-dasharray="5,4" />
+
+
+<!-- Diagonale (FH) infinie : passe par F, O et H -->
+<line x1="260" y1="0" x2="-20" y2="160"
+      stroke="#34d399" stroke-width="2.5" stroke-dasharray="5,4" />
+
+
+         
+
+
+          <!-- Sommets (croix) -->
+          <!-- Droites infinies en pointillés : Solution 2 -->
+          <!-- (EF) horizontale (passe par E et F) -->
+          <line x1="0"  y1="40" x2="240" y2="40"
+                stroke="#8b5cf6" stroke-width="2"
+                stroke-dasharray="5,4"/>
+
+          <!-- (FG) verticale (passe par F et G) -->
+          <line x1="190" y1="0" x2="190" y2="160"
+                stroke="#ec4899" stroke-width="2"
+                stroke-dasharray="5,4"/>
+
+          <text x="40" y="30" font-size="11" fill="#facc15" font-weight="bold">E</text>
+
+          <line x1="186" y1="36" x2="194" y2="44" stroke="#facc15" stroke-width="2.5"/>
+          <line x1="186" y1="44" x2="194" y2="36" stroke="#facc15" stroke-width="2.5"/>
+          <text x="192" y="30" font-size="11" fill="#facc15" font-weight="bold">F</text>
+
+          <line x1="186" y1="116" x2="194" y2="124" stroke="#facc15" stroke-width="2.5"/>
+          <line x1="186" y1="124" x2="194" y2="116" stroke="#facc15" stroke-width="2.5"/>
+          <text x="195" y="140" font-size="11" fill="#facc15" font-weight="bold">G</text>
+
+          <line x1="46" y1="116" x2="54" y2="124" stroke="#facc15" stroke-width="2.5"/>
+          <line x1="46" y1="124" x2="54" y2="116" stroke="#facc15" stroke-width="2.5"/>
+          <text x="40" y="140" font-size="11" fill="#facc15" font-weight="bold">H</text>
+
+          <!-- Côtés : on met en couleur seulement EF et FG -->
+          <line x1="50" y1="40" x2="190" y2="40" stroke="#8b5cf6" stroke-width="3"/>   <!-- EF -->
+          <line x1="190" y1="40" x2="190" y2="120" stroke="#ec4899" stroke-width="3"/>  <!-- FG -->
+          <line x1="190" y1="120" x2="50" y2="120" stroke="#6b7280" stroke-width="2"/>  <!-- GH -->
+          <line x1="50" y1="120" x2="50" y2="40"  stroke="#6b7280" stroke-width="2"/>  <!-- HE -->
+
+          <!-- Angle droit en F (à l’intérieur du rectangle) -->
+          <polyline points="178,40 178,52 190,52"
+                    fill="none" stroke="#fbbf24" stroke-width="2.5"/>
+        </svg>
+        <p>Figure attendue Solution 2 : les droites <span style="color:#8b5cf6;font-weight:bold;">(EF)</span> et
+           <span style="color:#ec4899;font-weight:bold;">(FG)</span> sont perpendiculaires.</p>
+      </div>
+
+      <!-- Solution 3 : (FG) ⟂ (GH) -->
+      <div class="figure-attendue">
+        <svg width="240" height="160" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
+          <!-- Rectangle -->
+          <polygon points="50,40 190,40 190,120 50,120"
+                   fill="none" stroke="#9ca3af" stroke-width="2"/>
+           <!-- Centre O (120,80) -->
+    <line x1="116" y1="76" x2="124" y2="84" stroke="#f97316" stroke-width="3"/>
+    <line x1="116" y1="84" x2="124" y2="76" stroke="#f97316" stroke-width="3"/>
+    <text x="115" y="70" font-size="11" fill="#f97316" font-weight="bold">O</text>
+
+   <!-- Diagonale (EG) infinie : passe par E, O et G -->
+<line x1="-20" y1="0" x2="260" y2="160"
+      stroke="#34d399" stroke-width="2.5" stroke-dasharray="5,4" />
+
+
+<!-- Diagonale (FH) infinie : passe par F, O et H -->
+<line x1="260" y1="0" x2="-20" y2="160"
+      stroke="#34d399" stroke-width="2.5" stroke-dasharray="5,4" />
+
+
+
+          <!-- Sommets (croix) -->
+          <!-- Droites infinies en pointillés : Solution 3 -->
+          <!-- (FG) verticale (passe par F et G) -->
+          <line x1="190" y1="0" x2="190" y2="160"
+                stroke="#ec4899" stroke-width="2"
+                stroke-dasharray="5,4"/>
+
+          <!-- (GH) horizontale (passe par G et H) -->
+          <line x1="0"  y1="120" x2="240" y2="120"
+                stroke="#ec4899" stroke-width="2"
+                stroke-dasharray="5,4"/>
+
+          <text x="40" y="30" font-size="11" fill="#facc15" font-weight="bold">E</text>
+
+          <line x1="186" y1="36" x2="194" y2="44" stroke="#facc15" stroke-width="2.5"/>
+          <line x1="186" y1="44" x2="194" y2="36" stroke="#facc15" stroke-width="2.5"/>
+          <text x="192" y="30" font-size="11" fill="#facc15" font-weight="bold">F</text>
+
+          <line x1="186" y1="116" x2="194" y2="124" stroke="#facc15" stroke-width="2.5"/>
+          <line x1="186" y1="124" x2="194" y2="116" stroke="#facc15" stroke-width="2.5"/>
+          <text x="195" y="140" font-size="11" fill="#facc15" font-weight="bold">G</text>
+
+          <line x1="46" y1="116" x2="54" y2="124" stroke="#facc15" stroke-width="2.5"/>
+          <line x1="46" y1="124" x2="54" y2="116" stroke="#facc15" stroke-width="2.5"/>
+          <text x="40" y="140" font-size="11" fill="#facc15" font-weight="bold">H</text>
+
+          <!-- Côtés : on met en couleur seulement FG et GH -->
+          <line x1="50" y1="40" x2="190" y2="40" stroke="#6b7280" stroke-width="2"/>     <!-- EF -->
+          <line x1="190" y1="40" x2="190" y2="120" stroke="#ec4899" stroke-width="3"/>    <!-- FG -->
+          <line x1="190" y1="120" x2="50" y2="120" stroke="#ec4899" stroke-width="3"/>    <!-- GH -->
+          <line x1="50" y1="120" x2="50" y2="40"  stroke="#6b7280" stroke-width="2"/>     <!-- HE -->
+
+          <!-- Angle droit en G (à l’intérieur du rectangle) -->
+          <polyline points="190,108 178,108 178,120"
+                    fill="none" stroke="#fbbf24" stroke-width="2.5"/>
+        </svg>
+        <p>Figure attendue Solution 3 : les droites <span style="color:#ec4899;font-weight:bold;">(FG)</span> et
+           <span style="color:#ec4899;font-weight:bold;">(GH)</span> sont perpendiculaires.</p>
+      </div>
+
+      <!-- Solution 4 : (GH) ⟂ (HE) -->
+      <div class="figure-attendue">
+        <svg width="240" height="160" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
+          <!-- Rectangle -->
+          <polygon points="50,40 190,40 190,120 50,120"
+                   fill="none" stroke="#9ca3af" stroke-width="2"/>
+       <!-- Centre O (120,80) -->
+    <line x1="116" y1="76" x2="124" y2="84" stroke="#f97316" stroke-width="3"/>
+    <line x1="116" y1="84" x2="124" y2="76" stroke="#f97316" stroke-width="3"/>
+    <text x="115" y="70" font-size="11" fill="#f97316" font-weight="bold">O</text>
+
+   <!-- Diagonale (EG) infinie : passe par E, O et G -->
+<line x1="-20" y1="0" x2="260" y2="160"
+      stroke="#34d399" stroke-width="2.5" stroke-dasharray="5,4" />
+
+
+<!-- Diagonale (FH) infinie : passe par F, O et H -->
+<line x1="260" y1="0" x2="-20" y2="160"
+      stroke="#34d399" stroke-width="2.5" stroke-dasharray="5,4" />
+
+
+
+          <!-- Sommets (croix) -->
+    <!-- Droites infinies en pointillés : Solution 4 -->
+    <!-- (GH) horizontale (passe par G et H) -->
+    <line x1="0"  y1="120" x2="240" y2="120"
+          stroke="#ec4899" stroke-width="2"
+          stroke-dasharray="5,4"/>
+
+    <!-- (HE) verticale (passe par H et E) -->
+    <line x1="50" y1="0" x2="50" y2="160"
+          stroke="#8b5cf6" stroke-width="2"
+          stroke-dasharray="5,4"/>
+
+          <text x="40" y="30" font-size="11" fill="#facc15" font-weight="bold">E</text>
+
+          <line x1="186" y1="36" x2="194" y2="44" stroke="#facc15" stroke-width="2.5"/>
+          <line x1="186" y1="44" x2="194" y2="36" stroke="#facc15" stroke-width="2.5"/>
+          <text x="192" y="30" font-size="11" fill="#facc15" font-weight="bold">F</text>
+
+          <line x1="186" y1="116" x2="194" y2="124" stroke="#facc15" stroke-width="2.5"/>
+          <line x1="186" y1="124" x2="194" y2="116" stroke="#facc15" stroke-width="2.5"/>
+          <text x="195" y="140" font-size="11" fill="#facc15" font-weight="bold">G</text>
+
+          <line x1="46" y1="116" x2="54" y2="124" stroke="#facc15" stroke-width="2.5"/>
+          <line x1="46" y1="124" x2="54" y2="116" stroke="#facc15" stroke-width="2.5"/>
+          <text x="40" y="140" font-size="11" fill="#facc15" font-weight="bold">H</text>
+
+          <!-- Côtés : on met en couleur seulement GH et HE -->
+          <line x1="50" y1="40" x2="190" y2="40" stroke="#6b7280" stroke-width="2"/>     <!-- EF -->
+          <line x1="190" y1="40" x2="190" y2="120" stroke="#6b7280" stroke-width="2"/>    <!-- FG -->
+          <line x1="190" y1="120" x2="50" y2="120" stroke="#ec4899" stroke-width="3"/>    <!-- GH -->
+          <line x1="50" y1="120" x2="50" y2="40"  stroke="#8b5cf6" stroke-width="3"/>     <!-- HE -->
+
+          <!-- Angle droit en H (à l’intérieur du rectangle) -->
+          <polyline points="50,108 62,108 62,120"
+                    fill="none" stroke="#fbbf24" stroke-width="2.5"/>
+        </svg>
+        <p>Figure attendue Solution 4 : les droites <span style="color:#ec4899;font-weight:bold;">(GH)</span> et
+           <span style="color:#8b5cf6;font-weight:bold;">(HE)</span> sont perpendiculaires.</p>
+      </div>
+
+</div>
+
+  </section>
+
+  <!-- ================= EXERCICE 2 ================= -->
+<section class="exercice" id="ex2">
+  <h2>Exercice 2 – Parallélogramme ABCD et point I (figure 2)</h2>
+
+  <div class="consigne">
+    <p>ABCD est un <strong>parallélogramme</strong> (figure 2) et I est un point sur le côté [CB].</p>
+    <ol>
+      <li>Tracer deux droites de cette figure qui soient <strong>parallèles</strong>.</li>
+      <li>Tracer une droite <strong>parallèle à (AB)</strong> passant par I et coupant [AD] en J.</li>
+      <li>Dire la nature des quadrilatères <strong>ABIJ</strong> et <strong>ICDJ</strong>. Justifier.</li>
+    </ol>
+    <p class="outils">✏️ Règle, équerre &nbsp;&nbsp;|&nbsp;&nbsp; 💻 GeoGebra : « Parallélogramme », « Parallèle ».</p>
+
+    <!-- Figure 2 : parallélogramme avec I sur CB -->
+    <div class="figure-depart">
+      <svg width="260" height="170" viewBox="0 0 260 170">
+        <!-- Parallélogramme ABCD -->
+        <polygon points="60,120 140,120 190,60 110,60"
+                 fill="none" stroke="#9ca3af" stroke-width="2"/>
+
+        <!-- Sommets A, B, C, D -->
+        <circle cx="110" cy="60"  r="3" fill="#facc15"/><text x="102" y="55"  font-size="11" fill="#facc15">A</text>
+        <circle cx="190" cy="60"  r="3" fill="#facc15"/><text x="192" y="55"  font-size="11" fill="#facc15">B</text>
+        <circle cx="60"  cy="120" r="3" fill="#facc15"/><text x="52" y="135" font-size="11" fill="#facc15">D</text>
+        <circle cx="140" cy="120" r="3" fill="#facc15"/><text x="140" y="135" font-size="11" fill="#facc15">C</text>
+
+        <!-- Point I sur [CB] : croix + étiquette décalée -->
+        <line x1="161" y1="86" x2="169" y2="94"
+              stroke="#f97316" stroke-width="2.5"/>
+        <line x1="161" y1="94" x2="169" y2="86"
+              stroke="#f97316" stroke-width="2.5"/>
+        <text x="180" y="84" font-size="11" fill="#f97316">I</text>
+      </svg>
+      <p>Figure 2 : parallélogramme ABCD avec un point I sur [CB].</p>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn" onclick="toggle('aide-ex2')">🔍 Aide</button>
+    <button class="btn" onclick="toggle('corr-ex2')">✅ Correction (figure attendue)</button>
+    <span class="competences">Propriété des parallélogrammes ; parallèles par un point ; quadrilatères particuliers.</span>
+  </div>
+
+  <div id="aide-ex2" class="aide hidden">
+    <p class="sous-titre-aide">📏 Sur feuille</p>
+    <ul>
+      <li>Q1 : dans un parallélogramme, les côtés opposés sont parallèles : par exemple (AB) ∥ (DC).</li>
+      <li>Q2 : par le point I, trace une droite parallèle à (AB) ; elle coupe [AD] en J.</li>
+      <li>Q3 : observe les côtés opposés dans les quadrilatères ABIJ et ICDJ.</li>
+    </ul>
+  </div>
+
+  <div id="corr-ex2" class="correction hidden">
+<ul>
+  <li>
+    <strong>Q1 :</strong>
+    On construit une droite passant par I et parallèle à <strong>(AB)</strong>.
+    Cette droite coupe [AD] en J : on note cette droite <strong>(IJ)</strong>.
+  </li>
+
+  <li>
+    <strong>Q2 :</strong>
+    Dans le quadrilatère <strong>ABIJ</strong> : <br>
+    – (AB) est parallèle à (IJ) par construction ;<br>
+    – (AI) est parallèle à (BJ) car <strong>ABCD</strong> est un parallélogramme
+      (côtés opposés parallèles).<br>
+    Les deux paires de côtés opposés de <strong>ABIJ</strong> sont donc parallèles :
+    <strong>ABIJ est un parallélogramme</strong>.<br>
+    <em>Théorème :</em> un quadrilatère dont les deux paires de côtés opposés
+    sont parallèles est un parallélogramme.
+  </li>
+
+  <li>
+    <strong>Q3 :</strong>
+    De même, dans le quadrilatère <strong>ICDJ</strong> :<br>
+    – (CD) est parallèle à (AB) et (IJ) est parallèle à (AB), donc (CD) ∥ (IJ) ;<br>
+    – (CI) est parallèle à (DJ) car ABCD est un parallélogramme.<br>
+    Les deux paires de côtés opposés de <strong>ICDJ</strong> sont donc parallèles :
+    <strong>ICDJ est aussi un parallélogramme</strong>.<br>
+    <em>Théorèmes utilisés :</em><br>
+    – dans un parallélogramme, les côtés opposés sont parallèles ;<br>
+    – si deux droites sont parallèles à une même droite, alors elles sont parallèles entre elles.
+  </li>
+</ul>
+
+
+   <div class="figure-attendue">
+  <svg width="260" height="170" viewBox="0 0 260 170">
+    <!-- Parallélogramme ABCD : A(110,60), B(190,60), C(140,120), D(60,120) -->
+    <polygon points="110,60 190,60 140,120 60,120"
+             fill="none" stroke="#9ca3af" stroke-width="2"/>
+
+    <!-- Sommets A, B, C, D -->
+    <circle cx="110" cy="60"  r="3" fill="#facc15"/><text x="102" y="55"  font-size="11" fill="#facc15">A</text>
+    <circle cx="190" cy="60"  r="3" fill="#facc15"/><text x="192" y="55"  font-size="11" fill="#facc15">B</text>
+    <circle cx="140" cy="120" r="3" fill="#facc15"/><text x="140" y="135" font-size="11" fill="#facc15">C</text>
+    <circle cx="60"  cy="120" r="3" fill="#facc15"/><text  x="52" y="135" font-size="11" fill="#facc15">D</text>
+
+    <!-- Droite (IJ) parallèle à (AB) : horizontale passant par y = 90 -->
+    <line x1="40" y1="90" x2="210" y2="90" stroke="#34d399" stroke-width="2"/>
+
+    <!-- Point I sur [CB] : croix + étiquette décalée -->
+    <line x1="161" y1="86" x2="169" y2="94"
+          stroke="#f97316" stroke-width="2.5"/>
+    <line x1="161" y1="94" x2="169" y2="86"
+          stroke="#f97316" stroke-width="2.5"/>
+    <text x="180" y="84" font-size="11" fill="#f97316">I</text>
+
+    <!-- Point J sur [AD] : croix au point (85 ; 90) -->
+    <line x1="81" y1="86" x2="89" y2="94"
+          stroke="#f97316" stroke-width="2.5"/>
+    <line x1="81" y1="94" x2="89" y2="86"
+          stroke="#f97316" stroke-width="2.5"/>
+    <text x="72" y="84" font-size="11" fill="#f97316">J</text>
+  </svg>
+
+  <p>Figure attendue 2 : la droite (IJ) est parallèle à (AB) et coupe [AD] en J, les quadrilatères ABIJ et ICDJ sont des parallélogrammes.</p>
+</div>
+
+  </div>
+</section>
+
+
+   <!-- ================= EXERCICE 3 ================= -->
+  <section class="exercice" id="ex3">
+    <h2>Exercice 3 – Losange KLMN (figure 3)</h2>
+
+    <div class="consigne">
+      <p>KLMN est un <strong>losange</strong> (figure 3).</p>
+      <ol>
+        <li>Tracer deux droites de la figure 3 qui soient <strong>perpendiculaires</strong>. Coder la figure, puis nommer ces droites.</li>
+        <li>Comment s’appellent ces droites dans le losange&nbsp;?</li>
+      </ol>
+      <p class="outils">✏️ Règle, équerre &nbsp;&nbsp;|&nbsp;&nbsp; 💻 GeoGebra : « Segment », « Perpendiculaire ».</p>
+
+      <!-- Figure 3 : losange KLMN -->
+      <div class="figure-depart">
+        <svg width="220" height="200" viewBox="0 0 220 200">
+          <!-- losange -->
+          <polygon points="110,30 170,100 110,170 50,100"
+                   fill="none" stroke="#9ca3af" stroke-width="2"/>
+
+          <!-- sommets en points -->
+          <circle cx="110" cy="30" r="3" fill="#facc15"/><text x="115" y="25" font-size="11" fill="#facc15">K</text>
+          <circle cx="170" cy="100" r="3" fill="#facc15"/><text x="175" y="100" font-size="11" fill="#facc15">L</text>
+          <circle cx="110" cy="170" r="3" fill="#facc15"/><text x="115" y="185" font-size="11" fill="#facc15">M</text>
+          <circle cx="50" cy="100" r="3" fill="#facc15"/><text x="40" y="100" font-size="11" fill="#facc15">N</text>
+        </svg>
+        <p>Figure 3 : losange KLMN.</p>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" onclick="toggle('aide-ex3')">🔍 Aide</button>
+      <button class="btn" onclick="toggle('corr-ex3')">✅ Correction (figure attendue)</button>
+      <span class="competences">Diagonales du losange ; notion de perpendiculaire ; codage d’une figure.</span>
+    </div>
+
+    <div id="aide-ex3" class="aide hidden">
+      <p class="sous-titre-aide">Idée</p>
+      <ul>
+        <li>Relie le sommet du haut au sommet du bas : segment [KM].</li>
+        <li>Relie le sommet de gauche au sommet de droite : segment [LN].</li>
+        <li>Ces deux segments se croisent au centre du losange et forment un angle droit.</li>
+        <li>Dans un losange, les diagonales ont des propriétés particulières : elles sont perpendiculaires et se coupent en leur milieu.</li>
+      </ul>
+    </div>
+
+<!-- ================= EXERCICE 3 - CORRECTION ================= -->
+<div id="corr-ex3" class="correction hidden">
+
+<ul>
+  <li>
+    <strong>Q1 :</strong>
+    Dans le losange <strong>KLMN</strong>, les diagonales
+    <strong>(KM)</strong> et <strong>(LN)</strong> sont
+    <strong>perpendiculaires</strong> :
+    (KM) &perp; (LN).<br>
+    <em>Théorème :</em> dans un losange, les diagonales sont perpendiculaires.
+  </li>
+
+  <li>
+    <strong>Q2 :</strong>
+    Les diagonales <strong>[KM]</strong> et <strong>[LN]</strong>
+    se coupent en O et se partagent en deux segments de même longueur :
+    O est le <strong>milieu</strong> de [KM] et de [LN].<br>
+    <em>Théorème :</em> dans tout parallélogramme (donc dans un losange),
+    les diagonales se coupent en leur milieu.
+  </li>
+
+  <li>
+    <strong>Q3 :</strong>
+    Dans le losange, la diagonale <strong>[KM]</strong> est
+    <strong>bissectrice</strong> de l’angle &ang;LKN et la diagonale
+    <strong>[LN]</strong> est bissectrice de l’angle &ang;MLN.
+    Les angles aux sommets sont donc partagés en deux angles égaux.<br>
+    <em>Théorème :</em> dans un losange, chaque diagonale est bissectrice
+    des angles auxquels elle est issue.
+  </li>
+</ul>
+
+
+  <div class="figure-attendue">
+    <svg width="360" height="260" viewBox="0 0 260 200">
+
+      <!-- Losange KLMN : K(130,30), L(200,100), M(130,170), N(60,100) -->
+      <polygon points="130,30 200,100 130,170 60,100"
+               fill="none" stroke="#9ca3af" stroke-width="2"/>
+
+    <!-- ========= CÔTÉS CODÉS ÉGAUX — DOUBLES TRAITS ORTHOGONAUX ========== -->
+
+    <!-- KL (milieu ≈ 165,65) : côté de pente 1 → traits de pente -1 -->
+    <line x1="161" y1="69" x2="169" y2="61" stroke="#e5e7eb" stroke-width="2"/>
+    <line x1="163" y1="71" x2="171" y2="63" stroke="#e5e7eb" stroke-width="2"/>
+
+    <!-- LM (milieu ≈ 165,135) : côté de pente -1 → traits de pente 1 -->
+    <line x1="161" y1="131" x2="169" y2="139" stroke="#e5e7eb" stroke-width="2"/>
+    <line x1="163" y1="129" x2="171" y2="137" stroke="#e5e7eb" stroke-width="2"/>
+
+    <!-- MN (milieu ≈ 95,135) : côté de pente 1 → traits de pente -1 -->
+    <line x1="91" y1="139" x2="99" y2="131" stroke="#e5e7eb" stroke-width="2"/>
+    <line x1="93" y1="141" x2="101" y2="133" stroke="#e5e7eb" stroke-width="2"/>
+
+    <!-- NK (milieu ≈ 95,65) : côté de pente -1 → traits de pente 1 (on garde ton code « parfait ») -->
+    <line x1="91" y1="61" x2="99" y2="69" stroke="#e5e7eb" stroke-width="2"/>
+    <line x1="93" y1="59" x2="101" y2="67" stroke="#e5e7eb" stroke-width="2"/>
+
+
+
+
+      <!-- Diagonales (KM) et (LN) comme droites "infinies" en vert -->
+      <!-- (KM) verticale -->
+      <line x1="130" y1="-50" x2="130" y2="250"
+            stroke="#34d399" stroke-width="3"/>
+
+      <!-- (LN) horizontale -->
+      <line x1="-50" y1="100" x2="310" y2="100"
+            stroke="#34d399" stroke-width="3"/>
+
+      <!-- Angle droit jaune, légèrement décalé -->
+      <path d="M131 90 L140 90 L140 98"
+            stroke="#fbbf24" stroke-width="3" fill="none"/>
+
+      <!-- Sommets K, L, M, N marqués par des croix jaunes -->
+      <!-- K -->
+      <line x1="127" y1="27" x2="133" y2="33" stroke="#facc15" stroke-width="3"/>
+      <line x1="127" y1="33" x2="133" y2="27" stroke="#facc15" stroke-width="3"/>
+      <text x="110" y="20" fill="#facc15" font-size="14" font-weight="bold">K</text>
+
+      <!-- L -->
+      <line x1="197" y1="97" x2="203" y2="103" stroke="#facc15" stroke-width="3"/>
+      <line x1="197" y1="103" x2="203" y2="97" stroke="#facc15" stroke-width="3"/>
+      <text x="208" y="95" fill="#facc15" font-size="14" font-weight="bold">L</text>
+
+      <!-- M -->
+      <line x1="127" y1="167" x2="133" y2="173" stroke="#facc15" stroke-width="3"/>
+      <line x1="127" y1="173" x2="133" y2="167" stroke="#facc15" stroke-width="3"/>
+      <text x="110" y="188" fill="#facc15" font-size="14" font-weight="bold">M</text>
+
+      <!-- N -->
+      <line x1="57" y1="97" x2="63" y2="103" stroke="#facc15" stroke-width="3"/>
+      <line x1="57" y1="103" x2="63" y2="97" stroke="#facc15" stroke-width="3"/>
+      <text x="45" y="95" fill="#facc15" font-size="14" font-weight="bold">N</text>
+
+    </svg>
+
+    <p>
+      Figure attendue 3 :<br>
+      Dans le losange KLMN, les quatre côtés
+      <strong>(KL)</strong>, <strong>(LM)</strong>, <strong>(MN)</strong> et
+      <strong>(NK)</strong> sont codés égaux
+      (<span style="color:#e5e7eb;">doubles petits traits blancs</span>).<br>
+      Les deux droites
+      <span style="color:#34d399;font-weight:bold;">(KM)</span> et
+      <span style="color:#34d399;font-weight:bold;">(LN)</span> sont tracées
+      en vert comme des diagonales perpendiculaires
+      (<span style="color:#fbbf24;font-weight:bold;">angle droit : petit « L » jaune au centre</span>),
+      et les sommets K, L, M et N sont marqués par des croix jaunes.
+    </p>
+      </div>
+    </div>
+  </section>
+
+
+<!-- ================= EXERCICE 4 ================= -->
+<section class="exercice" id="ex4">
+  <h2>Exercice 4 – Carré ABCD (figure 4)</h2>
+  <div class="consigne">
+    <p>ABCD est un <strong>carré</strong> (figure 4 de l’annexe).</p>
+    <ol>
+      <li>Tracer deux droites du carré qui sont <strong>perpendiculaires</strong> mais qui ne sont pas des supports de ses côtés.</li>
+      <li>Coder ces droites sur la figure puis les nommer.</li>
+      <li>Donner le nom de ces droites dans la figure.</li>
+      <li>Nommer deux droites <strong>sécantes</strong> de la figure qui ne soient pas perpendiculaires.</li>
+    </ol>
+    <p class="outils">✏️ Règle, équerre &nbsp;&nbsp;|&nbsp;&nbsp; 💻 GeoGebra : « Segment », « Perpendiculaire ».</p>
+    <div class="figure-depart">
+      <svg width="220" height="200" viewBox="0 0 220 200">
+        <polygon points="60,50 160,50 160,150 60,150" fill="none" stroke="#9ca3af" stroke-width="2" />
+        <circle cx="60" cy="50" r="3" fill="#facc15" /><text x="55" y="40" font-size="11" fill="#facc15">A</text>
+        <circle cx="160" cy="50" r="3" fill="#facc15" /><text x="162" y="40" font-size="11" fill="#facc15">D</text>
+        <circle cx="60" cy="150" r="3" fill="#facc15" /><text x="52" y="165" font-size="11" fill="#facc15">B</text>
+        <circle cx="160" cy="150" r="3" fill="#facc15" /><text x="162" y="165" font-size="11" fill="#facc15">C</text>
+      </svg>
+      <p>Figure 4 : carré ABCD.</p>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn" onclick="toggle('aide-ex4')">🔍 Aide</button>
+    <button class="btn" onclick="toggle('corr-ex4')">✅ Correction (figure attendue)</button>
+    <span class="competences">Carré ; diagonales ; sécantes non perpendiculaires.</span>
+  </div>
+  <div id="aide-ex4" class="aide hidden">
+    <ul>
+      <li>Relie A à C puis B à D : ce sont deux droites qui se coupent en angle droit au centre.</li>
+      <li>Pour Q4, prends par exemple (AB) et (AC) : elles se coupent mais ne sont pas perpendiculaires.</li>
+    </ul>
+  </div>
+  <!-- ================= EXERCICE 4 - CORRECTION ================= -->
+  <div id="corr-ex4" class="correction hidden">
+<ul>
+  <li>
+    <strong>Q1–Q2 :</strong>
+    Dans le carré <strong>ABCD</strong>, les diagonales
+    <strong>(AC)</strong> et <strong>(BD)</strong> sont
+    <strong>perpendiculaires</strong> et se coupent en leur milieu en O :
+    (AC) &perp; (BD) et O est le centre du carré.<br>
+    <em>Théorème :</em> dans un carré, les diagonales sont perpendiculaires
+    et se coupent en leur milieu.
+  </li>
+
+  <li>
+    <strong>Q3 :</strong>
+    Les droites (AC) et (BD) sont les <strong>diagonales du carré ABCD</strong>.
+  </li>
+
+  <li>
+    <strong>Q4 :</strong>
+    Les droites <strong>(AB)</strong> et <strong>(AC)</strong> se coupent
+    au point A mais ne sont pas perpendiculaires.
+    Ce sont donc deux <strong>droites sécantes non perpendiculaires</strong>.<br>
+    <em>Définition :</em> deux droites sécantes ont un point commun ;
+    si l’angle formé n’est pas droit, elles ne sont pas perpendiculaires.
+  </li>
+</ul>
+
+    <div class="figure-attendue">
+      <svg width="360" height="260" viewBox="0 0 260 200">
+        <!-- Carré ABCD (position standard) -->
+        <polygon points="80,150 180,150 180,50 80,50" fill="none" stroke="#9ca3af" stroke-width="3" />
+
+        <!-- ================== CODAGE D'ÉGALITÉ SUR LES DIAGONALES ================== -->
+        <!-- Sur (AC) : deux doubles traits, un entre A et O, un entre O et C -->
+
+        <!-- (AC) – côté A → O, centre ≈ (105,125) -->
+        <line x1="102" y1="122" x2="108" y2="128" stroke="#e5e7eb" stroke-width="2.5" />
+        <line x1="106" y1="118" x2="112" y2="124" stroke="#e5e7eb" stroke-width="2.5" />
+
+        <!-- (AC) – côté O → C, centre ≈ (155,75) -->
+        <line x1="152" y1="72" x2="158" y2="78" stroke="#e5e7eb" stroke-width="3" />
+        <line x1="156" y1="68" x2="162" y2="74" stroke="#e5e7eb" stroke-width="3" />
+
+        <!-- Sur (BD) : deux doubles traits, un entre D et O, un entre O et B -->
+
+        <!-- (BD) – côté D → O, centre ≈ (105,75) -->
+        <line x1="102" y1="78" x2="108" y2="72" stroke="#e5e7eb" stroke-width="3" />
+        <line x1="106" y1="82" x2="112" y2="76" stroke="#e5e7eb" stroke-width="3" />
+
+        <!-- (BD) – côté O → B, centre ≈ (155,125) -->
+        <line x1="152" y1="128" x2="158" y2="122" stroke="#e5e7eb" stroke-width="3" />
+        <line x1="156" y1="132" x2="162" y2="126" stroke="#e5e7eb" stroke-width="3" />
+
+        <!-- ========= DIAGONALES INFINIES (inchangées) ========= -->
+        <line x1="0" y1="230" x2="260" y2="-30" stroke="#34d399" stroke-width="4" />
+        <line x1="0" y1="-30" x2="260" y2="230" stroke="#34d399" stroke-width="4" />
+
+        <!-- Nommage des diagonales (inchangé) -->
+        <text x="50" y="195" fill="#34d399" font-size="14" font-weight="bold">(AC)</text>
+        <text x="230" y="195" fill="#34d399" font-size="14" font-weight="bold">(BD)</text>
+
+        <!-- ========= ANGLE DROIT JAUNE (inchangé) ========= -->
+        <g transform="translate(143,90) rotate(45)">
+          <path d="M0,0 L13,0 L13,13" stroke="#fbbf24" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+        </g>
+
+        <!-- ========= POINT O : INTERSECTION DES DIAGONALES ========= -->
+        <!-- croix jaune au centre O(130,100) -->
+        <line x1="127" y1="97" x2="133" y2="103" stroke="#facc15" stroke-width="3" />
+        <line x1="127" y1="103" x2="133" y2="97" stroke="#facc15" stroke-width="3" />
+        <text x="110" y="105" fill="#facc15" font-size="14" font-weight="bold">O</text>
+
+        <!-- Sommets avec croix jaunes (inchangés) -->
+        <line x1="76" y1="146" x2="84" y2="154" stroke="#facc15" stroke-width="3" />
+        <line x1="76" y1="154" x2="84" y2="146" stroke="#facc15" stroke-width="3" />
+        <text x="75" y="166" fill="#facc15" font-size="14" font-weight="bold">A</text>
+
+        <line x1="176" y1="146" x2="184" y2="154" stroke="#facc15" stroke-width="3" />
+        <line x1="176" y1="154" x2="184" y2="146" stroke="#facc15" stroke-width="3" />
+        <text x="175" y="166" fill="#facc15" font-size="14" font-weight="bold">B</text>
+
+        <line x1="176" y1="46" x2="184" y2="54" stroke="#facc15" stroke-width="3" />
+        <line x1="176" y1="54" x2="184" y2="46" stroke="#facc15" stroke-width="3" />
+        <text x="175" y="40" fill="#facc15" font-size="14" font-weight="bold">C</text>
+
+        <line x1="76" y1="46" x2="84" y2="54" stroke="#facc15" stroke-width="3" />
+        <line x1="76" y1="54" x2="84" y2="46" stroke="#facc15" stroke-width="3" />
+        <text x="75" y="40" fill="#facc15" font-size="14" font-weight="bold">D</text>
+      </svg>
+
+      <p>
+        Figure attendue 4 : <br>carré ABCD avec les quatre côtés codés égaux
+        (doubles traits orthogonaux blancs au milieu de chaque côté, donc sur les diagonales),
+        diagonales <span style="color:#34d399;font-weight:bold;">(AC)</span> et
+        <span style="color:#34d399;font-weight:bold;">(BD)</span> tracées en vert comme droites infinies,
+        se coupant en O. Le point <strong>O</strong> est l’intersection des diagonales,
+        qui se coupent en leur milieu et forment un angle droit indiqué par le « L » jaune.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+  <!-- ================= EXERCICE 5 ================= -->
+  <section class="exercice" id="ex5">
+    <h2>Exercice 5 – Cercle de centre O (figure 5)</h2>
+
+    <div class="consigne">
+      <p>On utilise la figure 5 : un <strong>cercle de centre O</strong> passant par le point A.</p>
+      <ol>
+        <li>Placer le point <strong>E</strong> du cercle diamétralement opposé au point A.</li>
+        <li>Tracer <strong>(d)</strong>, la droite perpendiculaire à <strong>(AO)</strong> passant par E.</li>
+        <li>Tracer <strong>(d’)</strong>, la droite parallèle à (d) passant par O.</li>
+        <li>Comment sont les droites (d’) et (AO)&nbsp;? Justifier.</li>
+      </ol>
+      <p class="outils">✏️ Compas, règle, équerre &nbsp;&nbsp;|&nbsp;&nbsp; 💻 GeoGebra : « Cercle », « Perpendiculaire », « Parallèle ».</p>
+
+      <!-- Figure 5 : cercle, A et O -->
+      <div class="figure-depart">
+        <svg width="220" height="180" viewBox="0 0 220 180">
+          <circle cx="110" cy="90" r="60" fill="none" stroke="#9ca3af" stroke-width="2"/>
+          <circle cx="110" cy="90" r="3" fill="#facc15"/><text x="115" y="85" font-size="11" fill="#facc15">O</text>
+          <circle cx="50" cy="90" r="3" fill="#facc15"/><text x="40" y="85" font-size="11" fill="#facc15">A</text>
+        </svg>
+        <p>Figure 5 : cercle de centre O passant par A.</p>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" onclick="toggle('aide-ex5')">🔍 Aide</button>
+      <button class="btn" onclick="toggle('corr-ex5')">✅ Correction (figure attendue)</button>
+      <span class="competences">Cercle ; diamètre ; perpendiculaire ; parallèle à une perpendiculaire.</span>
+    </div>
+
+    <div id="aide-ex5" class="aide hidden">
+      <ul>
+        <li>Q1 : place E sur le cercle de sorte que O soit le milieu de [AE] : AOE est un diamètre.</li>
+        <li>Q2 : trace une droite perpendiculaire à (AO) passant par E.</li>
+        <li>Q3 : trace par O une droite parallèle à (d).</li>
+        <li>Q4 : si une droite est parallèle à une droite perpendiculaire, elle est aussi perpendiculaire à la même droite.</li>
+      </ul>
+    </div>
+
+    <div id="corr-ex5" class="correction hidden">
+<ul>
+  <li>
+    <strong>Q1 :</strong>
+    Le point E est diamétralement opposé à A sur le cercle : [AE] est un
+    <strong>diamètre</strong>.
+  </li>
+
+  <li>
+    <strong>Q2 :</strong>
+    La droite <strong>(d)</strong> est construite perpendiculaire à
+    <strong>(AO)</strong> en passant par E :
+    (d) &perp; (AO) en E.
+  </li>
+
+  <li>
+    <strong>Q3 :</strong>
+    La droite <strong>(d’)</strong> est tracée par O et parallèle à (d) :
+    (d’) ∥ (d).
+  </li>
+
+  <li>
+    <strong>Q4 :</strong>
+    Puisque (d) &perp; (AO) et (d’) ∥ (d),
+    la droite (d’) est également <strong>perpendiculaire</strong> à (AO) :
+    (d’) &perp; (AO).<br>
+    <em>Théorème :</em> une droite perpendiculaire à une droite est
+    perpendiculaire à toutes les droites qui lui sont parallèles.
+  </li>
+</ul>
+
+
+
+      <div class="figure-attendue">
+        <svg width="220" height="180" viewBox="0 0 220 180">
+          <circle cx="110" cy="90" r="60" fill="none" stroke="#9ca3af" stroke-width="2"/>
+          <circle cx="110" cy="90" r="3" fill="#facc15"/><text x="115" y="85" font-size="11" fill="#facc15">O</text>
+          <circle cx="50" cy="90" r="3" fill="#facc15"/><text x="40" y="85" font-size="11" fill="#facc15">A</text>
+          <circle cx="170" cy="90" r="3" fill="#facc15"/><text x="175" y="85" font-size="11" fill="#facc15">E</text>
+          <line x1="50" y1="90" x2="170" y2="90" stroke="#34d399" stroke-width="2"/>
+          <line x1="170" y1="-200" x2="170" y2="400" stroke="#f97316" stroke-width="2"/>
+          <text x="175" y="20" font-size="11" fill="#f97316">(d)</text>
+          <line x1="110" y1="-200" x2="110" y2="400" stroke="#fbbf24" stroke-width="2"/>
+          <text x="115" y="20" font-size="11" fill="#fbbf24">(d')</text>
+        </svg>
+        <p>Figure attendue 5 : diamètre [AE], perpendiculaire (d) en E et parallèle (d’) par O, toutes deux perpendiculaires à (AO).</p>
+      </div>
+    </div>
+  </section>
+
+
+<!-- ================= EXERCICE 6 ================= -->
+  <section class="exercice" id="ex6">
+    <h2>Exercice 6 – Droite (Δ) et points E, C, F (figure 6)</h2>
+    <div class="consigne">
+      <p>(Δ) est une droite. E, C et F sont trois points comme sur la figure 6.</p>
+      <ol>
+        <li>Tracer les droites <strong>(D₁)</strong>, <strong>(D₂)</strong> et <strong>(D₃)</strong> passant respectivement par les points E, C et F et <strong>perpendiculaires à (Δ)</strong>.</li>
+        <li>Justifier la position de ces trois droites les unes par rapport aux autres.</li>
+      </ol>
+      <p class="outils">✏️ Règle, équerre &nbsp;&nbsp;|&nbsp;&nbsp; 💻 GeoGebra : « Perpendiculaire ».</p>
+      <!-- Figure 6 : droite Delta + points -->
+      <div class="figure-depart">
+        <svg width="260" height="170" viewBox="0 0 230 150">
+          <line x1="20" y1="110" x2="210" y2="80" stroke="#9ca3af" stroke-width="2"/>
+          <text x="210" y="70" font-size="11" fill="#9ca3af">Δ</text>
+          <circle cx="60" cy="75" r="3" fill="#facc15"/><text x="75" y="75" font-size="11" fill="#facc15">E</text>
+          <circle cx="130" cy="92" r="3" fill="#facc15"/><text x="135" y="80" font-size="11" fill="#facc15">C</text>
+          <circle cx="185" cy="110" r="3" fill="#facc15"/><text x="195" y="110" font-size="11" fill="#facc15">F</text>
+        </svg>
+        <p>Figure 6 : droite (Δ) avec les trois points E, C et F.</p>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="toggle('aide-ex6')">🔍 Aide</button>
+      <button class="btn" onclick="toggle('corr-ex6')">✅ Correction (figure attendue)</button>
+      <span class="competences">Deux droites perpendiculaires à une même droite sont parallèles.</span>
+    </div>
+    <div id="aide-ex6" class="aide hidden">
+<ul>
+  <li>
+    <strong>Q1 :</strong>
+    Les droites <strong>(D₁)</strong>, <strong>(D₂)</strong> et
+    <strong>(D₃)</strong> ont été construites de sorte qu’elles soient
+    toutes <strong>perpendiculaires</strong> à la même droite (Δ).<br>
+    On a donc : (D₁) &perp; (Δ), (D₂) &perp; (Δ) et (D₃) &perp; (Δ).
+  </li>
+
+  <li>
+    <strong>Q2 :</strong>
+    Comme (D₁), (D₂) et (D₃) sont toutes perpendiculaires à (Δ),
+    elles sont <strong>parallèles entre elles</strong> :
+    (D₁) ∥ (D₂) ∥ (D₃).<br>
+    <em>Théorème :</em> deux droites perpendiculaires à une même droite
+    sont parallèles entre elles.
+  </li>
+
+  <li>
+    <strong>Correction de vocabulaire :</strong><br>
+    – le point E est <strong>au-dessus</strong> de la droite (Δ) ;<br>
+    – le point C est <strong>sur</strong> la droite (Δ) ;<br>
+    – le point F est <strong>au-dessous</strong> de la droite (Δ).
+  </li>
+</ul>
+
+     <div class="figure-attendue">
+        <svg width="260" height="170" viewBox="0 0 260 170">
+          <!-- Droite (Δ) -->
+          <line x1="20" y1="110" x2="210" y2="80"
+                stroke="#9ca3af" stroke-width="2" />
+          <text x="210" y="70" font-size="11" fill="#9ca3af">Δ</text>
+          <!-- Points E, C, F -->
+          <circle cx="60" cy="75" r="3" fill="#facc15" />
+          <text x="72" y="75" font-size="11" fill="#facc15">E</text>
+          <circle cx="130" cy="92" r="3" fill="#facc15" />
+          <text x="110" y="84" font-size="11" fill="#facc15">C</text>
+          <circle cx="185" cy="110" r="3" fill="#facc15" />
+          <text x="195" y="110" font-size="11" fill="#facc15">F</text>
+
+          <!-- ================== DROITES (D1), (D2), (D3) ================== -->
+          <!-- Toutes sont perpendiculaires à (Δ) et passent par E, C et F -->
+          <!-- (D1) passant par E(60,75) -->
+          <line x1="0" y1="-305" x2="260" y2="1342"
+                stroke="#34d399" stroke-width="3" />
+          <text x="15" y="30" font-size="14" fill="#34d399">(D₁)</text>
+          <!-- (D2) passant par C(130,92) -->
+          <line x1="0" y1="-731" x2="260" y2="915"
+                stroke="#34d399" stroke-width="3" />
+          <text x="85" y="30" font-size="14" fill="#34d399">(D₂)</text>
+          <!-- (D3) passant par F(185,110) -->
+          <line x1="0" y1="-1061" x2="260" y2="585"
+                stroke="#34d399" stroke-width="3" />
+          <text x="180" y="30" font-size="14" fill="#34d399">(D₃)</text>
+
+          <!-- =========== CODAGE DE L’ANGLE DROIT (D ⟂ Δ) =========== -->
+          <!-- Angle droit : petit « L » jaune, orienté selon (Δ) -->
+          <!-- Pour D1 at intersection ≈(64,103) -->
+          <g transform="translate(65,93) rotate(-9)">
+            <path d="M0 0 L8 0 L8 8"
+                  stroke="#fbbf24"
+                  stroke-width="2"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round" />
+          </g>
+          <!-- Pour D2 at (130,85) -->
+          <g transform="translate(131,83) rotate(-9)">
+            <path d="M0 0 L8 0 L8 8"
+                  stroke="#fbbf24"
+                  stroke-width="2"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round" />
+          </g>
+          <!-- Pour D3 at (181,80) -->
+          <g transform="translate(182,75) rotate(-9)">
+            <path d="M0 0 L8 0 L8 8"
+                  stroke="#fbbf24"
+                  stroke-width="2"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round" />
+          </g>
+        </svg>
+        <p>
+          Figure attendue 6 : les trois droites
+          <strong>(D₁)</strong>, <strong>(D₂)</strong> et <strong>(D₃)</strong>
+          sont toutes <strong>perpendiculaires</strong> à la droite
+          <strong>(Δ)</strong> et donc <strong>parallèles entre elles</strong>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EXERCICE 7 ================= -->
+  <section class="exercice" id="ex7">
+    <h2>Exercice 7 – Deux droites sécantes (D₁) et (D₂) (figure 7)</h2>
+
+    <div class="consigne">
+      <p>(D₁) et (D₂) sont deux droites <strong>sécantes en O</strong> (figure 7).</p>
+      <ol>
+        <li>Tracer <strong>(D₃)</strong>, la droite parallèle à (D₁) passant par le point I.</li>
+        <li>Tracer <strong>(D₄)</strong>, la droite parallèle à (D₃) passant par le point J.</li>
+        <li>Comment sont les droites (D₂) et (D₁)&nbsp;? Justifier.</li>
+      </ol>
+      <p class="outils">✏️ Règle, équerre &nbsp;&nbsp;|&nbsp;&nbsp; 💻 GeoGebra : « Parallèle ».</p>
+
+      <!-- Figure 7 : D1, D2, O, I, J -->
+      <div class="figure-depart">
+        <svg width="230" height="170" viewBox="0 0 230 170">
+          <line x1="20" y1="150" x2="200" y2="20" stroke="#9ca3af" stroke-width="2"/>
+          <text x="150" y="35" font-size="11" fill="#9ca3af">(D₁)</text>
+          <line x1="10" y1="100" x2="230" y2="70" stroke="#9ca3af" stroke-width="2"/>
+          <text x="200" y="65" font-size="11" fill="#9ca3af">(D₂)</text>
+          <circle cx="108" cy="86" r="3" fill="#facc15"/><text x="105" y="77" font-size="11" fill="#facc15">O</text>
+          <circle cx="40" cy="70" r="3" fill="#facc15"/><text x="50" y="70" font-size="11" fill="#facc15">I</text>
+          <circle cx="140" cy="140" r="3" fill="#facc15"/><text x="150" y="145" font-size="11" fill="#facc15">J</text>
+        </svg>
+        <p>Figure 7 : deux droites sécantes (D₁) et (D₂) avec les points O, I et J.</p>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" onclick="toggle('aide-ex7')">🔍 Aide</button>
+      <button class="btn" onclick="toggle('corr-ex7')">✅ Correction (figure attendue)</button>
+      <span class="competences">Faisceaux de parallèles à partir de droites sécantes.</span>
+    </div>
+
+    <div id="aide-ex7" class="aide hidden">
+      <ul>
+        <li>Par I, trace une droite parallèle à (D₁) : (D₃).</li>
+        <li>Par J, trace une droite parallèle à (D₃) : (D₄).</li>
+      </ul>
+    </div>
+
+    <div id="corr-ex7" class="correction hidden">
+      <ul>
+        <li><strong>Q1 :</strong> la droite (D₃) est tracée <strong>parallèle à (D₁)</strong> et passant par I :
+          on a donc <strong>(D₃) ∥ (D₁)</strong>.</li>
+
+        <li><strong>Q2 :</strong> la droite (D₄) est tracée <strong>parallèle à (D₃)</strong> et passant par J :
+          donc <strong>(D₄) ∥ (D₃)</strong>.</li>
+
+        <li><strong>Q3 :</strong> comme (D₃) est parallèle à (D₁) et (D₄) est parallèle à (D₃),
+          alors les trois droites <strong>(D₁), (D₃) et (D₄)</strong> sont toutes parallèles entre elles,
+          et (D₁) et (D₂) se coupent en O : ce sont deux <strong>droites sécantes</strong>.</li>
+
+        <li class="theoreme">
+          <em>Théorème utilisé :</em> si deux droites sont parallèles à une même troisième droite,
+          alors elles sont <strong>parallèles entre elles</strong>.
+        </li>
+      </ul>
+
+
+<div class="figure-attendue">
+  <svg width="230" height="170" viewBox="0 0 230 170">
+    <!-- Droite (D₁) : même que dans la figure de départ -->
+    <line x1="20" y1="150" x2="200" y2="20"
+          stroke="#9ca3af" stroke-width="2" />
+    <text x="150" y="35" font-size="11" fill="#9ca3af">(D₁)</text>
+
+    <!-- Droite (D₂) : même que dans la figure de départ -->
+    <line x1="10" y1="100" x2="230" y2="70"
+          stroke="#9ca3af" stroke-width="2" />
+    <text x="200" y="65" font-size="11" fill="#9ca3af">(D₂)</text>
+
+    <!-- Points O, I, J : mêmes positions que dans la figure de départ -->
+    <circle cx="108" cy="86" r="3" fill="#facc15" />
+    <text x="105" y="77" font-size="11" fill="#facc15">O</text>
+
+    <circle cx="40" cy="70" r="3" fill="#facc15" />
+    <text x="30" y="65" font-size="11" fill="#facc15">I</text>
+
+    <circle cx="140" cy="140" r="3" fill="#facc15" />
+    <text x="145" y="150" font-size="11" fill="#facc15">J</text>
+
+    <!-- (D₃) : parallèle à (D₁) passant par I -->
+    <!-- Droite "infinie" (grande) pour bien voir le parallélisme -->
+    <line x1="4"  y1="96"  x2="135" y2="2"
+          stroke="#34d399" stroke-width="2" />
+    <text x="80" y="20" font-size="11" fill="#34d399">(D₃)</text>
+
+    <!-- (D₄) : parallèle à (D₃) (donc à (D₁)) passant par J -->
+    <line x1="99" y1="170" x2="230" y2="75"
+          stroke="#f97316" stroke-width="2" />
+    <text x="165" y="100" font-size="11" fill="#f97316">(D₄)</text>
+  </svg>
+
+  <p>
+    Figure attendue 7 : les droites <span style="color:#9ca3af;">(D₁)</span> et
+    <span style="color:#9ca3af;">(D₂)</span> sont sécantes en O.
+    La droite <span style="color:#34d399;">(D₃)</span> est parallèle à (D₁) et passe par I,
+    la droite <span style="color:#f97316;">(D₄)</span> est parallèle à (D₃) et passe par J ;
+    elles sont donc toutes deux parallèles à (D₁).
+  </p>
+</div>
+
+    </div>
+  </section>
+
+  <!-- ================= EXERCICE 8 ================= -->
+  <section class="exercice" id="ex8">
+    <h2>Exercice 8 – Diamètre [AB] et triangle ACB (figure 8)</h2>
+
+    <div class="consigne">
+      <p>Sur la figure 8, on considère un cercle de centre O et un point C sur le cercle.</p>
+      <ol>
+        <li>Tracer le diamètre <strong>[AB]</strong> du cercle de centre O, puis placer un point E appartenant au cercle.</li>
+        <li>Tracer les droites <strong>(CB)</strong> et <strong>(CA)</strong>.</li>
+        <li>Que peut-on dire de ces deux droites&nbsp;? Vérifier à l’équerre.</li>
+      </ol>
+      <p class="outils">✏️ Compas, règle, équerre &nbsp;&nbsp;|&nbsp;&nbsp; 💻 GeoGebra : « Diamètre », « Segment », « Angle ».</p>
+
+      <!-- Figure 8 : cercle, centre O, point C -->
+      <div class="figure-depart">
+        <svg width="220" height="180" viewBox="0 0 220 180">
+          <circle cx="110" cy="90" r="60" fill="none" stroke="#9ca3af" stroke-width="2"/>
+          <circle cx="110" cy="90" r="3" fill="#facc15"/><text x="115" y="85" font-size="11" fill="#facc15">O</text>
+          <circle cx="110" cy="30" r="3" fill="#facc15"/><text x="110" y="20" font-size="11" fill="#facc15">C</text>
+        </svg>
+        <p>Figure 8 : cercle de centre O avec un point C sur le cercle.</p>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" onclick="toggle('aide-ex8')">🔍 Aide</button>
+      <button class="btn" onclick="toggle('corr-ex8')">✅ Correction (figure attendue)</button>
+      <span class="competences">Propriété : angle inscrit qui intercepte un diamètre est droit.</span>
+    </div>
+
+    <div id="aide-ex8" class="aide hidden">
+      <ul>
+        <li>Trace un diamètre [AB] en passant par O (A et B sur le cercle).</li>
+        <li>Relie C à A puis C à B.</li>
+      </ul>
+    </div>
+
+    <div id="corr-ex8" class="correction hidden">
+<ul>
+  <li><strong>Q1 :</strong> le segment [AB] est tracé de façon à passer par le centre O
+    avec A et B sur le cercle : <strong>[AB] est donc un diamètre</strong> du cercle.</li>
+
+  <li><strong>Q2 :</strong> on relie C à A et C à B. On obtient le triangle <strong>ACB</strong>
+    inscrit dans le cercle, dont le côté [AB] est un diamètre.</li>
+
+  <li><strong>Q3 :</strong> dans ce triangle, l’angle en C intercepte le diamètre [AB] :
+    on sait alors que cet angle est un <strong>angle droit</strong>.
+    Les droites <strong>(CA)</strong> et <strong>(CB)</strong> sont donc
+    <strong>perpendiculaires</strong> : <strong>(CA) ⟂ (CB)</strong>.</li>
+
+  <li class="theoreme">
+    <em>Théorème utilisé :</em> dans un cercle, <strong>tout angle inscrit qui intercepte un
+    diamètre est un angle droit</strong>.
+  </li>
+</ul>
+
+
+<div class="figure-attendue">
+  <svg width="220" height="180" viewBox="0 0 220 180">
+
+    <!-- Cercle de centre O -->
+    <circle cx="110" cy="90" r="60"
+            fill="none" stroke="#9ca3af" stroke-width="2" />
+
+    <!-- Centre O -->
+    <circle cx="110" cy="90" r="3" fill="#facc15" />
+    <text x="115" y="85" font-size="11" fill="#facc15">O</text>
+
+    <!-- Point C sur le cercle -->
+    <circle cx="110" cy="30" r="3" fill="#facc15" />
+    <text x="110" y="20" font-size="11" fill="#facc15">C</text>
+
+    <!-- Diamètre [AB] en violet -->
+    <circle cx="50" cy="90" r="3" fill="#a78bfa" />
+    <text x="40" y="85" font-size="11" fill="#a78bfa">A</text>
+
+    <circle cx="170" cy="90" r="3" fill="#a78bfa" />
+    <text x="175" y="85" font-size="11" fill="#a78bfa">B</text>
+
+    <!-- Segment [AB] (diamètre) -->
+    <line x1="50" y1="90" x2="170" y2="90"
+          stroke="#a78bfa" stroke-width="2" />
+    <text x="100" y="110" font-size="11" fill="#a78bfa">[AB]</text>
+
+    <!-- Point E sur le cercle (orange) -->
+    <circle cx="160" cy="55" r="3" fill="#f97316" />
+    <text x="163" y="45" font-size="11" fill="#f97316">E</text>
+
+    <!-- Droite (CA) : passe par C(110,30) et A(50,90), prolongée "infiniment" -->
+    <line x1="-10" y1="150" x2="240" y2="-100"
+          stroke="#34d399" stroke-width="2" />
+    <text x="15" y="145" font-size="11" fill="#34d399">(CA)</text>
+
+    <!-- Droite (CB) : passe par C(110,30) et B(170,90), prolongée "infiniment" -->
+    <line x1="-10" y1="-90" x2="240" y2="160"
+          stroke="#34d399" stroke-width="2" />
+    <text x="180" y="145" font-size="11" fill="#34d399">(CB)</text>
+
+    <!-- (Optionnel) petit angle droit au point C pour coder la perpendicularité -->
+    <g transform="translate(116,39) rotate(135)">
+      <path d="M0,0 L10,0 L10,10"
+            stroke="#fbbf24"
+            stroke-width="2"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round" />
+    </g>
+
+  </svg>
+
+  <p>
+    Figure attendue 8 : le diamètre
+    <span style="color:#a78bfa;">[AB]</span> est tracé en violet,
+    le point <span style="color:#f97316;">E</span> appartient au cercle.
+    Les droites <span style="color:#34d399;">(CA)</span> et
+    <span style="color:#34d399;">(CB)</span> sont représentées comme des
+    droites infinies et sont perpendiculaires l’une à l’autre :
+    l’angle au point C est un angle droit car il intercepte le diamètre [AB].
+  </p>
+</div>
+    </div>
+  </section>
+
+  <!-- ================= EXERCICE 9 ================= -->
+  <section class="exercice" id="ex9">
+    <h2>Exercice 9 – Parallélogramme ABCD et point E (figure 9)</h2>
+
+    <div class="consigne">
+      <p>La figure 9 est le <strong>parallélogramme ABCD</strong> avec un point E à l’extérieur.</p>
+      <ol>
+        <li>Tracer la droite <strong>(d)</strong> perpendiculaire à <strong>(AB)</strong> passant par E.</li>
+        <li>Tracer <strong>(d₁)</strong>, la droite parallèle à <strong>(DC)</strong> passant par le centre O du parallélogramme.</li>
+        <li>Justifier que (d) et (d₁) sont <strong>perpendiculaires</strong>.</li>
+      </ol>
+      <p class="outils">✏️ Règle, équerre &nbsp;&nbsp;|&nbsp;&nbsp; 💻 GeoGebra : « Perpendiculaire », « Parallèle », « Milieu ».</p>
+
+      <!-- Figure 9 : parallélogramme + E -->
+      <div class="figure-depart">
+        <svg width="230" height="170" viewBox="0 0 230 170">
+          <polygon points="50,110 120,110 170,60 100,60"
+                   fill="none" stroke="#9ca3af" stroke-width="2"/>
+          <circle cx="50" cy="110" r="3" fill="#facc15"/><text x="45" y="125" font-size="11" fill="#facc15">A</text>
+          <circle cx="120" cy="110" r="3" fill="#facc15"/><text x="120" y="125" font-size="11" fill="#facc15">B</text>
+          <circle cx="170" cy="60" r="3" fill="#facc15"/><text x="175" y="50" font-size="11" fill="#facc15">C</text>
+          <circle cx="100" cy="60" r="3" fill="#facc15"/><text x="95" y="50" font-size="11" fill="#facc15">D</text>
+          <circle cx="170" cy="135" r="3" fill="#facc15"/><text x="175" y="142" font-size="11" fill="#facc15">E</text>
+        </svg>
+        <p>Figure 9 : parallélogramme ABCD avec un point E.</p>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" onclick="toggle('aide-ex9')">🔍 Aide</button>
+      <button class="btn" onclick="toggle('corr-ex9')">✅ Correction (figure attendue)</button>
+      <span class="competences">Diagonales du parallélogramme ; parallèles ; perpendiculaires.</span>
+    </div>
+
+    <div id="aide-ex9" class="aide hidden">
+      <ul>
+        <li>Q1 : par E, trace une droite perpendiculaire à (AB).</li>
+        <li>Q2 : trouve le centre O en croisant les diagonales, puis par O trace une droite parallèle à (DC).</li>
+      </ul>
+    </div>
+
+    <div id="corr-ex9" class="correction hidden">
+    <ul>
+      <li><strong>Q1 :</strong> la droite (d) est tracée <strong>perpendiculaire à (AB)</strong> en passant par E,
+        donc on a <strong>(d) ⟂ (AB)</strong>.</li>
+
+      <li><strong>Q2 :</strong> dans le parallélogramme ABCD, les côtés opposés sont parallèles,
+        donc <strong>(AB) ∥ (DC)</strong>.  
+        La droite (d₁) est construite <strong>parallèle à (DC)</strong> et passant par O,
+        donc on a <strong>(d₁) ∥ (AB)</strong>.</li>
+
+      <li><strong>Q3 :</strong> si <strong>(d) ⟂ (AB)</strong> et <strong>(d₁) ∥ (AB)</strong>,
+        alors la droite (d) est <strong>perpendiculaire</strong> à la droite (d₁) :
+        <strong>(d) ⟂ (d₁)</strong>.</li>
+
+      <li class="theoreme">
+        <em>Théorème utilisé :</em> une droite perpendiculaire à une droite est
+        <strong>perpendiculaire à toutes les droites qui sont parallèles</strong> à cette dernière.
+      </li>
+    </ul>
+
+ <div class="figure-attendue">
+  <svg width="230" height="170" viewBox="0 0 230 170">
+
+    <!-- Parallélogramme ABCD (segments) -->
+    <polygon points="50,110 120,110 170,60 100,60"
+             fill="none" stroke="#9ca3af" stroke-width="2"/>
+
+    <!-- Sommets -->
+    <circle cx="50" cy="110" r="3" fill="#facc15"/><text x="45" y="125" font-size="11" fill="#facc15">A</text>
+    <circle cx="120" cy="110" r="3" fill="#facc15"/><text x="120" y="125" font-size="11" fill="#facc15">B</text>
+    <circle cx="170" cy="60" r="3" fill="#facc15"/><text x="175" y="50" font-size="11" fill="#facc15">C</text>
+    <circle cx="100" cy="60" r="3" fill="#facc15"/><text x="95" y="50" font-size="11" fill="#facc15">D</text>
+    <circle cx="170" cy="135" r="3" fill="#facc15"/><text x="175" y="142" font-size="11" fill="#facc15">E</text>
+
+    <!-- Diagonales pour trouver le centre O -->
+    <line x1="50" y1="110" x2="170" y2="60" stroke="#4b5563" stroke-width="1"/>
+    <line x1="120" y1="110" x2="100" y2="60" stroke="#4b5563" stroke-width="1"/>
+    <circle cx="110" cy="85" r="3" fill="#f97316"/><text x="115" y="80" font-size="11" fill="#f97316">O</text>
+
+    <!-- ================== DROITES INFINIES ================== -->
+
+    <!-- (AB) : droite support de [AB], horizontale "infinie" -->
+    <line x1="-20" y1="110" x2="250" y2="110"
+          stroke="#9ca3af" stroke-width="2"/>
+    <text x="5" y="105" font-size="11" fill="#9ca3af">(AB)</text>
+
+    <!-- (DC) : droite support de [DC], horizontale "infinie" -->
+    <line x1="-20" y1="60" x2="250" y2="60"
+          stroke="#9ca3af" stroke-width="2"/>
+    <text x="5" y="55" font-size="11" fill="#9ca3af">(DC)</text>
+
+    <!-- (d) : perpendiculaire à (AB) passant par E (verticale infinie) -->
+    <line x1="170" y1="-10" x2="170" y2="180"
+          stroke="#34d399" stroke-width="3"/>
+    <text x="175" y="20" font-size="11" fill="#34d399">(d)</text>
+
+    <!-- (d₁) : parallèle à (DC) passant par O (horizontale infinie) -->
+    <line x1="-20" y1="85" x2="250" y2="85"
+          stroke="#fbbf24" stroke-width="3"/>
+    <text x="185" y="80" font-size="11" fill="#fbbf24">(d₁)</text>
+
+    <!-- Petit angle droit pour coder d ⟂ AB (donc d ⟂ d₁) -->
+    <g transform="translate(170,119)">
+      <path d="M0,0 L-8,0 L-8,-8"
+            stroke="#fbbf24"
+            stroke-width="2"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"/>
+    </g>
+
+  </svg>
+
+  <p>
+    Figure attendue 9 : (AB) et (DC) sont représentées comme des droites infinies.
+    La droite <span style="color:#34d399;">(d)</span> est perpendiculaire à (AB) et passe par E.
+    La droite <span style="color:#fbbf24;">(d₁)</span> est parallèle à (DC) et passe par O,
+    donc parallèle à (AB). Comme (d) ⟂ (AB) et (d₁) ∥ (AB), on a bien
+    <strong>(d) ⟂ (d₁)</strong>.
+  </p>
+</div>
+
+    </div>
+  </section>
+
+
+</main>
+
+<script>
+  // Fonction pour afficher / cacher l’aide ou la correction
+  function toggle(id) {
+    const el = document.getElementById(id); // récupère l’élément par son id
+    if (!el) return;                        // sécurité si l’id n’existe pas
+    el.classList.toggle('hidden');          // bascule la classe "hidden"
+  }
+</script>
+</body>
+</html>
