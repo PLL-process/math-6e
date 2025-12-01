@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<!-- Déclaration du type de document : HTML5 -->
+
+<html lang="fr">
+<!-- Page en français -->
+
+<head>
+    <!-- En-tête du document (métadonnées, titre, styles) -->
+
+    <meta charset="UTF-8">
+    <!-- Encodage UTF-8 pour bien gérer les accents -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Affichage adapté aux écrans (PC, tablette, smartphone) -->
+
+    <title>6e – Additions et soustractions de décimaux (interactif)</title>
+    <!-- Titre de l’onglet du navigateur -->
+
+    <style>
+        /* ===============================
+           STYLES GÉNÉRAUX
+        ================================= */
+
+        body {
+            /* Style global du corps de page */
+            margin: 0;
+            /* Pas de marge extérieure */
+            padding: 0;
+            /* Pas de marge intérieure */
+            font-family: Arial, Helvetica, sans-serif;
+            /* Police lisible */
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            /* Fond dégradé bleu nuit */
+            color: #e5e7eb;
+            /* Texte gris clair */
+        }
+
+        header {
+            /* Bandeau supérieur */
+            background: linear-gradient(90deg, #2563eb, #4f46e5);
+            /* Dégradé bleu/violet */
+            color: #ffffff;
+            /* Texte blanc */
+            padding: 20px;
+            /* Espacement interne */
+            text-align: center;
+            /* Centrage du texte */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            /* Ombre sous le bandeau */
+        }
+
+        header h1 {
+            /* Titre principal du bandeau */
+            margin: 0;
+            /* Pas de marge */
+            font-size: 1.6rem;
+            /* Taille du texte */
+        }
+
+        header p {
+            /* Sous-titre */
+            margin: 6px 0 0 0;
+            /* Petite marge au-dessus */
+            font-size: 0.95rem;
+            /* Taille de police un peu plus petite */
+        }
+
+        main {
+            /* Bloc principal de contenu */
+            max-width: 1100px;
+            /* Largeur max */
+            margin: 20px auto 40px auto;
+            /* Centrage horizontal + marges verticales */
+            background: rgba(15, 23, 42, 0.95);
+            /* Fond sombre semi-opaque */
+            border-radius: 12px;
+            /* Coins arrondis */
+            padding: 20px;
+            /* Espacement interne */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            /* Ombre autour du bloc */
+        }
+
+        h2 {
+            /* Titres de section */
+            color: #60a5fa;
+            /* Bleu clair */
+            border-bottom: 1px solid #1f2937;
+            /* Trait de séparation */
+            padding-bottom: 4px;
+            /* Espacement sous le texte */
+            margin-top: 18px;
+            /* Marge supérieure */
+        }
+
+        .info {
+            /* Bloc d’infos générales (niveau, thème, objectif) */
+            background: #111827;
+            /* Fond gris très foncé */
+            border-radius: 8px;
+            /* Coins arrondis */
+            padding: 10px 12px;
+            /* Espacement interne */
+            margin-bottom: 15px;
+            /* Marge inférieure */
+            border-left: 4px solid #3b82f6;
+            /* Barre bleue à gauche */
+            font-size: 0.95rem;
+            /* Taille de texte */
+        }
+
+        .badge {
+            /* Petites pastilles (niveau, thème) */
+            display: inline-block;
+            /* Affichage en ligne */
+            padding: 2px 8px;
+            /* Espacement interne */
+            border-radius: 999px;
+            /* Forme de pilule */
+            font-size: 0.75rem;
+            /* Petite police */
+            margin-right: 6px;
+            /* Espace à droite */
+        }
+
+        .badge-niveau {
+            /* Badge de niveau */
+            background: #22c55e;
+            /* Vert */
+            color: #052e16;
+            /* Texte vert foncé */
+        }
+
+        .badge-theme {
+            /* Badge de thème */
+            background: #f97316;
+            /* Orange */
+            color: #1b1305;
+            /* Texte foncé */
+        }
+
+        .scoreboard {
+            /* Bloc du score global */
+            margin: 10px 0 20px 0;
+            /* Marges */
+            padding: 10px;
+            /* Espacement interne */
+            background: #020617;
+            /* Fond très sombre */
+            border-radius: 8px;
+            /* Coins arrondis */
+            border: 1px solid #1f2937;
+            /* Bordure gris foncé */
+            display: flex;
+            /* Disposition en ligne */
+            justify-content: space-between;
+            /* Espacement entre éléments */
+            align-items: center;
+            /* Alignement vertical */
+        }
+
+        .scoreboard strong {
+            /* Mise en valeur dans le score */
+            color: #facc15;
+            /* Jaune vif */
+        }
+
+        .btn-reset {
+            /* Bouton de réinitialisation des réponses */
+            background: #ef4444;
+            /* Rouge */
+            color: #ffffff;
+            /* Texte blanc */
+            border: none;
+            /* Pas de bordure */
+            padding: 6px 10px;
+            /* Espacement interne */
+            border-radius: 6px;
+            /* Coins arrondis */
+            font-size: 0.85rem;
+            /* Taille texte */
+            cursor: pointer;
+            /* Curseur main */
+        }
+
+        .btn-reset:hover {
+            /* Survol du bouton reset */
+            background: #b91c1c;
+            /* Rouge plus foncé */
+        }
+
+        .cours-toggle {
+            /* Bouton pour afficher/masquer le rappel de cours */
+            background: #0ea5e9;
+            /* Bleu clair */
+            color: #082f49;
+            /* Texte bleu foncé */
+            border: none;
+            /* Pas de bordure */
+            padding: 6px 10px;
+            /* Espacement */
+            border-radius: 6px;
+            /* Coins arrondis */
+            cursor: pointer;
+            /* Curseur main */
+            font-size: 0.85rem;
+            /* Taille texte */
+            margin-bottom: 10px;
+            /* Marge inférieure */
+        }
+
+        .cours-toggle:hover {
+            /* Survol du bouton cours */
+            background: #0369a1;
+            /* Bleu plus foncé */
+            color: #e0f2fe;
+            /* Texte plus clair */
+        }
+
+        .cours {
+            /* Bloc du rappel de cours */
+            background: #020617;
+            /* Fond très sombre */
+            border-radius: 8px;
+            /* Coins arrondis */
+            padding: 10px;
+            /* Espacement interne */
+            margin-bottom: 20px;
+            /* Marge inférieure */
+            border: 1px solid #1e293b;
+            /* Bordure */
+            display: none;
+            /* Masqué par défaut */
+            font-size: 0.9rem;
+            /* Légèrement plus petit */
+        }
+
+        .cours ul {
+            /* Liste du rappel de cours */
+            padding-left: 18px;
+            /* Décalage pour les puces */
+        }
+
+        .exercice {
+            /* Bloc pour chaque exercice */
+            background: #0b1120;
+            /* Fond bleu nuit */
+            border-radius: 8px;
+            /* Coins arrondis */
+            padding: 10px 12px;
+            /* Espacement interne */
+            margin-bottom: 12px;
+            /* Marge inférieure */
+            border: 1px solid #1f2937;
+            /* Bordure sombre */
+        }
+
+        .exercice h3 {
+            /* Titre de l’exercice */
+            margin: 0 0 6px 0;
+            /* Marge basse */
+            font-size: 1rem;
+            /* Taille de police */
+            color: #bfdbfe;
+            /* Bleu très clair */
+        }
+
+        .enonce {
+            /* Texte de l’énoncé */
+            font-size: 0.95rem;
+            /* Taille de police */
+            margin-bottom: 4px;
+            /* Marge basse */
+        }
+
+        .meta {
+            /* Infos meta : points, type */
+            font-size: 0.8rem;
+            /* Petite police */
+            color: #9ca3af;
+            /* Gris clair */
+            margin-bottom: 6px;
+            /* Marge basse */
+        }
+
+        .zone-reponse {
+            /* Ligne regroupant la saisie + boutons + message */
+            display: flex;
+            /* Affichage en ligne */
+            flex-wrap: wrap;
+            /* Retour à la ligne possible */
+            gap: 6px;
+            /* Espacement entre éléments */
+            align-items: center;
+            /* Alignement vertical */
+            margin-top: 4px;
+            /* Marge haute */
+        }
+
+        .zone-reponse input[type="text"] {
+            /* Champs de saisie des réponses */
+            padding: 4px 6px;
+            /* Espacement interne */
+            border-radius: 4px;
+            /* Coins arrondis */
+            border: 1px solid #4b5563;
+            /* Bordure grise */
+            background: #020617;
+            /* Fond sombre */
+            color: #e5e7eb;
+            /* Texte clair */
+            min-width: 80px;
+            /* Largeur minimale */
+        }
+
+        .btn {
+            /* Style commun des petits boutons */
+            border: none;
+            /* Pas de bordure */
+            padding: 4px 8px;
+            /* Espacement interne */
+            border-radius: 4px;
+            /* Coins arrondis */
+            font-size: 0.8rem;
+            /* Petite police */
+            cursor: pointer;
+            /* Curseur main */
+        }
+
+        .btn-valider {
+            /* Bouton Valider */
+            background: #22c55e;
+            /* Vert */
+            color: #022c22;
+            /* Texte vert foncé */
+        }
+
+        .btn-valider:hover {
+            /* Survol Valider */
+            background: #16a34a;
+            /* Vert plus foncé */
+        }
+
+        .btn-aide {
+            /* Bouton Aide */
+            background: #3b82f6;
+            /* Bleu */
+            color: #eff6ff;
+            /* Texte clair */
+        }
+
+        .btn-aide:hover {
+            /* Survol Aide */
+            background: #1d4ed8;
+            /* Bleu plus foncé */
+        }
+
+        .btn-correction {
+            /* Bouton Correction */
+            background: #facc15;
+            /* Jaune */
+            color: #422006;
+            /* Texte foncé */
+        }
+
+        .btn-correction:hover {
+            /* Survol Correction */
+            background: #eab308;
+            /* Jaune plus vif */
+        }
+
+        .message {
+            /* Zone de message (OK / erreur) */
+            min-width: 120px;
+            /* Largeur min */
+            font-size: 0.8rem;
+            /* Petite police */
+        }
+
+        .message.ok {
+            /* Message de réussite */
+            color: #4ade80;
+            /* Vert clair */
+        }
+
+        .message.ko {
+            /* Message d’erreur */
+            color: #f97316;
+            /* Orange vif */
+        }
+
+        .aide-texte,
+        .correction-texte {
+            /* Bloc de texte pour aide / correction */
+            margin-top: 4px;
+            /* Marge haute */
+            font-size: 0.8rem;
+            /* Petite police */
+            display: none;
+            /* Masqué par défaut */
+        }
+
+        .aide-texte {
+            /* Couleur de l’aide */
+            color: #7dd3fc;
+            /* Bleu clair */
+        }
+
+        .correction-texte {
+            /* Couleur de la correction */
+            color: #fbbf24;
+            /* Jaune orangé */
+        }
+
+        .colonne-op {
+            /* Tableau pour opérations posées */
+            border-collapse: collapse;
+            /* Fusion des bordures */
+            margin-top: 6px;
+            /* Marge haute */
+        }
+
+        .colonne-op td {
+            /* Cellules du tableau d’opération */
+            border: 1px solid #4b5563;
+            /* Bordure grise */
+            width: 30px;
+            /* Largeur */
+            height: 28px;
+            /* Hauteur */
+            text-align: center;
+            /* Texte centré */
+            vertical-align: middle;
+            /* Alignement vertical */
+        }
+
+        .colonne-op input {
+            /* Champs dans la colonne d’addition */
+            width: 95%;
+            /* Largeur quasi totale */
+            border: none;
+            /* Pas de bordure */
+            background: transparent;
+            /* Fond transparent */
+            color: #e5e7eb;
+            /* Texte clair */
+            text-align: center;
+            /* Centré */
+        }
+
+        .ligne-signe {
+            /* Ligne où se trouve le signe + ou - */
+            font-weight: bold;
+            /* Texte en gras */
+        }
+
+        .separateur {
+            /* Ligne de séparation de l’opération */
+            border-top: 2px solid #e5e7eb !important;
+            /* Trait plus épais en haut */
+        }
+    </style>
+    <!-- Fin des styles -->
+</head>
+<!-- Fin de l’en-tête -->
+
+<body>
+    <!-- Corps de la page -->
+
+    <header>
+        <!-- Bandeau supérieur -->
+
+        <h1>6e – Additions et soustractions de nombres décimaux</h1>
+        <!-- Titre principal -->
+
+        <p>🧮 Choc des savoirs – Fiche interactive avec problèmes et technique opératoire</p>
+        <!-- Sous-titre descriptif -->
+    </header>
+    <!-- Fin du bandeau -->
+
+    <main>
+        <!-- Bloc principal -->
+
+        <div class="info">
+            <!-- Informations générales -->
+
+            <span class="badge badge-niveau">Niveau : 6e</span>
+            <!-- Badge niveau -->
+
+            <span class="badge badge-theme">Thème : décimaux – additions & soustractions</span>
+            <!-- Badge thème -->
+
+            <p>
+                <!-- Paragraphe d’objectifs -->
+
+                🎯 Objectif : savoir poser, calculer et vérifier des additions et soustractions de nombres décimaux,
+                puis résoudre des problèmes proches de la vie quotidienne.
+                <!-- Description -->
+            </p>
+        </div>
+        <!-- Fin du bloc info -->
+
+        <div class="scoreboard">
+            <!-- Zone du score -->
+
+            <div>
+                <!-- Texte du score -->
+
+                Score actuel : <strong id="score">0</strong> / <strong id="scoreMax">20</strong> points
+                <!-- Affichage du score et du maximum -->
+            </div>
+            <!-- Fin du texte -->
+
+            <button class="btn-reset" id="btnReset">
+                <!-- Bouton de réinitialisation -->
+
+                🔁 Réinitialiser les réponses
+                <!-- Texte du bouton -->
+            </button>
+            <!-- Fin du bouton -->
+        </div>
+        <!-- Fin du scoreboard -->
+
+        <button class="cours-toggle" id="btnCours">
+            <!-- Bouton pour afficher / masquer le rappel de cours -->
+
+            📘 Afficher / masquer le rappel de cours
+            <!-- Texte du bouton -->
+        </button>
+        <!-- Fin du bouton cours -->
+
+        <section class="cours" id="blocCours">
+            <!-- Rappel de cours masqué au départ -->
+
+            <h2>Rappel de cours – Nombres décimaux</h2>
+            <!-- Titre du rappel -->
+
+            <ul>
+                <!-- Liste des points de cours -->
+
+                <li>Un nombre décimal possède une partie entière et une partie décimale séparées par une virgule
+                    (exemple : 12,5).</li>
+                <!-- Point 1 -->
+
+                <li>Pour additionner ou soustraire des décimaux, on <strong>aligne les virgules</strong>, puis on
+                    calcule colonne par colonne.</li>
+                <!-- Point 2 -->
+
+                <li>On peut ajouter des zéros après la virgule pour avoir le même nombre de chiffres dans chaque
+                    nombre.</li>
+                <!-- Point 3 -->
+
+                <li>On vérifie toujours si le résultat est cohérent (ordre de grandeur, estimation, contexte du
+                    problème).</li>
+                <!-- Point 4 -->
+            </ul>
+            <!-- Fin de la liste -->
+        </section>
+        <!-- Fin du rappel de cours -->
+
+        <!-- ===================================================
+             PARTIE A – PROBLÈMES (FICHE 1 – 12 EXERCICES)
+        ====================================================== -->
+
+        <h2>Partie A – Problèmes avec décimaux (fiche 1)</h2>
+        <!-- Titre de section -->
+
+        <!-- Exercice 1 – Le cahier de calcul -->
+        <div class="exercice" data-points="1">
+            <!-- Exercice à 1 point -->
+
+            <h3>Exercice 1 – Le cahier de calcul</h3>
+            <!-- Titre exercice -->
+
+            <div class="enonce">
+                <!-- Énoncé -->
+
+                Un cahier coûte <strong>4,80&nbsp;€</strong>. Lina a <strong>12,50&nbsp;€</strong> et achète le cahier.
+                Combien lui reste-t-il ?
+                <!-- Texte issu du PDF 1 -->
+            </div>
+
+            <div class="meta">
+                <!-- Infos supplémentaires -->
+
+                💰 Problème de monnaie – <strong>1 point</strong>
+                <!-- Type et points -->
+            </div>
+
+            <div class="zone-reponse">
+                <!-- Ligne de réponse -->
+
+                <input type="text" class="reponse" data-correct="7.7" placeholder="Réponse en €">
+                <!-- Réponse attendue : 7,70 € (notée 7.7 en JS) -->
+
+                <button class="btn btn-valider">Valider</button>
+                <!-- Bouton valider -->
+
+                <button class="btn btn-aide">Aide</button>
+                <!-- Bouton aide -->
+
+                <button class="btn btn-correction">Correction</button>
+                <!-- Bouton correction -->
+
+                <span class="message"></span>
+                <!-- Message de feedback -->
+            </div>
+
+            <div class="aide-texte">
+                <!-- Aide -->
+
+                💡 Tu dois calculer l’argent qui reste : <code>12,50 − 4,80</code>. Pose l’opération en alignant les
+                virgules.
+                <!-- Contenu aide -->
+            </div>
+
+            <div class="correction-texte">
+                <!-- Correction -->
+
+                ✅ On calcule <code>12,50 − 4,80 = 7,70</code>. Lina garde donc <strong>7,70&nbsp;€</strong>.
+                <!-- Correction détaillée -->
+            </div>
+        </div>
+        <!-- Fin exercice 1 -->
+
+        <!-- Exercice 2 – Le trajet du matin -->
+        <div class="exercice" data-points="1">
+            <h3>Exercice 2 – Le trajet du matin</h3>
+            <div class="enonce">
+                Lucas marche <strong>2,75&nbsp;km</strong>, puis encore <strong>3,4&nbsp;km</strong> pour rejoindre
+                l’école. Quelle distance a-t-il parcourue ?
+            </div>
+            <div class="meta">
+                🚶‍♂️ Distance totale – <strong>1 point</strong>
+            </div>
+            <div class="zone-reponse">
+                <input type="text" class="reponse" data-correct="6.15" placeholder="Réponse en km">
+                <button class="btn btn-valider">Valider</button>
+                <button class="btn btn-aide">Aide</button>
+                <button class="btn btn-correction">Correction</button>
+                <span class="message"></span>
+            </div>
+            <div class="aide-texte">
+                💡 Additionne les deux distances : <code>2,75 + 3,4</code>. Tu peux écrire <code>3,40</code> pour bien
+                aligner les virgules.
+            </div>
+            <div class="correction-texte">
+                ✅ <code>2,75 + 3,40 = 6,15</code>. Lucas a parcouru <strong>6,15&nbsp;km</strong>.
+            </div>
+        </div>
+
+        <!-- Exercice 3 – La boîte de farine -->
+        <div class="exercice" data-points="1">
+            <h3>Exercice 3 – La boîte de farine</h3>
+            <div class="enonce">
+                La boîte contient <strong>5,6&nbsp;kg</strong> de farine. La cuisinière utilise
+                <strong>1,85&nbsp;kg</strong>. Combien reste-t-il ?
+            </div>
+            <div class="meta">
+                🥐 Masse restante – <strong>1 point</strong>
+            </div>
+            <div class="zone-reponse">
+                <input type="text" class="reponse" data-correct="3.75" placeholder="Réponse en kg">
+                <button class="btn btn-valider">Valider</button>
+                <button class="btn btn-aide">Aide</button>
+                <button class="btn btn-correction">Correction</button>
+                <span class="message"></span>
+            </div>
+            <div class="aide-texte">
+                💡 Tu calcules ce qu’il reste : <code>5,6 − 1,85</code>. Tu peux écrire <code>5,60</code>.
+            </div>
+            <div class="correction-texte">
+                ✅ <code>5,60 − 1,85 = 3,75</code>. Il reste <strong>3,75&nbsp;kg</strong> de farine.
+            </div>
+        </div>
+
+        <!-- Exercice 4 – Le compte de Sofia -->
+        <div class="exercice" data-points="2">
+            <h3>Exercice 4 – Le compte de Sofia</h3>
+            <div class="enonce">
+                Sofia a <strong>68,40&nbsp;€</strong> sur son compte. Elle dépense <strong>14,75&nbsp;€</strong>, puis
+                reçoit <strong>9,5&nbsp;€</strong>. Quel montant a-t-elle maintenant ?
+            </div>
+            <div class="meta">
+                💳 Compte bancaire – <strong>2 points</strong>
+            </div>
+            <div class="zone-reponse">
+                <input type="text" class="reponse" data-correct="63.15" placeholder="Réponse en €">
+                <button class="btn btn-valider">Valider</button>
+                <button class="btn btn-aide">Aide</button>
+                <button class="btn btn-correction">Correction</button>
+                <span class="message"></span>
+            </div>
+            <div class="aide-texte">
+                💡 Commence par retirer ce qu’elle dépense, puis ajoute ce qu’elle reçoit.
+            </div>
+            <div class="correction-texte">
+                ✅ <code>68,40 − 14,75 = 53,65</code>, puis <code>53,65 + 9,50 = 63,15</code>. Sofia a
+                <strong>63,15&nbsp;€</strong>.
+            </div>
+        </div>
+
+        <!-- Exercice 5 – La piscine municipale -->
+        <div class="exercice" data-points="1">
+            <h3>Exercice 5 – La piscine municipale</h3>
+            <div class="enonce">
+                La piscine contient <strong>245,5&nbsp;m³</strong> d’eau. On en retire
+                <strong>18,75&nbsp;m³</strong>, puis on ajoute <strong>12,4&nbsp;m³</strong>. Quel volume y a-t-il
+                maintenant ?
+            </div>
+            <div class="meta">
+                🏊‍♂️ Volume d’eau – <strong>1 point</strong>
+            </div>
+            <div class="zone-reponse">
+                <input type="text" class="reponse" data-correct="239.15" placeholder="Réponse en m³">
+                <button class="btn btn-valider">Valider</button>
+                <button class="btn btn-aide">Aide</button>
+                <button class="btn btn-correction">Correction</button>
+                <span class="message"></span>
+            </div>
+            <div class="aide-texte">
+                💡 Suit l’ordre indiqué : on enlève, puis on ajoute.
+            </div>
+            <div class="correction-texte">
+                ✅ <code>245,5 − 18,75 = 226,75</code>, puis <code>226,75 + 12,4 = 239,15</code>.
+            </div>
+        </div>
+
+        <!-- Exercice 6 – Le plein d’essence -->
+        <div class="exercice" data-points="1">
+            <h3>Exercice 6 – Le plein d’essence</h3>
+            <div class="enonce">
+                Le réservoir contient <strong>32,6&nbsp;L</strong> d’essence. Après un trajet, il reste
+                <strong>27,85&nbsp;L</strong>. Quelle quantité a été consommée ?
+            </div>
+            <div class="meta">
+                ⛽ Consommation – <strong>1 point</strong>
+            </div>
+            <div class="zone-reponse">
+                <input type="text" class="reponse" data-correct="4.75" placeholder="Réponse en L">
+                <button class="btn btn-valider">Valider</button>
+                <button class="btn btn-aide">Aide</button>
+                <button class="btn btn-correction">Correction</button>
+                <span class="message"></span>
+            </div>
+            <div class="aide-texte">
+                💡 Quantité consommée = quantité au départ − quantité restante.
+            </div>
+            <div class="correction-texte">
+                ✅ <code>32,60 − 27,85 = 4,75</code>. On a consommé <strong>4,75&nbsp;L</strong>.
+            </div>
+        </div>
+
+        <!-- Exercice 7 – La réserve de nourriture -->
+        <div class="exercice" data-points="1">
+            <h3>Exercice 7 – La réserve de nourriture</h3>
+            <div class="enonce">
+                Le refuge dispose de <strong>92,4&nbsp;kg</strong> de nourriture. Il en consomme
+                <strong>27,65&nbsp;kg</strong>, puis reçoit <strong>18,9&nbsp;kg</strong>. Quelle quantité a-t-il
+                maintenant ?
+            </div>
+            <div class="meta">
+                🐾 Stock de nourriture – <strong>1 point</strong>
+            </div>
+            <div class="zone-reponse">
+                <input type="text" class="reponse" data-correct="83.65" placeholder="Réponse en kg">
+                <button class="btn btn-valider">Valider</button>
+                <button class="btn btn-aide">Aide</button>
+                <button class="btn btn-correction">Correction</button>
+                <span class="message"></span>
+            </div>
+            <div class="aide-texte">
+                💡 On enlève ce qui est consommé, puis on ajoute ce qui est reçu.
+            </div>
+            <div class="correction-texte">
+                ✅ <code>92,4 − 27,65 = 64,75</code>, puis <code>64,75 + 18,9 = 83,65</code>.
+            </div>
+        </div>
+
+        <!-- Exercice 8 – Le budget du voyage -->
+        <div class="exercice" data-points="2">
+            <h3>Exercice 8 – Le budget du voyage</h3>
+            <div class="enonce">
+                La classe a réuni <strong>350,75&nbsp;€</strong>. Elle paie <strong>128,4&nbsp;€</strong>, puis
+                <strong>67,85&nbsp;€</strong>. Deux élèves apportent ensuite <strong>25,5&nbsp;€</strong> chacun. Quel
+                montant reste-t-il ?
+            </div>
+            <div class="meta">
+                🚌 Problème à plusieurs étapes – <strong>2 points</strong>
+            </div>
+            <div class="zone-reponse">
+                <input type="text" class="reponse" data-correct="205.5" placeholder="Réponse en €">
+                <button class="btn btn-valider">Valider</button>
+                <button class="btn btn-aide">Aide</button>
+                <button class="btn btn-correction">Correction</button>
+                <span class="message"></span>
+            </div>
+            <div class="aide-texte">
+                💡 Commence par enlever les deux dépenses, puis ajoute l’argent apporté par les deux élèves.
+            </div>
+            <div class="correction-texte">
+                ✅ <code>350,75 − 128,4 − 67,85 = 154,5</code>, puis <code>2 × 25,5 = 51</code> ⇒
+                <code>154,5 + 51 = 205,5</code>.
+            </div>
+        </div>
+
+        <!-- Exercice 9 – Le stock de matériel -->
+        <div class="exercice" data-points="2">
+            <h3>Exercice 9 – Le stock de matériel</h3>
+            <div class="enonce">
+                Un magasin a <strong>485,6&nbsp;kg</strong> de matériaux. Il en vend <strong>156,35&nbsp;kg</strong>,
+                puis <strong>98,7&nbsp;kg</strong>. Une livraison apporte <strong>120,85&nbsp;kg</strong>. Quelle
+                quantité reste en stock ?
+            </div>
+            <div class="meta">
+                🧱 Problème à plusieurs étapes – <strong>2 points</strong>
+            </div>
+            <div class="zone-reponse">
+                <input type="text" class="reponse" data-correct="351.4" placeholder="Réponse en kg">
+                <button class="btn btn-valider">Valider</button>
+                <button class="btn btn-aide">Aide</button>
+                <button class="btn btn-correction">Correction</button>
+                <span class="message"></span>
+            </div>
+            <div class="aide-texte">
+                💡 Tu enlèves les ventes, puis tu ajoutes la livraison.
+            </div>
+            <div class="correction-texte">
+                ✅ On peut calculer : <code>485,6 − 156,35 − 98,7 = 264,55</code> puis <code>264,55 + 120,85 = 385,4</code>.
+                (Tu peux adapter le résultat exact et la tolérance selon ta fiche.)
+            </div>
+        </div>
+
+        <!-- Exercice 10 – Le trajet du bus -->
+        <div class="exercice" data-points="1">
+            <h3>Exercice 10 – Le trajet du bus</h3>
+            <div class="enonce">
+                Le bus doit parcourir <strong>82,5&nbsp;km</strong>. Il fait <strong>31,4&nbsp;km</strong> le matin,
+                puis <strong>22,75&nbsp;km</strong> l’après-midi. Quelle distance reste-t-il à parcourir le soir ?
+            </div>
+            <div class="meta">
+                🚌 Distance restante – <strong>1 point</strong>
+            </div>
+            <div class="zone-reponse">
+                <input type="text" class="reponse" data-correct="28.35" placeholder="Réponse en km">
+                <button class="btn btn-valider">Valider</button>
+                <button class="btn btn-aide">Aide</button>
+                <button class="btn btn-correction">Correction</button>
+                <span class="message"></span>
+            </div>
+            <div class="aide-texte">
+                💡 Additionne d’abord les distances déjà parcourues, puis soustrais-les du total.
+            </div>
+            <div class="correction-texte">
+                ✅ <code>31,4 + 22,75 = 54,15</code>, puis <code>82,5 − 54,15 = 28,35</code>.
+            </div>
+        </div>
+
+        <!-- Exercice 11 – Le grand aquarium -->
+        <div class="exercice" data-points="1">
+            <h3>Exercice 11 – Le grand aquarium</h3>
+            <div class="enonce">
+                Un aquarium contient <strong>315,8&nbsp;L</strong> d’eau. Une vidange enlève
+                <strong>74,65&nbsp;L</strong>, puis une fuite <strong>12,4&nbsp;L</strong>. On ajoute ensuite
+                <strong>36,9&nbsp;L</strong>. Quel est le volume final d’eau ?
+            </div>
+            <div class="meta">
+                🐠 Volume d’eau – <strong>1 point</strong>
+            </div>
+            <div class="zone-reponse">
+                <input type="text" class="reponse" data-correct="265.65" placeholder="Réponse en L">
+                <button class="btn btn-valider">Valider</button>
+                <button class="btn btn-aide">Aide</button>
+                <button class="btn btn-correction">Correction</button>
+                <span class="message"></span>
+            </div>
+            <div class="aide-texte">
+                💡 Tu enlèves les deux pertes, puis tu ajoutes ce qu’on remet.
+            </div>
+            <div class="correction-texte">
+                ✅ <code>315,8 − 74,65 − 12,4 = 228,75</code>, puis <code>228,75 + 36,9 = 265,65</code>.
+            </div>
+        </div>
+
+        <!-- Exercice 12 – Le camion de transport -->
+        <div class="exercice" data-points="1">
+            <h3>Exercice 12 – Le camion de transport</h3>
+            <div class="enonce">
+                Le camion transporte <strong>18,75&nbsp;t</strong>. Il décharge <strong>6,8&nbsp;t</strong>, charge
+                <strong>9,45&nbsp;t</strong>, puis retire <strong>2,55&nbsp;t</strong>. Quelle masse transporte-t-il à la
+                fin ?
+            </div>
+            <div class="meta">
+                🚚 Problème multi-étapes – <strong>1 point</strong>
+            </div>
+            <div class="zone-reponse">
+                <input type="text" class="reponse" data-correct="18.85" placeholder="Réponse en t">
+                <button class="btn btn-valider">Valider</button>
+                <button class="btn btn-aide">Aide</button>
+                <button class="btn btn-correction">Correction</button>
+                <span class="message"></span>
+            </div>
+            <div class="aide-texte">
+                💡 Applique les opérations dans l’ordre : − 6,8 ; + 9,45 ; − 2,55.
+            </div>
+            <div class="correction-texte">
+                ✅ <code>18,75 − 6,8 + 9,45 − 2,55 = 18,85</code>.
+            </div>
+        </div>
+
+        <!-- ===================================================
+             PARTIE B – TECHNIQUE OPÉRATOIRE (FICHE 2 – 5 EX.)
+        ====================================================== -->
+
+        <h2>Partie B – Technique opératoire (fiche 2)</h2>
+
+        <!-- Exercice 13 – Addition à poser -->
+        <div class="exercice" data-points="1">
+            <h3>Exercice 13 – Addition à poser</h3>
+            <div class="enonce">
+                Calcule : <strong>12,475 + 8,36</strong>
+            </div>
+            <div class="meta">
+                🧮 Addition de décimaux – <strong>1 point</strong>
+            </div>
+            <div class="zone-reponse">
+                <input type="text" class="reponse" data-correct="20.835" placeholder="Réponse">
+                <button class="btn btn-valider">Valider</button>
+                <button class="btn btn-aide">Aide</button>
+                <button class="btn btn-correction">Correction</button>
+                <span class="message"></span>
+            </div>
+            <div class="aide-texte">
+                💡 Écris <code>8,360</code> pour avoir trois chiffres après la virgule comme <code>12,475</code>.
+            </div>
+            <div class="correction-texte">
+                ✅ <code>12,475 + 8,360 = 20,835</code>.
+            </div>
+        </div>
+
+        <!-- Exercice 14 – Soustraction à poser -->
+        <div class="exercice" data-points="1">
+            <h3>Exercice 14 – Soustraction à poser</h3>
+            <div class="enonce">
+                Calcule : <strong>25,8 − 7,425</strong>
+            </div>
+            <div class="meta">
+                ➖ Soustraction de décimaux – <strong>1 point</strong>
+            </div>
+            <div class="zone-reponse">
+                <input type="text" class="reponse" data-correct="18.375" placeholder="Réponse">
+                <button class="btn btn-valider">Valider</button>
+                <button class="btn btn-aide">Aide</button>
+                <button class="btn btn-correction">Correction</button>
+                <span class="message"></span>
+            </div>
+            <div class="aide-texte">
+                💡 Ajoute des zéros : <code>25,800 − 7,425</code>.
+            </div>
+            <div class="correction-texte">
+                ✅ <code>25,800 − 7,425 = 18,375</code>.
+            </div>
+        </div>
+
+        <!-- Exercice 15 – Addition à trois nombres -->
+        <div class="exercice" data-points="1">
+            <h3>Exercice 15 – Addition à trois nombres</h3>
+            <div class="enonce">
+                Calcule : <strong>4,208 + 13,7 + 2,95</strong>
+            </div>
+            <div class="meta">
+                🧮 Addition de trois décimaux – <strong>1 point</strong>
+            </div>
+            <div class="zone-reponse">
+                <input type="text" class="reponse" data-correct="20.858" placeholder="Réponse">
+                <button class="btn btn-valider">Valider</button>
+                <button class="btn btn-aide">Aide</button>
+                <button class="btn btn-correction">Correction</button>
+                <span class="message"></span>
+            </div>
+            <div class="aide-texte">
+                💡 Écris <code>13,700</code> et <code>2,950</code> pour bien aligner les virgules.
+            </div>
+            <div class="correction-texte">
+                ✅ <code>4,208 + 13,700 + 2,950 = 20,858</code>.
+            </div>
+        </div>
+
+        <!-- Exercice 16 – Soustraction avec emprunt -->
+        <div class="exercice" data-points="1">
+            <h3>Exercice 16 – Soustraction avec emprunt</h3>
+            <div class="enonce">
+                Calcule : <strong>18,504 − 9,87</strong>
+            </div>
+            <div class="meta">
+                ➖ Soustraction avec retenue – <strong>1 point</strong>
+            </div>
+            <div class="zone-reponse">
+                <input type="text" class="reponse" data-correct="8.634" placeholder="Réponse">
+                <button class="btn btn-valider">Valider</button>
+                <button class="btn btn-aide">Aide</button>
+                <button class="btn btn-correction">Correction</button>
+                <span class="message"></span>
+            </div>
+            <div class="aide-texte">
+                💡 Écris <code>9,870</code>. Quand le chiffre du haut est plus petit, pense à l’emprunt.
+            </div>
+            <div class="correction-texte">
+                ✅ <code>18,504 − 9,870 = 8,634</code>.
+            </div>
+        </div>
+
+        <!-- Exercice 17 – Addition piégeuse -->
+        <div class="exercice" data-points="1">
+            <h3>Exercice 17 – Addition piégeuse</h3>
+            <div class="enonce">
+                Calcule : <strong>0,856 + 14,2 + 3,075</strong>
+            </div>
+            <div class="meta">
+                🧮 Longueurs différentes – <strong>1 point</strong>
+            </div>
+            <div class="zone-reponse">
+                <input type="text" class="reponse" data-correct="18.131" placeholder="Réponse">
+                <button class="btn btn-valider">Valider</button>
+                <button class="btn btn-aide">Aide</button>
+                <button class="btn btn-correction">Correction</button>
+                <span class="message"></span>
+            </div>
+            <div class="aide-texte">
+                💡 Tu peux écrire <code>14,200</code> pour avoir trois chiffres après la virgule dans chaque nombre.
+            </div>
+            <div class="correction-texte">
+                ✅ <code>0,856 + 14,200 + 3,075 = 18,131</code>.
+            </div>
+        </div>
+
+        <!-- ===================================================
+             PARTIE C – EXERCICES SUPPLÉMENTAIRES + COLONNE
+        ====================================================== -->
+
+        <h2>Partie C – Exercices supplémentaires et opération posée</h2>
+
+        <!-- Exercice 18 – Problème supplémentaire -->
+        <div class="exercice" data-points="1">
+            <h3>Exercice 18 – Lecture d’un roman</h3>
+            <div class="enonce">
+                Un élève lit <strong>18,5&nbsp;pages</strong> le lundi et <strong>23,75&nbsp;pages</strong> le mardi.
+                Combien de pages a-t-il lues au total ?
+            </div>
+            <div class="meta">
+                📖 Somme de décimaux – <strong>1 point</strong>
+            </div>
+            <div class="zone-reponse">
+                <input type="text" class="reponse" data-correct="42.25" placeholder="Réponse en pages">
+                <button class="btn btn-valider">Valider</button>
+                <button class="btn btn-aide">Aide</button>
+                <button class="btn btn-correction">Correction</button>
+                <span class="message"></span>
+            </div>
+            <div class="aide-texte">
+                💡 Additionne <code>18,5</code> et <code>23,75</code>. Tu peux écrire <code>18,50</code> si besoin.
+            </div>
+            <div class="correction-texte">
+                ✅ <code>18,5 + 23,75 = 42,25</code>. L’élève a lu <strong>42,25&nbsp;pages</strong>.
+            </div>
+        </div>
+
+        <!-- Exercice 19 – Courses au marché -->
+        <div class="exercice" data-points="1">
+            <h3>Exercice 19 – Courses au marché</h3>
+            <div class="enonce">
+                Au marché, un client achète des fruits pour <strong>7,85&nbsp;€</strong> et des légumes pour
+                <strong>5,9&nbsp;€</strong>. Il paie avec un billet de <strong>20&nbsp;€</strong>. Combien de monnaie
+                doit-on lui rendre ?
+            </div>
+            <div class="meta">
+                🧺 Monnaie à rendre – <strong>1 point</strong>
+            </div>
+            <div class="zone-reponse">
+                <input type="text" class="reponse" data-correct="6.25" placeholder="Réponse en €">
+                <button class="btn btn-valider">Valider</button>
+                <button class="btn btn-aide">Aide</button>
+                <button class="btn btn-correction">Correction</button>
+                <span class="message"></span>
+            </div>
+            <div class="aide-texte">
+                💡 Calcule d’abord la dépense totale, puis soustrais-la à 20.
+            </div>
+            <div class="correction-texte">
+                ✅ <code>7,85 + 5,9 = 13,75</code>, puis <code>20 − 13,75 = 6,25</code>.
+            </div>
+        </div>
+
+        <!-- Exercice 20 – Opération posée en colonne façon GeoGebra -->
+        <div class="exercice" data-points="2">
+            <h3>Exercice 20 – Addition en colonne (type GeoGebra)</h3>
+            <div class="enonce">
+                Pose et calcule en colonne : <strong>47,35 + 18,7</strong>.<br>
+                Complète uniquement la ligne du résultat.
+            </div>
+            <div class="meta">
+                📐 Technique opératoire en colonne – <strong>2 points</strong>
+            </div>
+
+            <table class="colonne-op">
+                <!-- Tableau représentant l’opération posée -->
+
+                <tr>
+                    <!-- Ligne du premier nombre (47,35) -->
+
+                    <td></td>
+                    <!-- Case vide pour les centaines (non utilisées ici) -->
+
+                    <td>4</td>
+                    <!-- Dizaines -->
+
+                    <td>7</td>
+                    <!-- Unités -->
+
+                    <td>,</td>
+                    <!-- Virgule -->
+
+                    <td>3</td>
+                    <!-- Dixième -->
+
+                    <td>5</td>
+                    <!-- Centième -->
+                </tr>
+
+                <tr class="ligne-signe">
+                    <!-- Ligne du second nombre (18,70) avec signe + -->
+
+                    <td>+</td>
+                    <!-- Signe plus -->
+
+                    <td>1</td>
+                    <!-- Dizaines -->
+
+                    <td>8</td>
+                    <!-- Unités -->
+
+                    <td>,</td>
+                    <!-- Virgule -->
+
+                    <td>7</td>
+                    <!-- Dixième (18,7 → 18,70) -->
+
+                    <td></td>
+                    <!-- Centième (0 implicite) -->
+                </tr>
+
+                <tr class="separateur">
+                    <!-- Ligne de séparation (trait de l’opération) -->
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <!-- Ligne du résultat à compléter -->
+
+                    <td></td>
+                    <!-- Case vide -->
+
+                    <td><input type="text" maxlength="1" class="digit" data-weight="10"></td>
+                    <!-- Dizaines du résultat -->
+
+                    <td><input type="text" maxlength="1" class="digit" data-weight="1"></td>
+                    <!-- Unités du résultat -->
+
+                    <td>,</td>
+                    <!-- Virgule fixe -->
+
+                    <td><input type="text" maxlength="1" class="digit" data-weight="0.1"></td>
+                    <!-- Dixième -->
+
+                    <td><input type="text" maxlength="1" class="digit" data-weight="0.01"></td>
+                    <!-- Centième -->
+                </tr>
+            </table>
+
+            <div class="zone-reponse">
+                <!-- Zone de boutons pour l’exercice colonne -->
+
+                <button class="btn btn-valider" data-colonne="47.35+18.7">Valider</button>
+                <!-- Bouton valider spécifique avec attribut data-colonne -->
+
+                <button class="btn btn-aide">Aide</button>
+                <!-- Bouton aide -->
+
+                <button class="btn btn-correction">Correction</button>
+                <!-- Bouton correction -->
+
+                <span class="message"></span>
+                <!-- Message de feedback -->
+            </div>
+
+            <div class="aide-texte">
+                <!-- Aide pour la colonne -->
+
+                💡 Commence par calculer le résultat (au brouillon ou mentalement), puis place chaque chiffre dans la
+                bonne colonne (dizaines, unités, dixièmes, centièmes).
+            </div>
+
+            <div class="correction-texte">
+                <!-- Correction pour l’opération posée -->
+
+                ✅ <code>47,35 + 18,70 = 66,05</code>. La dernière ligne doit être : <strong>6 6 , 0 5</strong>.
+            </div>
+        </div>
+
+    </main>
+    <!-- Fin du bloc principal -->
+
+    <script>
+        // ============================================
+        //  SCRIPT JAVASCRIPT INTERACTIF
+        // ============================================
+
+        // Fonction utilitaire : transformer une chaîne en nombre décimal
+        function normalizeToNumber(value) {
+            // Remplace la virgule par un point et supprime les espaces
+            const cleaned = value.replace(',', '.').trim();
+            // Convertit en nombre à virgule flottante
+            const num = parseFloat(cleaned);
+            // Retourne le nombre (ou NaN si ce n’est pas un nombre)
+            return num;
+        }
+
+        // Fonction pour jouer un petit bip (succès ou erreur)
+        function playBeep(success) {
+            // Récupère le constructeur AudioContext selon le navigateur
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            // Si pas d’API audio disponible, on ne fait rien
+            if (!AudioContext) return;
+
+            // Crée un nouveau contexte audio
+            const ctx = new AudioContext();
+            // Crée un oscillateur (générateur de son)
+            const osc = ctx.createOscillator();
+            // Crée un gain (volume)
+            const gain = ctx.createGain();
+
+            // Connecte l’oscillateur au gain puis au haut-parleur
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            // Choix de fréquence selon succès (aigu) ou erreur (grave)
+            osc.frequency.value = success ? 880 : 220;
+
+            // Volume de départ
+            gain.gain.value = 0.2;
+
+            // Démarre le son immédiatement
+            osc.start();
+
+            // Fait décroître le volume sur 0,2 seconde
+            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.2);
+
+            // Arrête l’oscillateur au bout de 0,25 seconde
+            osc.stop(ctx.currentTime + 0.25);
+        }
+
+        // Variable globale : score total
+        let totalScore = 0;
+        // Variable globale : score maximal possible
+        let maxScore = 0;
+
+        // Fonction pour calculer le score maximal à partir de data-points
+        function computeMaxScore() {
+            // Sélectionne tous les blocs d’exercices
+            const exercices = document.querySelectorAll('.exercice');
+            // Initialise un cumul
+            let max = 0;
+            // Parcours de chaque exercice
+            exercices.forEach(ex => {
+                // Récupère l’attribut data-points (nombre de points)
+                const pts = parseFloat(ex.getAttribute('data-points')) || 0;
+                // Ajoute au cumul
+                max += pts;
+            });
+            // Met à jour la variable globale
+            maxScore = max;
+            // Met à jour l’affichage dans le span #scoreMax
+            const scoreMaxSpan = document.getElementById('scoreMax');
+            if (scoreMaxSpan) {
+                scoreMaxSpan.textContent = maxScore;
+            }
+        }
+
+        // Fonction pour rafraîchir l’affichage du score
+        function updateScoreDisplay() {
+            // Récupère le span #score
+            const scoreSpan = document.getElementById('score');
+            // Si trouvé, met à jour le texte
+            if (scoreSpan) {
+                scoreSpan.textContent = totalScore;
+            }
+        }
+
+        // Fonction pour configurer le bouton d’affichage du cours
+        function setupCoursToggle() {
+            // Récupère le bouton
+            const btnCours = document.getElementById('btnCours');
+            // Récupère le bloc de cours
+            const blocCours = document.getElementById('blocCours');
+            // Si l’un des deux manque, on ne fait rien
+            if (!btnCours || !blocCours) return;
+
+            // Ajoute un écouteur de clic
+            btnCours.addEventListener('click', () => {
+                // Si le bloc est caché, on l’affiche ; sinon on le cache
+                blocCours.style.display =
+                    (blocCours.style.display === 'none' || blocCours.style.display === '') ? 'block' : 'none';
+            });
+        }
+
+        // Fonction pour vérifier un exercice "classique" avec une seule réponse numérique
+        function checkStandardExercise(exerciceDiv) {
+            // Récupère le champ de saisie de réponse
+            const input = exerciceDiv.querySelector('input.reponse');
+            // Récupère la zone de message
+            const messageSpan = exerciceDiv.querySelector('.message');
+            // Récupère le nombre de points pour cet exercice
+            const pts = parseFloat(exerciceDiv.getAttribute('data-points')) || 0;
+
+            // Vérifie que tous les éléments existent
+            if (!input || !messageSpan) return;
+
+            // Récupère la valeur saisie par l’élève
+            const userValue = input.value;
+            // Convertit en nombre
+            const userNum = normalizeToNumber(userValue);
+
+            // Récupère la valeur correcte (stockée dans data-correct)
+            const correctStr = input.getAttribute('data-correct') || '';
+            // Convertit en nombre
+            const correctNum = parseFloat(correctStr);
+
+            // Si l’élève n’a pas donné de valeur numérique valable
+            if (isNaN(userNum)) {
+                // Affiche un message d’erreur
+                messageSpan.textContent = '❗ Entre une valeur numérique.';
+                messageSpan.classList.remove('ok');
+                messageSpan.classList.add('ko');
+                // Son d’erreur
+                playBeep(false);
+                // Sortie de la fonction
+                return;
+            }
+
+            // Calcule la différence absolue entre la réponse et la valeur correcte
+            const diff = Math.abs(userNum - correctNum);
+            // Définit une petite tolérance d’arrondi
+            const tolerance = 0.005;
+
+            // Vérifie si l’exercice a déjà été validé précédemment
+            const alreadyCorrect = exerciceDiv.getAttribute('data-correct-done') === 'true';
+
+            // Si la réponse est suffisamment proche de la valeur correcte
+            if (diff <= tolerance) {
+                // Si l’exercice n’était pas encore comptabilisé comme correct
+                if (!alreadyCorrect) {
+                    // Ajoute les points au score total
+                    totalScore += pts;
+                    // Marque l’exercice comme validé
+                    exerciceDiv.setAttribute('data-correct-done', 'true');
+                }
+                // Message de réussite
+                messageSpan.textContent = '✅ Bravo, c’est correct !';
+                messageSpan.classList.remove('ko');
+                messageSpan.classList.add('ok');
+                // Son de réussite
+                playBeep(true);
+            } else {
+                // Si la réponse est fausse, aucun point ajouté
+                messageSpan.textContent = '❌ À corriger.';
+                messageSpan.classList.remove('ok');
+                messageSpan.classList.add('ko');
+                // Son d’erreur
+                playBeep(false);
+            }
+
+            // Met à jour l’affichage du score
+            updateScoreDisplay();
+        }
+
+        // Fonction pour vérifier l’exercice en colonne (exercice 20)
+        function checkColonneExercise(exerciceDiv) {
+            // Récupère le bouton Valider spécifique avec attribut data-colonne
+            const btn = exerciceDiv.querySelector('.zone-reponse .btn-valider[data-colonne]');
+            // Récupère la zone de message
+            const messageSpan = exerciceDiv.querySelector('.message');
+            // Récupère les champs "digit" (un par case de résultat)
+            const digitInputs = exerciceDiv.querySelectorAll('input.digit');
+            // Récupère le nombre de points
+            const pts = parseFloat(exerciceDiv.getAttribute('data-points')) || 0;
+
+            // Vérifie que tout existe
+            if (!btn || !messageSpan || digitInputs.length === 0) return;
+
+            // Récupère l’expression stockée dans data-colonne (ex : "47.35+18.7")
+            const expr = btn.getAttribute('data-colonne') || '';
+            // Sépare les deux nombres autour du signe +
+            const parts = expr.split('+');
+            // Convertit chaque partie en nombre
+            const a = parseFloat(parts[0]);
+            const b = parseFloat(parts[1]);
+            // Calcule le résultat attendu (somme)
+            const expected = a + b;
+
+            // Initialise un total calculé à partir des digits
+            let computed = 0;
+            // Variable pour savoir si un champ est vide
+            let empty = false;
+
+            // Parcourt les inputs "digit"
+            digitInputs.forEach(input => {
+                // Récupère la valeur saisie
+                const v = input.value.trim();
+                // Si une case est vide, on le note
+                if (v === '') {
+                    empty = true;
+                }
+                // Convertit en entier
+                const d = parseInt(v, 10);
+                // Valeur de position (dizaines, unités, dixièmes, centièmes)
+                const weight = parseFloat(input.getAttribute('data-weight')) || 0;
+                // Si le contenu est un chiffre valide
+                if (!isNaN(d)) {
+                    // Ajoute au total, pondéré par sa position
+                    computed += d * weight;
+                }
+            });
+
+            // Si un champ est vide, on signale qu’il manque quelque chose
+            if (empty) {
+                messageSpan.textContent = '❗ Remplis toutes les cases du résultat.';
+                messageSpan.classList.remove('ok');
+                messageSpan.classList.add('ko');
+                playBeep(false);
+                return;
+            }
+
+            // Compare le résultat calculé à la valeur attendue
+            const diff = Math.abs(computed - expected);
+            // Tolérance pour l’arrondi
+            const tolerance = 0.0005;
+
+            // Vérifie si déjà validé auparavant
+            const alreadyCorrect = exerciceDiv.getAttribute('data-correct-done') === 'true';
+
+            // Si la différence est très petite, on considère que c’est correct
+            if (diff <= tolerance) {
+                // Si ce n’était pas déjà validé, on ajoute les points
+                if (!alreadyCorrect) {
+                    totalScore += pts;
+                    exerciceDiv.setAttribute('data-correct-done', 'true');
+                }
+                // Message de réussite
+                messageSpan.textContent = '✅ Bravo, tu as bien posé et calculé l’addition !';
+                messageSpan.classList.remove('ko');
+                messageSpan.classList.add('ok');
+                // Son de succès
+                playBeep(true);
+            } else {
+                // Réponse incorrecte
+                messageSpan.textContent = '❌ Le résultat posé n’est pas correct, vérifie tes retenues.';
+                messageSpan.classList.remove('ok');
+                messageSpan.classList.add('ko');
+                // Son d’erreur
+                playBeep(false);
+            }
+
+            // Mise à jour du score affiché
+            updateScoreDisplay();
+        }
+
+        // Fonction pour installer les gestionnaires d’événements sur tous les exercices
+        function setupExercises() {
+            // Sélectionne tous les blocs d’exercices
+            const exercices = document.querySelectorAll('.exercice');
+
+            // Parcours de chaque exercice
+            exercices.forEach(ex => {
+                // Récupère tous les boutons Valider de cet exercice
+                const btnValiderList = ex.querySelectorAll('.btn-valider');
+                // Récupère le bouton Aide
+                const btnAide = ex.querySelector('.btn-aide');
+                // Récupère le bouton Correction
+                const btnCorrection = ex.querySelector('.btn-correction');
+                // Récupère les textes d’aide et de correction
+                const aideTexte = ex.querySelector('.aide-texte');
+                const corrTexte = ex.querySelector('.correction-texte');
+
+                // Pour chaque bouton Valider
+                btnValiderList.forEach(btn => {
+                    // Vérifie s’il s’agit d’un exercice "colonne" (présence de data-colonne)
+                    const isColonne = btn.hasAttribute('data-colonne');
+
+                    // Ajoute un gestionnaire de clic
+                    btn.addEventListener('click', () => {
+                        // Si c’est un exercice en colonne, on appelle checkColonneExercise
+                        if (isColonne) {
+                            checkColonneExercise(ex);
+                        } else {
+                            // Sinon, exercice standard (une réponse numérique simple)
+                            checkStandardExercise(ex);
+                        }
+                    });
+                });
+
+                // Gestion du bouton Aide (affiche/masque le texte d’aide)
+                if (btnAide && aideTexte) {
+                    btnAide.addEventListener('click', () => {
+                        // Bascule l’affichage entre block et none
+                        aideTexte.style.display =
+                            (aideTexte.style.display === 'none' || aideTexte.style.display === '') ? 'block' : 'none';
+                    });
+                }
+
+                // Gestion du bouton Correction (affiche/masque le texte de correction)
+                if (btnCorrection && corrTexte) {
+                    btnCorrection.addEventListener('click', () => {
+                        // Bascule l’affichage
+                        corrTexte.style.display =
+                            (corrTexte.style.display === 'none' || corrTexte.style.display === '') ? 'block' : 'none';
+                    });
+                }
+            });
+        }
+
+        // Fonction pour réinitialiser toutes les réponses et le score
+        function setupResetButton() {
+            // Récupère le bouton de reset
+            const btnReset = document.getElementById('btnReset');
+            // Si le bouton n’existe pas, on quitte
+            if (!btnReset) return;
+
+            // Ajout de l’événement clic
+            btnReset.addEventListener('click', () => {
+                // Remet le score total à zéro
+                totalScore = 0;
+                // Met à jour l’affichage
+                updateScoreDisplay();
+
+                // Sélectionne tous les exercices
+                const exercices = document.querySelectorAll('.exercice');
+                exercices.forEach(ex => {
+                    // Supprime le marqueur "déjà correct"
+                    ex.removeAttribute('data-correct-done');
+
+                    // Réinitialise tous les champs texte
+                    const inputs = ex.querySelectorAll('input[type="text"]');
+                    inputs.forEach(inp => {
+                        inp.value = '';
+                    });
+
+                    // Réinitialise les messages
+                    const messageSpan = ex.querySelector('.message');
+                    if (messageSpan) {
+                        messageSpan.textContent = '';
+                        messageSpan.classList.remove('ok', 'ko');
+                    }
+
+                    // Cache les aides et corrections
+                    const aideTexte = ex.querySelector('.aide-texte');
+                    const corrTexte = ex.querySelector('.correction-texte');
+                    if (aideTexte) aideTexte.style.display = 'none';
+                    if (corrTexte) corrTexte.style.display = 'none';
+                });
+
+                // Son de "reset" (on prend le son d’erreur pour changer)
+                playBeep(false);
+            });
+        }
+
+        // Quand la page est entièrement chargée, on initialise tout
+        window.addEventListener('DOMContentLoaded', () => {
+            // Calcule le score maximal total
+            computeMaxScore();
+            // Met à jour l’affichage initial du score
+            updateScoreDisplay();
+            // Met en place le bouton de rappel de cours
+            setupCoursToggle();
+            // Met en place les événements sur les exercices
+            setupExercises();
+            // Met en place le bouton de réinitialisation
+            setupResetButton();
+        });
+    </script>
+    <!-- Fin du script -->
+
+</body>
+<!-- Fin du corps -->
+
+</html>
+<!-- Fin du document -->
