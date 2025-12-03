@@ -398,9 +398,9 @@
 		<div id="aide-ex1" class="aide hidden">
 			<p class="sous-titre-aide">📏 Sur feuille</p>
 			<ul>
-				<li>Q1 : choisis par exemple les côtés <strong>(EH)</strong> et <strong>(EF)</strong> qui se coupent en angle droit au sommet E.</li>
-				<li>Q2 : choisis les côtés opposés <strong>(EF)</strong> et <strong>(HG)</strong> (ils ne se rencontrent jamais).</li>
-				<li>Q3 : relie E à G puis F à H : les deux segments se coupent au centre du rectangle.</li>
+				<li>R1 : choisis par exemple les côtés <strong>(EH)</strong> et <strong>(EF)</strong> qui se coupent en angle droit au sommet E.</li>
+				<li>R2 : choisis les côtés opposés <strong>(EF)</strong> et <strong>(HG)</strong> (ils ne se rencontrent jamais).</li>
+				<li>R3 : relie E à G puis F à H : les deux segments se coupent au centre du rectangle.</li>
 			</ul>
 			<p class="sous-titre-aide">💻 Avec GeoGebra</p>
 			<ul>
@@ -420,7 +420,7 @@
 
     <!-- Commentaire :  question 1, expliquée de façon simple pour les élèves de 6e. -->
 
-    <strong>Q1 :</strong>
+    <strong>R1 :</strong>
     <!-- Commentaire : Introduction au rectangle avec un exemple clair. -->
     Dans le rectangle <strong>EFGH</strong>, tous les angles sont droits (90°). Par exemple, l’angle en E est droit.
     <!-- Commentaire : Explication des côtés perpendiculaires avec notation mathématique. -->
@@ -686,8 +686,86 @@
 			</div>
 
 <p>2. Tracer deux droites parallèles dans ce rectangle, les nommer et les noter mathématiquement.</p>
+	
+<!-- ===== Q2 : réponses et figures ===== -->
+<ul>
+  <li>(EF) ∥ (HG) : les côtés du haut et du bas du rectangle sont parallèles.</li>
+  <li>(EH) ∥ (FG) : les côtés de gauche et de droite du rectangle sont parallèles.</li>
+</ul>
+
+<!-- Figure Q2 – Cas 1 : (EF) ∥ (HG) -->
+<div class="figure-attendue">
+  <svg width="240" height="160" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
+    <!-- Rectangle EFGH -->
+    <polygon points="50,40 190,40 190,120 50,120"
+             fill="none" stroke="#9ca3af" stroke-width="2" />
+
+    <!-- Sommets -->
+    <circle cx="50" cy="40" r="3" fill="#facc15" />
+    <text x="40" y="35" font-size="11" fill="#facc15">E</text>
+
+    <circle cx="190" cy="40" r="3" fill="#facc15" />
+    <text x="192" y="35" font-size="11" fill="#facc15">F</text>
+
+    <circle cx="190" cy="120" r="3" fill="#facc15" />
+    <text x="192" y="135" font-size="11" fill="#facc15">G</text>
+
+    <circle cx="50" cy="120" r="3" fill="#facc15" />
+    <text x="40" y="135" font-size="11" fill="#facc15">H</text>
+
+    <!-- Droites parallèles (EF) et (HG) -->
+    <!-- On prolonge les côtés pour bien voir qu’il s’agit de droites -->
+    <line x1="0" y1="40" x2="240" y2="40"
+          stroke="#34d399" stroke-width="3" />
+    <line x1="0" y1="120" x2="240" y2="120"
+          stroke="#34d399" stroke-width="3" />
+
+    <!-- Noms des droites -->
+    <text x="10" y="30" font-size="11" fill="#34d399">(EF)</text>
+    <text x="10" y="135" font-size="11" fill="#34d399">(HG)</text>
+  </svg>
+
+  <p>Q2 – Cas 1 : les droites <strong>(EF)</strong> et <strong>(HG)</strong> sont parallèles.</p>
+</div>
+
+<!-- Figure Q2 – Cas 2 : (EH) ∥ (FG) -->
+<div class="figure-attendue">
+  <svg width="240" height="160" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
+    <!-- Rectangle EFGH -->
+    <polygon points="50,40 190,40 190,120 50,120"
+             fill="none" stroke="#9ca3af" stroke-width="2" />
+
+    <!-- Sommets -->
+    <circle cx="50" cy="40" r="3" fill="#facc15" />
+    <text x="40" y="35" font-size="11" fill="#facc15">E</text>
+
+    <circle cx="190" cy="40" r="3" fill="#facc15" />
+    <text x="192" y="35" font-size="11" fill="#facc15">F</text>
+
+    <circle cx="190" cy="120" r="3" fill="#facc15" />
+    <text x="192" y="135" font-size="11" fill="#facc15">G</text>
+
+    <circle cx="50" cy="120" r="3" fill="#facc15" />
+    <text x="40" y="135" font-size="11" fill="#facc15">H</text>
+
+    <!-- Droites parallèles (EH) et (FG) -->
+    <line x1="50" y1="0" x2="50" y2="160"
+          stroke="#34d399" stroke-width="3" />
+    <line x1="190" y1="0" x2="190" y2="160"
+          stroke="#34d399" stroke-width="3" />
+
+    <!-- Noms des droites -->
+    <text x="55" y="20" font-size="11" fill="#34d399">(EH)</text>
+    <text x="195" y="20" font-size="11" fill="#34d399">(FG)</text>
+  </svg>
+
+  <p>Q2 – Cas 2 : les droites <strong>(EH)</strong> et <strong>(FG)</strong> sont parallèles.</p>
+</div>
+
+
+
 	<li>		
-		<strong>Q2 :</strong>
+		<strong>R2 :</strong>
 		Dans un rectangle (qui est un cas particulier de parallélogramme),
 		les côtés opposés sont <strong>parallèles</strong>. Ainsi
 		<strong>(EF)</strong> est parallèle à <strong>(HG)</strong>
@@ -695,8 +773,62 @@
 		<em>Théorème :</em> dans tout parallélogramme, les côtés opposés sont parallèles.
 	</li>
 
+<p>3. Tracer deux droites de cette même figure qui sont sécantes au centre O du rectangle mais qui ne sont pas perpendiculaires. Comment appelle-t-on ces deux sécantes ?</p>
+
+
+
+<!-- ===== Q3 : réponse et figure ===== -->
+<ul>
+  <li>
+    On trace les diagonales du rectangle : les droites <strong>(EG)</strong> et
+    <strong>(FH)</strong>. Elles se coupent en leur milieu O, mais l’angle formé
+    n’est pas droit : ce sont donc deux <strong>droites sécantes non perpendiculaires</strong>.
+  </li>
+</ul>
+
+<div class="figure-attendue">
+  <svg width="240" height="160" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
+    <!-- Rectangle EFGH -->
+    <polygon points="50,40 190,40 190,120 50,120"
+             fill="none" stroke="#9ca3af" stroke-width="2" />
+
+    <!-- Sommets -->
+    <circle cx="50" cy="40" r="3" fill="#facc15" />
+    <text x="40" y="35" font-size="11" fill="#facc15">E</text>
+
+    <circle cx="190" cy="40" r="3" fill="#facc15" />
+    <text x="192" y="35" font-size="11" fill="#facc15">F</text>
+
+    <circle cx="190" cy="120" r="3" fill="#facc15" />
+    <text x="192" y="135" font-size="11" fill="#facc15">G</text>
+
+    <circle cx="50" cy="120" r="3" fill="#facc15" />
+    <text x="40" y="135" font-size="11" fill="#facc15">H</text>
+
+    <!-- Centre O -->
+    <circle cx="120" cy="80" r="3" fill="#f97316" />
+    <text x="115" y="70" font-size="11" fill="#f97316">O</text>
+
+    <!-- Diagonales tracées comme droites entières -->
+    <line x1="0"   y1="10"  x2="240" y2="150"
+          stroke="#34d399" stroke-width="3" />
+    <line x1="240" y1="10"  x2="0"   y2="150"
+          stroke="#22c55e" stroke-width="3" />
+
+    <!-- Noms des droites -->
+    <text x="10"  y="25" font-size="11" fill="#34d399">(EG)</text>
+    <text x="180" y="25" font-size="11" fill="#22c55e">(FH)</text>
+  </svg>
+
+  <p>
+    Q3 : les diagonales <strong>(EG)</strong> et <strong>(FH)</strong> sont
+    <strong>sécantes en O</strong> et ne forment pas un angle droit :
+    ce sont des <strong>droites sécantes non perpendiculaires</strong>.
+  </p>
+</div>
+
 	<li>
-		<strong>Q3 :</strong>
+		<strong>R3 :</strong>
 		Les diagonales <strong>[EG]</strong> et <strong>[FH]</strong>
 		se coupent en leur milieu en un point noté O.
 		Ce point O est donc le <strong>centre du rectangle</strong>. <br>
@@ -755,22 +887,78 @@
 	<div id="aide-ex2" class="aide hidden">
 		<p class="sous-titre-aide">📏 Sur feuille</p>
 		<ul>
-			<li>Q1 : dans un parallélogramme, les côtés opposés sont parallèles : par exemple (AB) ∥ (DC).</li>
-			<li>Q2 : par le point I, trace une droite parallèle à (AB) ; elle coupe [AD] en J.</li>
-			<li>Q3 : observe les côtés opposés dans les quadrilatères ABIJ et ICDJ.</li>
+			<li>R1 : dans un parallélogramme, les côtés opposés sont parallèles : par exemple (AB) ∥ (DC).</li>
+			<li>R2 : par le point I, trace une droite parallèle à (AB) ; elle coupe [AD] en J.</li>
+			<li>R3 : observe les côtés opposés dans les quadrilatères ABIJ et ICDJ.</li>
 		</ul>
 	</div>
 
 	<div id="corr-ex2" class="correction hidden">
+
+
+
 <ul>
 	<li>
-		<strong>Q1 :</strong>
+		<strong>R1 :</strong>
 		On construit une droite passant par I et parallèle à <strong>(AB)</strong>.
 		Cette droite coupe [AD] en J : on note cette droite <strong>(IJ)</strong>.
 	</li>
+<!-- ===== EXERCICE 2 – Q1 : deux droites parallèles ===== -->
+<div class="figure-attendue">
+  <svg width="260" height="170" viewBox="0 0 260 170" xmlns="http://www.w3.org/2000/svg">
+    <!-- Parallélogramme ABCD (même base que la figure de départ) -->
+    <!-- A(110,60), B(190,60), C(140,120), D(60,120) -->
+    <polygon points="110,60 190,60 140,120 60,120"
+             fill="none" stroke="#9ca3af" stroke-width="2" />
+
+    <!-- Sommets -->
+    <circle cx="110" cy="60"  r="3" fill="#facc15" />
+    <text x="102" y="55" font-size="11" fill="#facc15">A</text>
+
+    <circle cx="190" cy="60"  r="3" fill="#facc15" />
+    <text x="192" y="55" font-size="11" fill="#facc15">B</text>
+
+    <circle cx="140" cy="120" r="3" fill="#facc15" />
+    <text x="140" y="135" font-size="11" fill="#facc15">C</text>
+
+    <circle cx="60"  cy="120" r="3" fill="#facc15" />
+    <text x="52" y="135" font-size="11" fill="#facc15">D</text>
+
+    <!-- Point I sur [CB] (croix orange), repris de la figure de départ -->
+    <line x1="161" y1="86" x2="169" y2="94"
+          stroke="#f97316" stroke-width="2.5" />
+    <line x1="161" y1="94" x2="169" y2="86"
+          stroke="#f97316" stroke-width="2.5" />
+    <text x="180" y="84" font-size="11" fill="#f97316">I</text>
+
+    <!-- Droites parallèles choisies : (AB) et (DC) -->
+
+    <!-- Droite (AB) en vert (ligne infinie) -->
+    <line x1="20" y1="60" x2="240" y2="60"
+          stroke="#22c55e" stroke-width="2" />
+    <!-- Segment [AB] en violet, plus épais -->
+    <line x1="110" y1="60" x2="190" y2="60"
+          stroke="#a855f7" stroke-width="3" />
+    <!-- Nom de la droite (AB) -->
+    <text x="200" y="50" font-size="11" fill="#22c55e">(AB)</text>
+    <!-- Nom du segment [AB] -->
+    <text x="130" y="52" font-size="11" fill="#a855f7">[AB]</text>
+
+    <!-- Droite (DC) en vert (ligne infinie) -->
+    <line x1="20" y1="120" x2="240" y2="120"
+          stroke="#22c55e" stroke-width="2" />
+    <!-- Segment [DC] en bleu ciel, plus épais -->
+    <line x1="60" y1="120" x2="140" y2="120"
+          stroke="#0ea5e9" stroke-width="3" />
+    <!-- Nom de la droite (DC) -->
+    <text x="200" y="135" font-size="11" fill="#22c55e">(DC)</text>
+    <!-- Nom du segment [DC] -->
+    <text x="80" y="135" font-size="11" fill="#0ea5e9">[DC]</text>
+  </svg>
+</div>
 
 	<li>
-		<strong>Q2 :</strong>
+		<strong>R2 :</strong>
 		Dans le quadrilatère <strong>ABIJ</strong> : <br>
 		– (AB) est parallèle à (IJ) par construction ;<br>
 		– (AI) est parallèle à (BJ) car <strong>ABCD</strong> est un parallélogramme
@@ -780,9 +968,65 @@
 		<em>Théorème :</em> un quadrilatère dont les deux paires de côtés opposés
 		sont parallèles est un parallélogramme.
 	</li>
+
+<!-- ===== EXERCICE 2 – Q2 : droite (IJ) parallèle à (AB) ===== -->
+<div class="figure-attendue">
+  <svg width="260" height="170" viewBox="0 0 260 170" xmlns="http://www.w3.org/2000/svg">
+    <!-- Parallélogramme ABCD -->
+    <polygon points="110,60 190,60 140,120 60,120"
+             fill="none" stroke="#9ca3af" stroke-width="2" />
+
+    <!-- Sommets -->
+    <circle cx="110" cy="60"  r="3" fill="#facc15" />
+    <text x="102" y="55" font-size="11" fill="#facc15">A</text>
+
+    <circle cx="190" cy="60"  r="3" fill="#facc15" />
+    <text x="192" y="55" font-size="11" fill="#facc15">B</text>
+
+    <circle cx="140" cy="120" r="3" fill="#facc15" />
+    <text x="140" y="135" font-size="11" fill="#facc15">C</text>
+
+    <circle cx="60"  cy="120" r="3" fill="#facc15" />
+    <text x="52" y="135" font-size="11" fill="#facc15">D</text>
+
+    <!-- Point I sur [CB] (même place que dans la figure de départ) -->
+    <line x1="161" y1="86" x2="169" y2="94"
+          stroke="#f97316" stroke-width="2.5" />
+    <line x1="161" y1="94" x2="169" y2="86"
+          stroke="#f97316" stroke-width="2.5" />
+    <text x="180" y="84" font-size="11" fill="#f97316">I</text>
+
+    <!-- Droite (AB) rappelée en vert (support) -->
+    <line x1="20" y1="60" x2="240" y2="60"
+          stroke="#22c55e" stroke-width="2" />
+    <text x="200" y="50" font-size="11" fill="#22c55e">(AB)</text>
+
+    <!-- Droite (IJ) : parallèle à (AB) passant par I -->
+    <line x1="40" y1="90" x2="240" y2="90"
+          stroke="#a855f7" stroke-width="2" />
+    <text x="205" y="82" font-size="11" fill="#a855f7">(IJ)</text>
+
+    <!-- Point J : intersection de (IJ) avec [AD] -->
+    <!-- On calcule une position cohérente visuellement : J sur [AD] -->
+    <circle cx="85" cy="90" r="3" fill="#a855f7" />
+    <text x="77" y="80" font-size="11" fill="#a855f7">J</text>
+
+    <!-- Segment [IJ] mis en valeur (par-dessus la droite) -->
+    <line x1="85" y1="90" x2="165" y2="90"
+          stroke="#a855f7" stroke-width="3" />
+
+    <!-- Segments [AI] et [BJ] (optionnel, pour préparer la Q3) -->
+    <line x1="110" y1="60" x2="85"  y2="90"
+          stroke="#f97316" stroke-width="3" />
+    <line x1="190" y1="60" x2="165" y2="90"
+          stroke="#f97316" stroke-width="3" />
+  </svg>
+</div>
+
+	
 <p>3. Tracer deux droites de cette même figure qui sont sécantes au centre O du rectangle mais qui ne sont pas perpendiculaires. Comment appelle-t-on ces deux sécantes ?</p>
 	<li>
-		<strong>Q3 :</strong>
+		<strong>R3 :</strong>
 		De même, dans le quadrilatère <strong>ICDJ</strong> :<br>
 		– (CD) est parallèle à (AB) et (IJ) est parallèle à (AB), donc (CD) ∥ (IJ) ;<br>
 		– (CI) est parallèle à (DJ) car ABCD est un parallélogramme.<br>
@@ -849,33 +1093,24 @@
 <div id="corr-ex3" class="correction hidden">
 
 <ul>
-	<li>
-		<strong>Q1 :</strong>
-		Dans le losange <strong>KLMN</strong>, les diagonales
-		<strong>(KM)</strong> et <strong>(LN)</strong> sont
-		<strong>perpendiculaires</strong> :
-		(KM) &perp; (LN).<br>
-		<em>Théorème :</em> dans un losange, les diagonales sont perpendiculaires.
-	</li>
+  <li>
+    <strong>Q1 – Réponse :</strong>
+    On choisit les droites <strong>(KM)</strong> et <strong>(LN)</strong> de la figure.
+    Elles se coupent en O et forment un angle droit en ce point :<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<strong>(KM) ⟂ (LN) en O</strong>.<br>
+    On code alors la figure en traçant un petit « L » d’angle droit en O,
+    pour montrer que les deux droites sont perpendiculaires.
+  </li>
 
-	<li>
-		<strong>Q2 :</strong>
-		Les diagonales <strong>[KM]</strong> et <strong>[LN]</strong>
-		se coupent en O et se partagent en deux segments de même longueur :
-		O est le <strong>milieu</strong> de [KM] et de [LN].<br>
-		<em>Théorème :</em> dans tout parallélogramme (donc dans un losange),
-		les diagonales se coupent en leur milieu.
-	</li>
-
-	<li>
-		<strong>Q3 :</strong>
-		Dans le losange, la diagonale <strong>[KM]</strong> est
-		<strong>bissectrice</strong> de l’angle &ang;LKN et la diagonale
-		<strong>[LN]</strong> est bissectrice de l’angle &ang;MLN.
-		Les angles aux sommets sont donc partagés en deux angles égaux.<br>
-		<em>Théorème :</em> dans un losange, chaque diagonale est bissectrice
-		des angles auxquels elle est issue.
-	</li>
+  <li>
+    <strong>Q2 – Réponse :</strong>
+    Dans le losange <strong>KLMN</strong>, les droites <strong>(KM)</strong> et
+    <strong>(LN)</strong> sont les <strong>diagonales</strong> du losange.<br>
+    Elles sont perpendiculaires et se coupent en leur milieu :
+    O est le milieu de [KM] et de [LN].<br>
+    <em>Théorème :</em> dans un losange, les diagonales sont perpendiculaires
+    et se coupent en leur milieu.
+  </li>
 </ul>
 
 
@@ -1002,7 +1237,7 @@
 	<div id="corr-ex4" class="correction hidden">
 <ul>
 	<li>
-		<strong>Q1–Q2 :</strong>
+		<strong>R1–R2 :</strong>
 		Dans le carré <strong>ABCD</strong>, les diagonales
 		<strong>(AC)</strong> et <strong>(BD)</strong> sont
 		<strong>perpendiculaires</strong> et se coupent en leur milieu en O :
@@ -1143,7 +1378,7 @@
 		</div>
 
 	<li>
-		<strong>Q3 :</strong>
+		<strong>R3 :</strong>
 		Les droites (AC) et (BD) sont les <strong>diagonales du carré ABCD</strong>.
 	</li>
 
@@ -1340,9 +1575,9 @@
 
 		<div id="aide-ex5" class="aide hidden">
 			<ul>
-				<li>Q1 : place E sur le cercle de sorte que O soit le milieu de [AE] : AOE est un diamètre.</li>
-				<li>Q2 : trace une droite perpendiculaire à (AO) passant par E.</li>
-				<li>Q3 : trace par O une droite parallèle à (d).</li>
+				<li>R1 : place E sur le cercle de sorte que O soit le milieu de [AE] : AOE est un diamètre.</li>
+				<li>R2 : trace une droite perpendiculaire à (AO) passant par E.</li>
+				<li>R3 : trace par O une droite parallèle à (d).</li>
 				<li>Q4 : si une droite est parallèle à une droite perpendiculaire, elle est aussi perpendiculaire à la même droite.</li>
 			</ul>
 		</div>
@@ -1357,7 +1592,7 @@
 
 
 	<li>
-		<strong>Q1 :</strong>
+		<strong>R1 :</strong>
 		Le point E est diamétralement opposé à A sur le cercle de centre O : [AE] est un
 		<strong>diamètre</strong>.
 	</li>
@@ -1406,7 +1641,7 @@
 	
 
 	<li>
-		<strong>Q2 :</strong>
+		<strong>R2 :</strong>
 		La droite <strong>(d)</strong> est construite perpendiculaire à
 		<strong>(AO)</strong> en passant par E :
 		(d) &perp; (AO) en E.
@@ -1473,7 +1708,7 @@
 				<p>3. Tracer <strong>(d’)</strong>, la droite parallèle à (d) passant par O.</p>
 		
 	<li>
-		<strong>Q3 :</strong>
+		<strong>R3 :</strong>
 		La droite <strong>(d’)</strong> est tracée par O et parallèle à (d) :
 		(d’) ∥ (d).
 	</li>
@@ -1679,11 +1914,11 @@
     <!-- AIDE -->
     <div id="aide-ex6" class="aide hidden">
         <ul>
-            <li><strong>Q1 :</strong> On construit trois droites perpendiculaires à (Δ) :
+            <li><strong>R1 :</strong> On construit trois droites perpendiculaires à (Δ) :
                 (D₁) ⟂ (Δ), (D₂) ⟂ (Δ), (D₃) ⟂ (Δ).
             </li>
 
-            <li><strong>Q2 :</strong> Les trois droites sont parallèles entre elles, car elles sont toutes
+            <li><strong>R2 :</strong> Les trois droites sont parallèles entre elles, car elles sont toutes
                 perpendiculaires à la même droite (Δ).<br>
                 <em>Théorème :</em> deux droites perpendiculaires à une même droite sont parallèles.
             </li>
@@ -1797,13 +2032,13 @@
 
 		<div id="corr-ex7" class="correction hidden">
 			<ul>
-				<li><strong>Q1 :</strong> la droite (D₃) est tracée <strong>parallèle à (D₁)</strong> et passant par I :
+				<li><strong>R1 :</strong> la droite (D₃) est tracée <strong>parallèle à (D₁)</strong> et passant par I :
 					on a donc <strong>(D₃) ∥ (D₁)</strong>.</li>
 
-				<li><strong>Q2 :</strong> la droite (D₄) est tracée <strong>parallèle à (D₃)</strong> et passant par J :
+				<li><strong>R2 :</strong> la droite (D₄) est tracée <strong>parallèle à (D₃)</strong> et passant par J :
 					donc <strong>(D₄) ∥ (D₃)</strong>.</li>
 
-				<li><strong>Q3 :</strong> comme (D₃) est parallèle à (D₁) et (D₄) est parallèle à (D₃),
+				<li><strong>R3 :</strong> comme (D₃) est parallèle à (D₁) et (D₄) est parallèle à (D₃),
 					alors les trois droites <strong>(D₁), (D₃) et (D₄)</strong> sont toutes parallèles entre elles,
 					et (D₁) et (D₂) se coupent en O : ce sont deux <strong>droites sécantes</strong>.</li>
 
@@ -1905,7 +2140,7 @@
 <ul>
 
 	<p>1. Tracer le diamètre [AB] du cercle de centre O, puis placer un point E appartenant au cercle.</p>
-	<li><strong>Q1 :</strong> le segment [AB] est tracé de façon à passer par le centre O
+	<li><strong>R1 :</strong> le segment [AB] est tracé de façon à passer par le centre O
 		avec A et B sur le cercle : <strong>[AB] est donc un diamètre</strong> du cercle.</li>
 
 
@@ -1996,7 +2231,7 @@
 
 <p>2. Tracer les droites (CB) et (CA).</p>
 
-	<li><strong>Q2 :</strong> on relie C à A et C à B. On obtient le triangle <strong>ACB</strong>
+	<li><strong>R2 :</strong> on relie C à A et C à B. On obtient le triangle <strong>ACB</strong>
 		inscrit dans le cercle, dont le côté [AB] est un diamètre.</li>
 
 <div class="figure-attendue">
@@ -2105,7 +2340,7 @@
 
 <p>3. Que peut-on dire de ces deux droites ? Vérifier à l’équerre.</p>
 
-	<li><strong>Q3 :</strong> dans ce triangle, l’angle en C intercepte le diamètre [AB] :
+	<li><strong>R3 :</strong> dans ce triangle, l’angle en C intercepte le diamètre [AB] :
 		on sait alors que cet angle est un <strong>angle droit</strong>.
 		Les droites <strong>(CA)</strong> et <strong>(CB)</strong> sont donc
 		<strong>perpendiculaires</strong> : <strong>(CA) ⟂ (CB)</strong>.</li>
@@ -2259,22 +2494,22 @@
 
 		<div id="aide-ex9" class="aide hidden">
 			<ul>
-				<li>Q1 : par E, trace une droite perpendiculaire à (AB).</li>
-				<li>Q2 : trouve le centre O en croisant les diagonales, puis par O trace une droite parallèle à (DC).</li>
+				<li>R1 : par E, trace une droite perpendiculaire à (AB).</li>
+				<li>R2 : trouve le centre O en croisant les diagonales, puis par O trace une droite parallèle à (DC).</li>
 			</ul>
 		</div>
 
 		<div id="corr-ex9" class="correction hidden">
 		<ul>
-			<li><strong>Q1 :</strong> la droite (d) est tracée <strong>perpendiculaire à (AB)</strong> en passant par E,
+			<li><strong>R1 :</strong> la droite (d) est tracée <strong>perpendiculaire à (AB)</strong> en passant par E,
 				donc on a <strong>(d) ⟂ (AB)</strong>.</li>
 
-			<li><strong>Q2 :</strong> dans le parallélogramme ABCD, les côtés opposés sont parallèles,
+			<li><strong>R2 :</strong> dans le parallélogramme ABCD, les côtés opposés sont parallèles,
 				donc <strong>(AB) ∥ (DC)</strong>.  
 				La droite (d₁) est construite <strong>parallèle à (DC)</strong> et passant par O,
 				donc on a <strong>(d₁) ∥ (AB)</strong>.</li>
 
-			<li><strong>Q3 :</strong> si <strong>(d) ⟂ (AB)</strong> et <strong>(d₁) ∥ (AB)</strong>,
+			<li><strong>R3 :</strong> si <strong>(d) ⟂ (AB)</strong> et <strong>(d₁) ∥ (AB)</strong>,
 				alors la droite (d) est <strong>perpendiculaire</strong> à la droite (d₁) :
 				<strong>(d) ⟂ (d₁)</strong>.</li>
 
