@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<!--
+  Fichier : addition_soustraction_6e_interactif.html
+  Niveau : 6e
+  Thème : Addition, soustraction, décimaux, expressions, conversions (activités inspirées du document fourni)
+  Important : les énoncés ci-dessous sont reformulés (pas de recopie intégrale), afin de servir de support interactif.
+-->
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"><!-- Encodage -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><!-- Responsive -->
+  <title>6e • Exercices interactifs • Addition & soustraction</title><!-- Titre -->
+  <style>
+    /* ====== Variables ====== */
+    :root{
+      --bg1:#050816;--bg2:#0b1226;--txt:#e8eefc;--muted:#b9c4e6;--line:rgba(255,255,255,.10);
+      --accent:#6ee7ff;--good:#5bff9a;--bad:#ff6b6b;--warn:#ffd36e;
+      --shadow:0 18px 50px rgba(0,0,0,.45);--radius:18px;
+    }
+    /* ====== Base ====== */
+    *{box-sizing:border-box;} /* Inclure bordures */
+    body{
+      margin:0; /* Pas de marge */
+      font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif; /* Police */
+      color:var(--txt); /* Couleur texte */
+      background:
+        radial-gradient(1200px 700px at 10% 0%, #13204a 0%, transparent 55%),
+        radial-gradient(900px 500px at 90% 10%, #113b4a 0%, transparent 55%),
+        linear-gradient(180deg,var(--bg1),var(--bg2)); /* Fond */
+      min-height:100vh; /* Hauteur mini */
+      padding:24px; /* Marge interne */
+    }
+    /* ====== Layout ====== */
+    .wrap{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.05fr .95fr;gap:18px;align-items:start;} /* Grille */
+    header{
+      grid-column:1/-1; /* Pleine largeur */
+      display:flex;gap:14px;align-items:center; /* Flex */
+      padding:16px 18px; /* Padding */
+      background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03)); /* Fond */
+      border:1px solid var(--line); /* Bordure */
+      border-radius:var(--radius); /* Arrondi */
+      box-shadow:var(--shadow); /* Ombre */
+      backdrop-filter:blur(10px); /* Flou */
+    }
+    .badge{
+      width:46px;height:46px;border-radius:14px;display:grid;place-items:center; /* Taille + centrage */
+      background:radial-gradient(circle at 30% 30%,rgba(110,231,255,.35),rgba(110,231,255,.06)); /* Dégradé */
+      border:1px solid rgba(110,231,255,.35); /* Bordure */
+      font-weight:900;letter-spacing:.4px; /* Gras */
+    }
+    h1{margin:0;font-size:18px;line-height:1.2;} /* Titre */
+    .sub{margin:2px 0 0 0;color:var(--muted);font-size:13px;} /* Sous-titre */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03)); /* Fond carte */
+      border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow); /* Bordure + ombre */
+      padding:16px;backdrop-filter:blur(10px); /* Padding + flou */
+    }
+    /* ====== Form meta ====== */
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px;} /* Ligne */
+    label{font-size:12px;color:var(--muted);} /* Label */
+    input.meta{
+      background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:12px; /* Style */
+      padding:10px 12px;color:var(--txt);outline:none;min-width:160px; /* Taille */
+    }
+    input.meta:focus{border-color:rgba(110,231,255,.6);box-shadow:0 0 0 3px rgba(110,231,255,.15);} /* Focus */
+    /* ====== Sections exercices ====== */
+    .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;} /* Boutons onglets */
+    .tabBtn{
+      cursor:pointer;border:none;border-radius:14px;padding:10px 12px;font-weight:900;color:var(--txt); /* Bouton */
+      background:rgba(255,255,255,.06);border:1px solid var(--line); /* Style */
+      transition:transform .08s ease,background .2s ease; /* Animation */
+    }
+    .tabBtn:hover{transform:translateY(-1px);background:rgba(255,255,255,.09);} /* Survol */
+    .tabBtn.active{background:rgba(110,231,255,.16);border-color:rgba(110,231,255,.35);} /* Actif */
+    .exo{display:none;margin-top:14px;} /* Exo caché */
+    .exo.active{display:block;} /* Exo affiché */
+    .exo h2{margin:0 0 6px 0;font-size:16px;} /* Titre exo */
+    .pill{display:inline-block;font-size:12px;color:var(--muted);border:1px solid var(--line);padding:4px 10px;border-radius:999px;margin-right:6px;background:rgba(0,0,0,.18);} /* Pastille */
+    .prompt{color:var(--txt);line-height:1.35;margin:10px 0 12px 0;} /* Consigne */
+    .help{color:var(--muted);font-size:12px;line-height:1.35;margin-top:8px;} /* Aide */
+    /* ====== Inputs exos ====== */
+    .inp{
+      width:120px;max-width:100%;padding:10px 12px;border-radius:12px; /* Taille */
+      border:1px solid var(--line);background:rgba(0,0,0,.22);color:var(--txt);outline:none; /* Couleurs */
+      font-weight:800;text-align:center; /* Texte */
+    }
+    .inp:focus{border-color:rgba(110,231,255,.6);box-shadow:0 0 0 3px rgba(110,231,255,.15);} /* Focus */
+    .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;} /* 2 colonnes */
+    .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;} /* 3 colonnes */
+    .line{height:1px;background:var(--line);margin:14px 0;} /* Séparateur */
+    /* ====== Magic square ====== */
+    .magic{width:100%;max-width:420px;margin:10px auto;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:12px;border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,0,0,.14));border:1px solid var(--line);} /* Grille */
+    .cell{position:relative;aspect-ratio:1/1;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.22);display:flex;align-items:center;justify-content:center;padding:8px;} /* Case */
+    .cell.given{background:rgba(110,231,255,.08);border-color:rgba(110,231,255,.25);} /* Donnée */
+    .cell.given::after{content:"🔒";position:absolute;top:6px;right:8px;font-size:12px;opacity:.85;} /* Verrou */
+    .cell input{width:100%;height:100%;border:none;background:transparent;color:var(--txt);font-size:20px;font-weight:900;text-align:center;outline:none;} /* Input */
+    .cell input::placeholder{color:rgba(232,238,252,.28);font-weight:700;} /* Placeholder */
+    .mark{position:absolute;left:8px;bottom:7px;font-size:12px;opacity:.9;padding:3px 7px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.20);display:none;} /* Marque */
+    .mark.ok{border-color:rgba(91,255,154,.35);background:rgba(91,255,154,.10);} /* OK */
+    .mark.no{border-color:rgba(255,107,107,.35);background:rgba(255,107,107,.10);} /* Non */
+    /* ====== Buttons ====== */
+    .btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-start;margin-top:10px;} /* Ligne */
+    button.action{
+      cursor:pointer;border:none;border-radius:14px;padding:10px 12px;font-weight:900;color:var(--txt); /* Bouton */
+      background:rgba(110,231,255,.12);border:1px solid rgba(110,231,255,.30); /* Style */
+      transition:transform .08s ease,background .2s ease; /* Animation */
+    }
+    button.action:hover{transform:translateY(-1px);background:rgba(110,231,255,.18);} /* Hover */
+    button.secondary{background:rgba(255,255,255,.06);border:1px solid var(--line);} /* Secondaire */
+    button.danger{background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.30);} /* Danger */
+    /* ====== Sidebar score ====== */
+    .scoreBox{display:grid;gap:12px;} /* Grille */
+    .kpi{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:rgba(0,0,0,.18);border:1px solid var(--line);border-radius:16px;} /* KPI */
+    .kpi .label{color:var(--muted);font-size:12px;} /* Label KPI */
+    .kpi .value{font-size:18px;font-weight:950;letter-spacing:.2px;} /* Valeur KPI */
+    .bar{height:10px;background:rgba(255,255,255,.07);border-radius:999px;overflow:hidden;border:1px solid var(--line);} /* Barre */
+    .bar>div{height:100%;width:0%;background:linear-gradient(90deg,rgba(91,255,154,.9),rgba(110,231,255,.9));border-radius:999px;transition:width .35s ease;} /* Remplissage */
+    .noteBox{padding:12px 14px;background:rgba(0,0,0,.18);border:1px solid var(--line);border-radius:16px;line-height:1.35;} /* Message */
+    .hint{border-left:4px solid rgba(255,211,110,.8);} /* Indice */
+    .good{border-left:4px solid rgba(91,255,154,.8);} /* OK */
+    .bad{border-left:4px solid rgba(255,107,107,.8);} /* Erreur */
+    /* ====== Responsive ====== */
+    @media (max-width: 980px){.wrap{grid-template-columns:1fr;}.magic{max-width:520px;}} /* Mobile */
+  </style>
+</head>
+<body>
+  <header>
+    <div class="badge">6e</div>
+    <div>
+      <h1>Exercices interactifs • Addition & soustraction • Décimaux • Expressions</h1>
+      <p class="sub">Saisie, indices progressifs, correction, et note globale sur 20 (les énoncés sont reformulés).</p>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <!-- ========================= -->
+    <!--          COLONNE GAUCHE   -->
+    <!-- ========================= -->
+    <section class="card" aria-label="Exercices">
+      <div class="row">
+        <div>
+          <label for="nom">Nom</label><br>
+          <input class="meta" id="nom" placeholder="Ex. : Durand" autocomplete="off">
+        </div>
+        <div>
+          <label for="prenom">Prénom</label><br>
+          <input class="meta" id="prenom" placeholder="Ex. : Lina" autocomplete="off">
+        </div>
+        <div>
+          <label for="classe">Classe</label><br>
+          <input class="meta" id="classe" placeholder="Ex. : 6e A" autocomplete="off">
+        </div>
+      </div>
+
+      <!-- ========================= -->
+      <!--            ONGLETS        -->
+      <!-- ========================= -->
+      <div class="tabs" role="tablist" aria-label="Choisir un exercice">
+        <button class="tabBtn active" data-tab="exo80" role="tab" aria-selected="true">Ex 80 • Carré magique</button>
+        <button class="tabBtn" data-tab="exo86" role="tab" aria-selected="false">Ex 86 • Expression</button>
+        <button class="tabBtn" data-tab="exo87" role="tab" aria-selected="false">Ex 87 • Expression</button>
+        <button class="tabBtn" data-tab="exo29" role="tab" aria-selected="false">Ex 29 • Multiplications</button>
+        <button class="tabBtn" data-tab="exo33" role="tab" aria-selected="false">Ex 33 • Compléter</button>
+        <button class="tabBtn" data-tab="exo34" role="tab" aria-selected="false">Ex 34 • Décimaux</button>
+        <button class="tabBtn" data-tab="exo37" role="tab" aria-selected="false">Ex 37 • Poser ×</button>
+        <button class="tabBtn" data-tab="exo48" role="tab" aria-selected="false">Ex 48 • Conversions</button>
+        <button class="tabBtn" data-tab="exo47" role="tab" aria-selected="false">Ex 47 • Puissances de 10</button>
+        <button class="tabBtn" data-tab="exo94" role="tab" aria-selected="false">Ex 94 • Recherche</button>
+      </div>
+
+      <!-- ========================= -->
+      <!--      EXERCICE 80          -->
+      <!-- ========================= -->
+      <div class="exo active" id="exo80" role="tabpanel" aria-label="Exercice 80">
+        <div>
+          <span class="pill">Noté</span><span class="pill">Décimaux</span><span class="pill">Logique</span>
+          <h2>Exercice 80 • Carré magique</h2>
+        </div>
+        <p class="prompt">
+          Complète le carré pour que la somme de chaque ligne, de chaque colonne et de chaque diagonale soit la même.
+          (Tu peux écrire <b>0,4</b> ou <b>0.4</b>.)
+        </p>
+        <div class="magic" id="magic80" aria-label="Grille du carré magique"></div>
+        <div class="btns">
+          <button class="action" id="b80_check">Vérifier</button>
+          <button class="action secondary" id="b80_hint">Indice</button>
+          <button class="action secondary" id="b80_corr">Voir la correction</button>
+          <button class="action danger" id="b80_reset">Réinitialiser</button>
+        </div>
+      </div>
+
+      <!-- ========================= -->
+      <!--      EXERCICE 86          -->
+      <!-- ========================= -->
+      <div class="exo" id="exo86" role="tabpanel" aria-label="Exercice 86">
+        <div>
+          <span class="pill">Noté</span><span class="pill">Expression</span><span class="pill">Euros</span>
+          <h2>Exercice 86 • Comprendre une expression</h2>
+        </div>
+        <p class="prompt">
+          Gaël achète une salade à <b>4,95 €</b> et une boisson à <b>1,50 €</b>. Il paie avec <b>10 €</b>.
+          <br><b>a)</b> Combien doit-on lui rendre ?
+          <br><b>b)</b> Choisis l’expression qui correspond au calcul de la monnaie rendue.
+          <br><b>c)</b> Une autre expression fonctionne aussi : laquelle ?
+        </p>
+        <div class="grid2">
+          <div class="card" style="padding:12px;background:rgba(0,0,0,.14);">
+            <b>a)</b> Monnaie rendue : <input class="inp" id="e86_a" placeholder="ex. 3,55"> €
+            <div class="help">Astuce : on fait d’abord le total des achats, puis on calcule la différence avec 10.</div>
+          </div>
+          <div class="card" style="padding:12px;background:rgba(0,0,0,.14);">
+            <b>b)</b> Expression correcte :
+            <div style="margin-top:8px;display:grid;gap:6px;">
+              <label><input type="radio" name="e86_b" value="A"> A : 10 + 4,95 + 1,50</label>
+              <label><input type="radio" name="e86_b" value="B"> B : (10 − 4,95) + 1,50</label>
+              <label><input type="radio" name="e86_b" value="C"> C : 10 − (4,95 + 1,50)</label>
+              <label><input type="radio" name="e86_b" value="D"> D : (10 − 4,95) − 1,50</label>
+            </div>
+            <div class="line"></div>
+            <b>c)</b> Autre expression qui marche : <input class="inp" id="e86_c" placeholder="A/B/C/D" style="width:90px;">
+          </div>
+        </div>
+        <div class="btns">
+          <button class="action" id="b86_check">Vérifier</button>
+          <button class="action secondary" id="b86_hint">Indice</button>
+          <button class="action secondary" id="b86_corr">Voir la correction</button>
+          <button class="action danger" id="b86_reset">Réinitialiser</button>
+        </div>
+      </div>
+
+      <!-- ========================= -->
+      <!--      EXERCICE 87          -->
+      <!-- ========================= -->
+      <div class="exo" id="exo87" role="tabpanel" aria-label="Exercice 87">
+        <div>
+          <span class="pill">Noté</span><span class="pill">Expression</span><span class="pill">Euros</span>
+          <h2>Exercice 87 • Écrire et calculer une expression</h2>
+        </div>
+        <p class="prompt">
+          Jennifer et Johanna reçoivent la <b>même somme</b> d’argent.
+          Jennifer passe de <b>4,65 €</b> à <b>10 €</b>.
+          Johanna avait <b>8,50 €</b>.
+          <br>Écris une expression pour la nouvelle somme de Johanna, puis calcule-la.
+        </p>
+        <div class="grid2">
+          <div class="card" style="padding:12px;background:rgba(0,0,0,.14);">
+            Expression (au choix) :
+            <input class="inp" id="e87_expr" placeholder="ex. 8,50 + (10 - 4,65)" style="width:100%;text-align:left;font-weight:800;">
+            <div class="help">Conseil : la somme reçue = 10 − 4,65. Ensuite on l’ajoute à 8,50.</div>
+          </div>
+          <div class="card" style="padding:12px;background:rgba(0,0,0,.14);">
+            Résultat : <input class="inp" id="e87_res" placeholder="ex. 13,85"> €
+          </div>
+        </div>
+        <div class="btns">
+          <button class="action" id="b87_check">Vérifier</button>
+          <button class="action secondary" id="b87_hint">Indice</button>
+          <button class="action secondary" id="b87_corr">Voir la correction</button>
+          <button class="action danger" id="b87_reset">Réinitialiser</button>
+        </div>
+      </div>
+
+      <!-- ========================= -->
+      <!--      EXERCICE 29          -->
+      <!-- ========================= -->
+      <div class="exo" id="exo29" role="tabpanel" aria-label="Exercice 29">
+        <div>
+          <span class="pill">Noté</span><span class="pill">Multiplication</span><span class="pill">Proportion</span>
+          <h2>Exercice 29 • Porter une masse</h2>
+        </div>
+        <p class="prompt">
+          Une fourmi pèse environ <b>0,015 g</b> et peut porter <b>60 fois</b> sa masse.
+          Un scarabée pèse environ <b>0,25 g</b> et peut porter <b>850 fois</b> sa masse.
+          <br>Calcule la masse (en g) que chacun peut porter.
+        </p>
+        <div class="grid2">
+          <div class="card" style="padding:12px;background:rgba(0,0,0,.14);">
+            Fourmi : <input class="inp" id="e29_a" placeholder="g"> g
+          </div>
+          <div class="card" style="padding:12px;background:rgba(0,0,0,.14);">
+            Scarabée : <input class="inp" id="e29_b" placeholder="g"> g
+          </div>
+        </div>
+        <div class="btns">
+          <button class="action" id="b29_check">Vérifier</button>
+          <button class="action secondary" id="b29_hint">Indice</button>
+          <button class="action secondary" id="b29_corr">Voir la correction</button>
+          <button class="action danger" id="b29_reset">Réinitialiser</button>
+        </div>
+      </div>
+
+      <!-- ========================= -->
+      <!--      EXERCICE 33          -->
+      <!-- ========================= -->
+      <div class="exo" id="exo33" role="tabpanel" aria-label="Exercice 33">
+        <div>
+          <span class="pill">Noté</span><span class="pill">Décomposer</span><span class="pill">Décimaux</span>
+          <h2>Exercice 33 • Recopier et compléter</h2>
+        </div>
+        <p class="prompt">
+          Complète en utilisant des écritures du type <b>0,7 = 0,1 × 7</b> et <b>0,09 = 0,01 × 9</b>.
+        </p>
+        <div class="card" style="padding:12px;background:rgba(0,0,0,.14);">
+          <b>a)</b> 0,7 × 8 = 0,1 × ( <input class="inp" id="e33_a1" placeholder="…"> × 8 ) = 0,1 × <input class="inp" id="e33_a2" placeholder="…"> = <input class="inp" id="e33_a3" placeholder="…">
+          <div class="line"></div>
+          <b>b)</b> 0,6 × 0,09 = (0,1 × <input class="inp" id="e33_b1" placeholder="…">) × (0,01 × 9)
+          <br>soit 0,6 × 0,09 = (0,1 × 0,01) × ( <input class="inp" id="e33_b2" placeholder="…"> × <input class="inp" id="e33_b3" placeholder="…"> ) = <input class="inp" id="e33_b4" placeholder="…"> × 54 = <input class="inp" id="e33_b5" placeholder="…">
+        </div>
+        <div class="btns">
+          <button class="action" id="b33_check">Vérifier</button>
+          <button class="action secondary" id="b33_hint">Indice</button>
+          <button class="action secondary" id="b33_corr">Voir la correction</button>
+          <button class="action danger" id="b33_reset">Réinitialiser</button>
+        </div>
+      </div>
+
+      <!-- ========================= -->
+      <!--      EXERCICE 34          -->
+      <!-- ========================= -->
+      <div class="exo" id="exo34" role="tabpanel" aria-label="Exercice 34">
+        <div>
+          <span class="pill">Noté</span><span class="pill">Décimaux</span><span class="pill">×10</span>
+          <h2>Exercice 34 • Sans calcul (raisonner)</h2>
+        </div>
+        <p class="prompt">
+          On sait que <b>126 × 49 = 6 174</b>. Sans poser toute l’opération, complète :
+        </p>
+        <div class="card" style="padding:12px;background:rgba(0,0,0,.14);display:grid;gap:10px;">
+          <div><b>a)</b> 12,6 × 49 = <input class="inp" id="e34_a" placeholder="…"></div>
+          <div><b>b)</b> 12,6 × 0,49 = <input class="inp" id="e34_b" placeholder="…"></div>
+          <div><b>c)</b> <input class="inp" id="e34_c1" placeholder="…"> × 4,9 = 6,174</div>
+          <div><b>d)</b> 1,26 × <input class="inp" id="e34_d1" placeholder="…"> = 61,74</div>
+        </div>
+        <div class="btns">
+          <button class="action" id="b34_check">Vérifier</button>
+          <button class="action secondary" id="b34_hint">Indice</button>
+          <button class="action secondary" id="b34_corr">Voir la correction</button>
+          <button class="action danger" id="b34_reset">Réinitialiser</button>
+        </div>
+      </div>
+
+      <!-- ========================= -->
+      <!--      EXERCICE 37          -->
+      <!-- ========================= -->
+      <div class="exo" id="exo37" role="tabpanel" aria-label="Exercice 37">
+        <div>
+          <span class="pill">Noté</span><span class="pill">Poser une multiplication</span>
+          <h2>Exercice 37 • Recopier et calculer (produits)</h2>
+        </div>
+        <p class="prompt">
+          Calcule les produits (tu peux poser la multiplication sur ton cahier), puis saisis le résultat :
+        </p>
+        <div class="grid3">
+          <div class="card" style="padding:12px;background:rgba(0,0,0,.14);">
+            <b>a)</b> 9,4 × 3,7 = <input class="inp" id="e37_a" placeholder="…">
+          </div>
+          <div class="card" style="padding:12px;background:rgba(0,0,0,.14);">
+            <b>b)</b> 3,75 × 5,6 = <input class="inp" id="e37_b" placeholder="…">
+          </div>
+          <div class="card" style="padding:12px;background:rgba(0,0,0,.14);">
+            <b>c)</b> 98,5 × 4,27 = <input class="inp" id="e37_c" placeholder="…">
+          </div>
+        </div>
+        <div class="btns">
+          <button class="action" id="b37_check">Vérifier</button>
+          <button class="action secondary" id="b37_hint">Indice</button>
+          <button class="action secondary" id="b37_corr">Voir la correction</button>
+          <button class="action danger" id="b37_reset">Réinitialiser</button>
+        </div>
+      </div>
+
+      <!-- ========================= -->
+      <!--      EXERCICE 48          -->
+      <!-- ========================= -->
+      <div class="exo" id="exo48" role="tabpanel" aria-label="Exercice 48">
+        <div>
+          <span class="pill">Noté</span><span class="pill">Unités</span><span class="pill">m / km</span>
+          <h2>Exercice 48 • Conversions</h2>
+        </div>
+        <p class="prompt">
+          On sait que <b>1 cm = 0,01 m</b> et <b>1 m = 0,001 km</b>. Complète :
+        </p>
+        <div class="card" style="padding:12px;background:rgba(0,0,0,.14);display:grid;gap:10px;">
+          <div><b>a)</b> 7,6 cm = 7,6 × <input class="inp" id="e48_a1" placeholder="…"> m = <input class="inp" id="e48_a2" placeholder="…"> m</div>
+          <div><b>b)</b> 8 m = 8 × <input class="inp" id="e48_b1" placeholder="…"> km = <input class="inp" id="e48_b2" placeholder="…"> km</div>
+          <div><b>c)</b> 12 cm = 12 × <input class="inp" id="e48_c1" placeholder="…"> m = <input class="inp" id="e48_c2" placeholder="…"> m</div>
+          <div><b>d)</b> 75 m = 75 × 0,001 km = <input class="inp" id="e48_d1" placeholder="…"> km</div>
+        </div>
+        <div class="btns">
+          <button class="action" id="b48_check">Vérifier</button>
+          <button class="action secondary" id="b48_hint">Indice</button>
+          <button class="action secondary" id="b48_corr">Voir la correction</button>
+          <button class="action danger" id="b48_reset">Réinitialiser</button>
+        </div>
+      </div>
+
+      <!-- ========================= -->
+      <!--      EXERCICE 47          -->
+      <!-- ========================= -->
+      <div class="exo" id="exo47" role="tabpanel" aria-label="Exercice 47">
+        <div>
+          <span class="pill">Noté</span><span class="pill">×10 / ÷10</span><span class="pill">Décimaux</span>
+          <h2>Exercice 47 • Recopier et compléter</h2>
+        </div>
+        <p class="prompt">
+          Complète le nombre qui manque (pense aux multiplications / divisions par 10, 100, 1000…).
+        </p>
+        <div class="card" style="padding:12px;background:rgba(0,0,0,.14);display:grid;gap:10px;">
+          <div><b>a)</b> 93,71 × <input class="inp" id="e47_a" placeholder="…"> = 9 371</div>
+          <div><b>b)</b> 0,59 × <input class="inp" id="e47_b" placeholder="…"> = 590</div>
+          <div><b>c)</b> 95,1 × <input class="inp" id="e47_c" placeholder="…"> = 0,951</div>
+          <div><b>d)</b> 357,4 × <input class="inp" id="e47_d" placeholder="…"> = 3,574</div>
+          <div><b>e)</b> 62,51 × <input class="inp" id="e47_e" placeholder="…"> = 6,251</div>
+          <div><b>f)</b> 3 214 × <input class="inp" id="e47_f" placeholder="…"> = 3,214</div>
+        </div>
+        <div class="btns">
+          <button class="action" id="b47_check">Vérifier</button>
+          <button class="action secondary" id="b47_hint">Indice</button>
+          <button class="action secondary" id="b47_corr">Voir la correction</button>
+          <button class="action danger" id="b47_reset">Réinitialiser</button>
+        </div>
+      </div>
+
+      <!-- ========================= -->
+      <!--      EXERCICE 94          -->
+      <!-- ========================= -->
+      <div class="exo" id="exo94" role="tabpanel" aria-label="Exercice 94">
+        <div>
+          <span class="pill">Bonus</span><span class="pill">Recherche</span><span class="pill">Explications</span>
+          <h2>Exercice 94 • Narration de recherche (bonus)</h2>
+        </div>
+        <p class="prompt">
+          Trois récipients : <b>0,8 L</b> (plein au départ), <b>0,5 L</b> et <b>0,3 L</b>.
+          <br>Explique comment obtenir dans <b>un</b> des récipients : <b>0,2 L</b>, puis <b>0,1 L</b>, puis <b>0,4 L</b>.
+          <br>Raconte tes essais et les étapes qui t’ont permis de trouver.
+        </p>
+        <div class="card" style="padding:12px;background:rgba(0,0,0,.14);">
+          <textarea id="e94_txt" style="width:100%;min-height:140px;border-radius:14px;border:1px solid var(--line);background:rgba(0,0,0,.22);color:var(--txt);padding:12px;outline:none;font-weight:650;line-height:1.35;" placeholder="Écris ici tes étapes (phrases courtes)."></textarea>
+          <div class="help">Cet exercice est en <b>bonus</b> : la correction est proposée, mais la note globale /20 n’en dépend pas.</div>
+        </div>
+        <div class="btns">
+          <button class="action secondary" id="b94_hint">Indice</button>
+          <button class="action secondary" id="b94_corr">Voir une proposition de solution</button>
+          <button class="action danger" id="b94_reset">Réinitialiser</button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================= -->
+    <!--          COLONNE DROITE   -->
+    <!-- ========================= -->
+    <aside class="card scoreBox" aria-label="Score et aide">
+      <div class="kpi">
+        <div>
+          <div class="label">Note globale</div>
+          <div class="value" id="note">— / 20</div>
+        </div>
+        <div style="text-align:right">
+          <div class="label">Réponses correctes</div>
+          <div class="value" id="okCount">—</div>
+        </div>
+      </div>
+
+      <div class="bar" aria-label="Progression">
+        <div id="barFill"></div>
+      </div>
+
+      <div class="noteBox hint" id="message">
+        👋 Choisis un exercice, saisis tes réponses, puis clique sur <b>Vérifier</b> (quand il y en a un).
+        <br>Tu peux demander un <b>Indice</b> ou afficher la <b>Correction</b> comme en classe.
+      </div>
+
+      <div class="noteBox" id="rules">
+        <b>Règles de saisie</b><br>
+        • Virgule ou point acceptés : 0,4 ou 0.4<br>
+        • Espace ignoré : “  3,8  ” est accepté<br>
+        • Les exercices notés comptent pour la note /20
+      </div>
+
+      <div class="noteBox" id="globalBtns">
+        <b>Actions globales</b><br>
+        <div class="btns" style="margin-top:10px;">
+          <button class="action" id="bAll_check">Vérifier tout</button>
+          <button class="action secondary" id="bAll_corr">Afficher toutes les corrections</button>
+          <button class="action danger" id="bAll_reset">Tout réinitialiser</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // ======================================================
+    //  UTILITAIRES (conversion, format, comparaison)
+    // ======================================================
+    const $ = (id) => document.getElementById(id); // Raccourci DOM
+    const toNumber = (s) => { // Convertir "0,4" en 0.4
+      if(s===null||s===undefined) return null; // Sécurité
+      const t=String(s).trim().replace(/\\s+/g,"").replace(",","."); // Nettoyer
+      if(t==="") return null; // Vide
+      const n=Number(t); // Convertir
+      return Number.isFinite(n)?n:null; // Retour
+    }; // Fin
+    const eq=(a,b)=>a!==null&&b!==null&&Math.abs(a-b)<1e-9; // Comparaison tolérante
+    const fmt=(n)=>String(n).replace(".",","); // Afficher avec virgule
+    const setMsg=(html,kind)=>{ // Message à droite
+      const box=$("message"); // Zone
+      box.classList.remove("hint","good","bad"); // Nettoyer
+      box.classList.add(kind); // Appliquer
+      box.innerHTML=html; // Mettre le texte
+    }; // Fin
+
+    // ======================================================
+    //  SAUVEGARDE LOCALE (progression élève)
+    // ======================================================
+    const saveMeta=()=>{ // Sauver identité
+      localStorage.setItem("as6_nom",$("nom").value); // Nom
+      localStorage.setItem("as6_prenom",$("prenom").value); // Prénom
+      localStorage.setItem("as6_classe",$("classe").value); // Classe
+    }; // Fin
+    const loadMeta=()=>{ // Charger identité
+      $("nom").value=localStorage.getItem("as6_nom")||""; // Nom
+      $("prenom").value=localStorage.getItem("as6_prenom")||""; // Prénom
+      $("classe").value=localStorage.getItem("as6_classe")||""; // Classe
+    }; // Fin
+
+    const saveAll=()=>{ // Sauver tous les champs (hors magic givens)
+      const ids=[ // Liste des ids inputs à sauvegarder
+        "e86_a","e86_c","e87_expr","e87_res","e29_a","e29_b",
+        "e33_a1","e33_a2","e33_a3","e33_b1","e33_b2","e33_b3","e33_b4","e33_b5",
+        "e34_a","e34_b","e34_c1","e34_d1",
+        "e37_a","e37_b","e37_c",
+        "e48_a1","e48_a2","e48_b1","e48_b2","e48_c1","e48_c2","e48_d1",
+        "e47_a","e47_b","e47_c","e47_d","e47_e","e47_f",
+        "e94_txt"
+      ]; // Fin liste
+      const data={}; // Objet stockage
+      ids.forEach(id=>{ // Parcours ids
+        const el=$(id); // Élément
+        if(!el) return; // Sécurité
+        data[id]=el.value; // Stocker valeur
+      }); // Fin parcours
+      // Radios ex86_b
+      const rb=document.querySelector('input[name="e86_b"]:checked'); // Radio coché
+      data["e86_b"]=rb?rb.value:""; // Stocker
+      localStorage.setItem("as6_data",JSON.stringify(data)); // Sauver
+    }; // Fin saveAll
+
+    const loadAll=()=>{ // Charger
+      const raw=localStorage.getItem("as6_data"); // Lire
+      if(!raw) return; // Rien
+      try{ // Essayer
+        const data=JSON.parse(raw); // Parser
+        Object.keys(data).forEach(id=>{ // Parcours
+          if(id==="e86_b"){ // Radios
+            const v=data[id]; // Valeur
+            if(v) document.querySelectorAll('input[name="e86_b"]').forEach(r=>{r.checked=(r.value===v);}); // Cocher
+            return; // Fin radios
+          } // Fin if
+          const el=$(id); // Élément
+          if(el) el.value=data[id]??""; // Remettre
+        }); // Fin parcours
+      }catch(e){ /* ignorer */ } // Sécurité
+    }; // Fin loadAll
+
+    // ======================================================
+    //  ONGLET (affichage exo)
+    // ======================================================
+    const switchTab=(tabId)=>{ // Changer d'exo
+      document.querySelectorAll(".tabBtn").forEach(b=>{ // Boutons
+        const active=(b.dataset.tab===tabId); // Actif ?
+        b.classList.toggle("active",active); // Classe
+        b.setAttribute("aria-selected",active?"true":"false"); // ARIA
+      }); // Fin
+      document.querySelectorAll(".exo").forEach(ex=>{ // Sections
+        ex.classList.toggle("active",ex.id===tabId); // Afficher
+      }); // Fin
+    }; // Fin
+
+    // ======================================================
+    //  EXO 80 : Carré magique (repris et intégré)
+    // ======================================================
+    const sol80=[[1.7,0.4,0.3,1.4],[0.6,1.1,1.2,0.9],[1.0,0.7,0.8,1.3],[0.5,1.6,1.5,0.2]]; // Solution
+    const giv80=[[true,false,false,true],[false,false,true,true],[true,true,false,false],[true,false,true,true]]; // Masque
+    const grid80=$("magic80"); // Grille
+    const inp80=[]; // Inputs
+
+    const build80=()=>{ // Construire
+      grid80.innerHTML=""; // Vider
+      for(let r=0;r<4;r++){ // Lignes
+        inp80[r]=[]; // Init
+        for(let c=0;c<4;c++){ // Colonnes
+          const cell=document.createElement("div"); // Case
+          cell.className="cell"+(giv80[r][c]?" given":""); // Classe
+          const inp=document.createElement("input"); // Input
+          inp.inputMode="decimal"; // Clavier
+          inp.autocomplete="off"; // Pas auto
+          inp.spellcheck=false; // Pas correcteur
+          inp.placeholder=giv80[r][c]?"":"…"; // Placeholder
+          if(giv80[r][c]){inp.value=fmt(sol80[r][c]);inp.disabled=true;} // Donnée
+          else{
+            inp.value=""; // Vide
+            inp.addEventListener("input",()=>{save80();clearMarks80();}); // Sauver + nettoyer
+          } // Fin else
+          const mark=document.createElement("div"); // Marque
+          mark.className="mark"; // Classe
+          cell.appendChild(inp); // Ajouter
+          cell.appendChild(mark); // Ajouter
+          grid80.appendChild(cell); // Ajouter
+          inp80[r][c]=inp; // Stocker
+        } // Fin colonnes
+      } // Fin lignes
+    }; // Fin build80
+
+    const save80=()=>{ // Sauver ex80
+      const data=[]; // Tableau
+      for(let r=0;r<4;r++){ // Lignes
+        const row=[]; // Ligne
+        for(let c=0;c<4;c++){row.push(inp80[r][c].value);} // Valeurs
+        data.push(row); // Ajouter
+      } // Fin
+      localStorage.setItem("as6_ex80",JSON.stringify(data)); // Sauver
+    }; // Fin save80
+
+    const load80=()=>{ // Charger ex80
+      const raw=localStorage.getItem("as6_ex80"); // Lire
+      if(!raw) return; // Rien
+      try{
+        const data=JSON.parse(raw); // Parser
+        for(let r=0;r<4;r++){for(let c=0;c<4;c++){if(!giv80[r][c]) inp80[r][c].value=data?.[r]?.[c]??"";}} // Remettre
+      }catch(e){/* ignore */}
+    }; // Fin load80
+
+    const clearMarks80=()=>{ // Effacer marques
+      grid80.querySelectorAll(".mark").forEach(m=>{m.style.display="none";m.classList.remove("ok","no");m.textContent="";}); // Reset
+    }; // Fin
+
+    const check80=()=>{ // Vérifier ex80
+      let ok=0;let total=0; // Compteurs
+      const marks=grid80.querySelectorAll(".mark");let idx=0; // Marques
+      for(let r=0;r<4;r++){ // Lignes
+        for(let c=0;c<4;c++){ // Colonnes
+          const m=marks[idx++]; // Marque
+          if(giv80[r][c]){m.style.display="none";continue;} // Donnée
+          total++; // Total à remplir
+          const v=toNumber(inp80[r][c].value); // Lire
+          if(v===null){m.style.display="none";continue;} // Vide
+          if(eq(v,sol80[r][c])){ok++;m.textContent="✔";m.classList.add("ok");m.classList.remove("no");} // OK
+          else{m.textContent="✘";m.classList.add("no");m.classList.remove("ok");} // Non
+          m.style.display="inline-block"; // Afficher
+        } // Fin colonnes
+      } // Fin lignes
+      return {ok,total}; // Retour
+    }; // Fin
+
+    let corr80=false; // État correction
+    const toggleCorr80=()=>{ // Correction ex80
+      corr80=!corr80; // Toggle
+      if(corr80){
+        for(let r=0;r<4;r++){for(let c=0;c<4;c++){if(!giv80[r][c]) inp80[r][c].value=fmt(sol80[r][c]);}} // Mettre solution
+        save80(); // Sauver
+        $("b80_corr").textContent="Masquer la correction"; // Texte
+        setMsg("🧾 Correction affichée (Ex 80). Observe, puis recommence si besoin.","good"); // Message
+      }else{
+        load80();clearMarks80(); // Revenir
+        $("b80_corr").textContent="Voir la correction"; // Texte
+        setMsg("👀 Correction masquée (Ex 80).","hint"); // Message
+      }
+      updateGlobalScore(); // Maj note
+    }; // Fin
+
+    const hint80=()=>{ // Indice ex80
+      const d2=toNumber(inp80[0][3].value)+toNumber(inp80[1][2].value)+toNumber(inp80[2][1].value)+toNumber(inp80[3][0].value); // Diagonale secondaire
+      if(!Number.isFinite(d2)){
+        setMsg("💡 Ex 80 • Commence par la diagonale (haut droite → bas gauche) : 1,4 + 1,2 + 0,7 + 0,5 = <b>3,8</b>. C’est la somme magique.","hint");
+        return;
+      }
+      setMsg("💡 Ex 80 • Ensuite, complète une ligne (ou colonne) où il manque <b>un seul</b> nombre : ? = somme magique − somme des autres cases.","hint");
+    }; // Fin
+
+    const reset80=()=>{ // Reset ex80
+      if(!confirm("Réinitialiser l'exercice 80 ?")) return; // Confirmer
+      localStorage.removeItem("as6_ex80"); // Supprimer
+      corr80=false; // Etat
+      build80();load80();clearMarks80(); // Rebuild
+      $("b80_corr").textContent="Voir la correction"; // Texte
+      updateGlobalScore(); // Maj note
+      setMsg("🔄 Ex 80 réinitialisé.","hint"); // Message
+    }; // Fin
+
+    // ======================================================
+    //  SOLUTIONS (pour correction/notation)
+    // ======================================================
+    const SOL={
+      e86:{a:3.55,b:"C",c:"D"}, // Ex86 : monnaie + expression + autre expression
+      e87:{res:13.85}, // Ex87 : résultat
+      e29:{a:0.9,b:212.5}, // Ex29 : masses
+      e33:{a1:7,a2:56,a3:5.6,b1:6,b2:6,b3:9,b4:0.001,b5:0.054}, // Ex33 : compléments
+      e34:{a:617.4,b:6.174,c1:1.26,d1:49}, // Ex34
+      e37:{a:34.78,b:21.0,c:420.595}, // Ex37
+      e48:{a1:0.01,a2:0.076,b1:0.001,b2:0.008,c1:0.01,c2:0.12,d1:0.075}, // Ex48
+      e47:{a:100,b:1000,c:0.01,d:0.01,e:0.1,f:0.001} // Ex47
+    }; // Fin SOL
+
+    // ======================================================
+    //  BARÈME (total /20)
+    //  - On répartit 20 points sur les exercices notés
+    // ======================================================
+    const WEIGHTS={
+      ex80:6,  // Carré magique (6 points)
+      ex86:3,  // Expression + monnaie (3 points)
+      ex87:2,  // Expression (2 points)
+      ex29:2,  // Multiplications (2 points)
+      ex33:3,  // Compléter (3 points)
+      ex34:2,  // Décimaux (2 points)
+      ex37:1,  // Produits (1 point)
+      ex48:1,  // Conversions (1 point)
+      ex47:0   // (On laisse 0 ici si vous voulez l’activer plus tard)
+    }; // Total actuel = 20 si ex47=0 ? => 6+3+2+2+3+2+1+1=20 ✅
+
+    // ======================================================
+    //  CHECKERS (retour {ok, total, scoreMax})
+    // ======================================================
+    const chkNumeric=(id,expected)=>{ // Vérifier un champ numérique
+      const v=toNumber($(id).value); // Lire
+      if(v===null) return false; // Vide
+      return eq(v,expected); // Comparer
+    }; // Fin
+
+    const chkTextUpper=(id,expected)=>{ // Vérifier lettre (A/B/C/D)
+      const v=String($(id).value||"").trim().toUpperCase(); // Lire
+      return v===String(expected).toUpperCase(); // Comparer
+    }; // Fin
+
+    const check86=()=>{ // Ex86
+      let ok=0;const total=3; // 3 items
+      if(chkNumeric("e86_a",SOL.e86.a)) ok++; // a
+      const rb=document.querySelector('input[name="e86_b"]:checked'); // b
+      if(rb && rb.value===SOL.e86.b) ok++; // b
+      if(chkTextUpper("e86_c",SOL.e86.c)) ok++; // c
+      return {ok,total,scoreMax:WEIGHTS.ex86}; // Retour
+    }; // Fin
+
+    const check87=()=>{ // Ex87
+      let ok=0;const total=1; // On note surtout le résultat
+      if(chkNumeric("e87_res",SOL.e87.res)) ok++; // résultat
+      return {ok,total,scoreMax:WEIGHTS.ex87}; // Retour
+    }; // Fin
+
+    const check29=()=>{ // Ex29
+      let ok=0;const total=2; // 2 items
+      if(chkNumeric("e29_a",SOL.e29.a)) ok++; // fourmi
+      if(chkNumeric("e29_b",SOL.e29.b)) ok++; // scarabée
+      return {ok,total,scoreMax:WEIGHTS.ex29}; // Retour
+    }; // Fin
+
+    const check33=()=>{ // Ex33
+      let ok=0;const total=8; // 8 champs
+      if(chkNumeric("e33_a1",SOL.e33.a1)) ok++; // 7
+      if(chkNumeric("e33_a2",SOL.e33.a2)) ok++; // 56
+      if(chkNumeric("e33_a3",SOL.e33.a3)) ok++; // 5.6
+      if(chkNumeric("e33_b1",SOL.e33.b1)) ok++; // 6
+      if(chkNumeric("e33_b2",SOL.e33.b2)) ok++; // 6
+      if(chkNumeric("e33_b3",SOL.e33.b3)) ok++; // 9
+      if(chkNumeric("e33_b4",SOL.e33.b4)) ok++; // 0.001
+      if(chkNumeric("e33_b5",SOL.e33.b5)) ok++; // 0.054
+      return {ok,total,scoreMax:WEIGHTS.ex33}; // Retour
+    }; // Fin
+
+    const check34=()=>{ // Ex34
+      let ok=0;const total=4; // 4 champs
+      if(chkNumeric("e34_a",SOL.e34.a)) ok++; // a
+      if(chkNumeric("e34_b",SOL.e34.b)) ok++; // b
+      if(chkNumeric("e34_c1",SOL.e34.c1)) ok++; // c
+      if(chkNumeric("e34_d1",SOL.e34.d1)) ok++; // d
+      return {ok,total,scoreMax:WEIGHTS.ex34}; // Retour
+    }; // Fin
+
+    const check37=()=>{ // Ex37
+      let ok=0;const total=3; // 3 produits
+      if(chkNumeric("e37_a",SOL.e37.a)) ok++; // a
+      if(chkNumeric("e37_b",SOL.e37.b)) ok++; // b
+      if(chkNumeric("e37_c",SOL.e37.c)) ok++; // c
+      return {ok,total,scoreMax:WEIGHTS.ex37}; // Retour
+    }; // Fin
+
+    const check48=()=>{ // Ex48
+      let ok=0;const total=7; // 7 champs
+      if(chkNumeric("e48_a1",SOL.e48.a1)) ok++; // 0.01
+      if(chkNumeric("e48_a2",SOL.e48.a2)) ok++; // 0.076
+      if(chkNumeric("e48_b1",SOL.e48.b1)) ok++; // 0.001
+      if(chkNumeric("e48_b2",SOL.e48.b2)) ok++; // 0.008
+      if(chkNumeric("e48_c1",SOL.e48.c1)) ok++; // 0.01
+      if(chkNumeric("e48_c2",SOL.e48.c2)) ok++; // 0.12
+      if(chkNumeric("e48_d1",SOL.e48.d1)) ok++; // 0.075
+      return {ok,total,scoreMax:WEIGHTS.ex48}; // Retour
+    }; // Fin
+
+    const check47=()=>{ // Ex47 (optionnel, ici non compté si poids=0)
+      let ok=0;const total=6; // 6 champs
+      if(chkNumeric("e47_a",SOL.e47.a)) ok++;
+      if(chkNumeric("e47_b",SOL.e47.b)) ok++;
+      if(chkNumeric("e47_c",SOL.e47.c)) ok++;
+      if(chkNumeric("e47_d",SOL.e47.d)) ok++;
+      if(chkNumeric("e47_e",SOL.e47.e)) ok++;
+      if(chkNumeric("e47_f",SOL.e47.f)) ok++;
+      return {ok,total,scoreMax:WEIGHTS.ex47}; // Retour
+    }; // Fin
+
+    // ======================================================
+    //  SCORE GLOBAL
+    // ======================================================
+    const updateGlobalScore=()=>{ // Mettre à jour note
+      // Ex80
+      const r80=check80(); // Résultat ex80
+      const s80=WEIGHTS.ex80*(r80.total? (r80.ok/r80.total):0); // Score pondéré
+      // Autres exos
+      const r86=check86();const s86=r86.scoreMax*(r86.ok/r86.total); // Ex86
+      const r87=check87();const s87=r87.scoreMax*(r87.ok/r87.total); // Ex87
+      const r29=check29();const s29=r29.scoreMax*(r29.ok/r29.total); // Ex29
+      const r33=check33();const s33=r33.scoreMax*(r33.ok/r33.total); // Ex33
+      const r34=check34();const s34=r34.scoreMax*(r34.ok/r34.total); // Ex34
+      const r37=check37();const s37=r37.scoreMax*(r37.ok/r37.total); // Ex37
+      const r48=check48();const s48=r48.scoreMax*(r48.ok/r48.total); // Ex48
+      const r47=check47();const s47=r47.scoreMax*(r47.total? (r47.ok/r47.total):0); // Ex47 (poids 0 par défaut)
+      // Total
+      const totalScore=s80+s86+s87+s29+s33+s34+s37+s48+s47; // Somme
+      const note=Math.round(totalScore*10)/10; // Arrondi dixième
+      // Compter réponses correctes (sur les items notés)
+      const okItems=r80.ok+r86.ok+r87.ok+r29.ok+r33.ok+r34.ok+r37.ok+r48.ok; // OK
+      const totalItems=r80.total+r86.total+r87.total+r29.total+r33.total+r34.total+r37.total+r48.total; // Total
+      // Afficher
+      $("note").textContent=fmt(note)+" / 20"; // Note
+      $("okCount").textContent=okItems+" / "+totalItems; // OK
+      $("barFill").style.width=(note/20*100).toFixed(1)+"%"; // Barre
+    }; // Fin updateGlobalScore
+
+    // ======================================================
+    //  CORRECTIONS / INDICES / RESET (par exercice)
+    // ======================================================
+    const setInputs=(map)=>{ // Appliquer des valeurs dans des inputs
+      Object.keys(map).forEach(id=>{const el=$(id);if(el) el.value=map[id];}); // Mettre
+    }; // Fin
+    const clearInputs=(ids)=>{ // Vider des inputs
+      ids.forEach(id=>{const el=$(id);if(el){el.value="";}}); // Vider
+      // Radios ex86
+      if(ids.includes("e86_b")) document.querySelectorAll('input[name="e86_b"]').forEach(r=>r.checked=false); // Décocher
+    }; // Fin
+
+    // ----- Ex86
+    let corr86=false; // État
+    const corrMap86=()=>({e86_a:fmt(SOL.e86.a),e86_c:SOL.e86.c}); // Map
+    const hint86=()=>{setMsg("💡 Ex 86 • Fais d’abord le total : 4,95 + 1,50 = 6,45. Puis 10 − 6,45 = 3,55.","hint");}; // Indice
+    const toggleCorr86=()=>{
+      corr86=!corr86;
+      if(corr86){
+        $("e86_a").value=fmt(SOL.e86.a);
+        document.querySelectorAll('input[name="e86_b"]').forEach(r=>r.checked=(r.value===SOL.e86.b));
+        $("e86_c").value=SOL.e86.c;
+        $("b86_corr").textContent="Masquer la correction";
+        setMsg("🧾 Correction affichée (Ex 86).","good");
+      }else{
+        $("b86_corr").textContent="Voir la correction";
+        setMsg("👀 Correction masquée (Ex 86).","hint");
+      }
+      saveAll();updateGlobalScore();
+    };
+    const check86Btn=()=>{const r=check86();updateGlobalScore();setMsg("🔎 Ex 86 : "+r.ok+" / "+r.total+" éléments corrects.","hint");}; // Check
+    const reset86=()=>{if(!confirm("Réinitialiser l'exercice 86 ?")) return;clearInputs(["e86_a","e86_c","e86_b"]);corr86=false;$("b86_corr").textContent="Voir la correction";saveAll();updateGlobalScore();setMsg("🔄 Ex 86 réinitialisé.","hint");}; // Reset
+
+    // ----- Ex87
+    let corr87=false;
+    const hint87=()=>{setMsg("💡 Ex 87 • Somme reçue = 10 − 4,65 = 5,35. Nouvelle somme de Johanna = 8,50 + 5,35.","hint");};
+    const toggleCorr87=()=>{
+      corr87=!corr87;
+      if(corr87){
+        $("e87_expr").value="8,50 + (10 - 4,65)";
+        $("e87_res").value=fmt(SOL.e87.res);
+        $("b87_corr").textContent="Masquer la correction";
+        setMsg("🧾 Correction affichée (Ex 87).","good");
+      }else{
+        $("b87_corr").textContent="Voir la correction";
+        setMsg("👀 Correction masquée (Ex 87).","hint");
+      }
+      saveAll();updateGlobalScore();
+    };
+    const check87Btn=()=>{const r=check87();updateGlobalScore();setMsg("🔎 Ex 87 : "+r.ok+" / "+r.total+" éléments corrects.","hint");};
+    const reset87=()=>{if(!confirm("Réinitialiser l'exercice 87 ?")) return;clearInputs(["e87_expr","e87_res"]);corr87=false;$("b87_corr").textContent="Voir la correction";saveAll();updateGlobalScore();setMsg("🔄 Ex 87 réinitialisé.","hint");};
+
+    // ----- Ex29
+    let corr29=false;
+    const hint29=()=>{setMsg("💡 Ex 29 • Multiplie la masse par le nombre de fois : 0,015 × 60 et 0,25 × 850.","hint");};
+    const toggleCorr29=()=>{
+      corr29=!corr29;
+      if(corr29){
+        $("e29_a").value=fmt(SOL.e29.a);$("e29_b").value=fmt(SOL.e29.b);
+        $("b29_corr").textContent="Masquer la correction";setMsg("🧾 Correction affichée (Ex 29).","good");
+      }else{$("b29_corr").textContent="Voir la correction";setMsg("👀 Correction masquée (Ex 29).","hint");}
+      saveAll();updateGlobalScore();
+    };
+    const check29Btn=()=>{const r=check29();updateGlobalScore();setMsg("🔎 Ex 29 : "+r.ok+" / "+r.total+" éléments corrects.","hint");};
+    const reset29=()=>{if(!confirm("Réinitialiser l'exercice 29 ?")) return;clearInputs(["e29_a","e29_b"]);corr29=false;$("b29_corr").textContent="Voir la correction";saveAll();updateGlobalScore();setMsg("🔄 Ex 29 réinitialisé.","hint");};
+
+    // ----- Ex33
+    let corr33=false;
+    const hint33=()=>{setMsg("💡 Ex 33 • 0,7 = 0,1×7 et 0,09 = 0,01×9. Regroupe ensuite : (0,1×0,01)×(6×9).","hint");};
+    const toggleCorr33=()=>{
+      corr33=!corr33;
+      if(corr33){
+        setInputs({
+          e33_a1:"7",e33_a2:"56",e33_a3:"5,6",
+          e33_b1:"6",e33_b2:"6",e33_b3:"9",e33_b4:"0,001",e33_b5:"0,054"
+        });
+        $("b33_corr").textContent="Masquer la correction";setMsg("🧾 Correction affichée (Ex 33).","good");
+      }else{$("b33_corr").textContent="Voir la correction";setMsg("👀 Correction masquée (Ex 33).","hint");}
+      saveAll();updateGlobalScore();
+    };
+    const check33Btn=()=>{const r=check33();updateGlobalScore();setMsg("🔎 Ex 33 : "+r.ok+" / "+r.total+" champs corrects.","hint");};
+    const reset33=()=>{if(!confirm("Réinitialiser l'exercice 33 ?")) return;clearInputs(["e33_a1","e33_a2","e33_a3","e33_b1","e33_b2","e33_b3","e33_b4","e33_b5"]);corr33=false;$("b33_corr").textContent="Voir la correction";saveAll();updateGlobalScore();setMsg("🔄 Ex 33 réinitialisé.","hint");};
+
+    // ----- Ex34
+    let corr34=false;
+    const hint34=()=>{setMsg("💡 Ex 34 • Utilise la valeur connue 126×49=6174 et déplace la virgule : ×10, ÷10, etc.","hint");};
+    const toggleCorr34=()=>{
+      corr34=!corr34;
+      if(corr34){
+        setInputs({e34_a:"617,4",e34_b:"6,174",e34_c1:"1,26",e34_d1:"49"});
+        $("b34_corr").textContent="Masquer la correction";setMsg("🧾 Correction affichée (Ex 34).","good");
+      }else{$("b34_corr").textContent="Voir la correction";setMsg("👀 Correction masquée (Ex 34).","hint");}
+      saveAll();updateGlobalScore();
+    };
+    const check34Btn=()=>{const r=check34();updateGlobalScore();setMsg("🔎 Ex 34 : "+r.ok+" / "+r.total+" champs corrects.","hint");};
+    const reset34=()=>{if(!confirm("Réinitialiser l'exercice 34 ?")) return;clearInputs(["e34_a","e34_b","e34_c1","e34_d1"]);corr34=false;$("b34_corr").textContent="Voir la correction";saveAll();updateGlobalScore();setMsg("🔄 Ex 34 réinitialisé.","hint");};
+
+    // ----- Ex37
+    let corr37=false;
+    const hint37=()=>{setMsg("💡 Ex 37 • Compte les décimales : 9,4×3,7 = (94×37) puis place 2 chiffres après la virgule.","hint");};
+    const toggleCorr37=()=>{
+      corr37=!corr37;
+      if(corr37){
+        setInputs({e37_a:"34,78",e37_b:"21",e37_c:"420,595"});
+        $("b37_corr").textContent="Masquer la correction";setMsg("🧾 Correction affichée (Ex 37).","good");
+      }else{$("b37_corr").textContent="Voir la correction";setMsg("👀 Correction masquée (Ex 37).","hint");}
+      saveAll();updateGlobalScore();
+    };
+    const check37Btn=()=>{const r=check37();updateGlobalScore();setMsg("🔎 Ex 37 : "+r.ok+" / "+r.total+" produits corrects.","hint");};
+    const reset37=()=>{if(!confirm("Réinitialiser l'exercice 37 ?")) return;clearInputs(["e37_a","e37_b","e37_c"]);corr37=false;$("b37_corr").textContent="Voir la correction";saveAll();updateGlobalScore();setMsg("🔄 Ex 37 réinitialisé.","hint");};
+
+    // ----- Ex48
+    let corr48=false;
+    const hint48=()=>{setMsg("💡 Ex 48 • 1 cm = 0,01 m (on divise par 100). 1 m = 0,001 km (on divise par 1000).","hint");};
+    const toggleCorr48=()=>{
+      corr48=!corr48;
+      if(corr48){
+        setInputs({e48_a1:"0,01",e48_a2:"0,076",e48_b1:"0,001",e48_b2:"0,008",e48_c1:"0,01",e48_c2:"0,12",e48_d1:"0,075"});
+        $("b48_corr").textContent="Masquer la correction";setMsg("🧾 Correction affichée (Ex 48).","good");
+      }else{$("b48_corr").textContent="Voir la correction";setMsg("👀 Correction masquée (Ex 48).","hint");}
+      saveAll();updateGlobalScore();
+    };
+    const check48Btn=()=>{const r=check48();updateGlobalScore();setMsg("🔎 Ex 48 : "+r.ok+" / "+r.total+" champs corrects.","hint");};
+    const reset48=()=>{if(!confirm("Réinitialiser l'exercice 48 ?")) return;clearInputs(["e48_a1","e48_a2","e48_b1","e48_b2","e48_c1","e48_c2","e48_d1"]);corr48=false;$("b48_corr").textContent="Voir la correction";saveAll();updateGlobalScore();setMsg("🔄 Ex 48 réinitialisé.","hint");};
+
+    // ----- Ex47 (non compté dans la note /20 par défaut)
+    let corr47=false;
+    const hint47=()=>{setMsg("💡 Ex 47 • Multiplier par 100 → déplacer la virgule de 2 rangs vers la droite. Multiplier par 0,01 → 2 rangs vers la gauche.","hint");};
+    const toggleCorr47=()=>{
+      corr47=!corr47;
+      if(corr47){
+        setInputs({e47_a:"100",e47_b:"1000",e47_c:"0,01",e47_d:"0,01",e47_e:"0,1",e47_f:"0,001"});
+        $("b47_corr").textContent="Masquer la correction";setMsg("🧾 Correction affichée (Ex 47).","good");
+      }else{$("b47_corr").textContent="Voir la correction";setMsg("👀 Correction masquée (Ex 47).","hint");}
+      saveAll();updateGlobalScore();
+    };
+    const check47Btn=()=>{const r=check47();updateGlobalScore();setMsg("🔎 Ex 47 : "+r.ok+" / "+r.total+" champs corrects (bonus si vous activez le barème).","hint");};
+    const reset47=()=>{if(!confirm("Réinitialiser l'exercice 47 ?")) return;clearInputs(["e47_a","e47_b","e47_c","e47_d","e47_e","e47_f"]);corr47=false;$("b47_corr").textContent="Voir la correction";saveAll();updateGlobalScore();setMsg("🔄 Ex 47 réinitialisé.","hint");};
+
+    // ----- Ex94 (bonus, texte)
+    let corr94=false;
+    const hint94=()=>{setMsg("💡 Ex 94 • Idée : utilise des transvasements pour créer des différences (0,8−0,5=0,3) puis combine pour viser 0,2 et 0,1.","hint");};
+    const toggleCorr94=()=>{
+      corr94=!corr94;
+      if(corr94){
+        setMsg("🧾 Ex 94 • Proposition (exemple) :<br>• Pour 0,2 L : remplir 0,3 L depuis 0,8 L, puis compléter 0,5 L avec 0,3 L (il reste 0,1), etc.<br>➡️ Il existe plusieurs solutions : l’important est de <b>raconter</b> tes essais et tes vérifications.","good");
+        $("b94_corr").textContent="Masquer la proposition";
+      }else{
+        setMsg("👀 Ex 94 • Proposition masquée. Écris ta démarche, même si tu as essayé plusieurs chemins.","hint");
+        $("b94_corr").textContent="Voir une proposition de solution";
+      }
+    };
+    const reset94=()=>{if(!confirm("Réinitialiser l'exercice 94 ?")) return;$("e94_txt").value="";corr94=false;$("b94_corr").textContent="Voir une proposition de solution";saveAll();setMsg("🔄 Ex 94 réinitialisé.","hint");};
+
+    // ======================================================
+    //  ACTIONS GLOBALES
+    // ======================================================
+    const checkAll=()=>{ // Vérifier tout
+      // Vérifier ex80 pour afficher marques
+      clearMarks80();check80(); // Maj marques
+      // Maj note globale
+      updateGlobalScore(); // Maj
+      // Message
+      setMsg("✅ Vérification terminée. Regarde ta note /20 et tes réponses correctes.","good");
+    }; // Fin
+    const corrAll=()=>{ // Afficher toutes les corrections
+      // Activer corrections (sans masquer ensuite)
+      if(!corr80) toggleCorr80(); // Ex80
+      if(!corr86) toggleCorr86(); // Ex86
+      if(!corr87) toggleCorr87(); // Ex87
+      if(!corr29) toggleCorr29(); // Ex29
+      if(!corr33) toggleCorr33(); // Ex33
+      if(!corr34) toggleCorr34(); // Ex34
+      if(!corr37) toggleCorr37(); // Ex37
+      if(!corr48) toggleCorr48(); // Ex48
+      // Ex47 et Ex94 restent au choix (non forcés)
+      setMsg("🧾 Toutes les corrections principales sont affichées (sauf bonus).","good");
+    }; // Fin
+    const resetAll=()=>{ // Tout réinitialiser
+      if(!confirm("Tout réinitialiser (tous les exercices) ?")) return; // Confirm
+      localStorage.removeItem("as6_data"); // Données
+      localStorage.removeItem("as6_ex80"); // Ex80
+      // Reset visuels
+      corr80=corr86=corr87=corr29=corr33=corr34=corr37=corr48=corr47=corr94=false; // Etats
+      // Rebuild
+      build80();load80();clearMarks80(); // Ex80
+      // Vider champs
+      clearInputs([
+        "e86_a","e86_c","e86_b","e87_expr","e87_res","e29_a","e29_b",
+        "e33_a1","e33_a2","e33_a3","e33_b1","e33_b2","e33_b3","e33_b4","e33_b5",
+        "e34_a","e34_b","e34_c1","e34_d1",
+        "e37_a","e37_b","e37_c",
+        "e48_a1","e48_a2","e48_b1","e48_b2","e48_c1","e48_c2","e48_d1",
+        "e47_a","e47_b","e47_c","e47_d","e47_e","e47_f",
+        "e94_txt"
+      ]);
+      // Boutons textes
+      $("b80_corr").textContent="Voir la correction";
+      $("b86_corr").textContent="Voir la correction";
+      $("b87_corr").textContent="Voir la correction";
+      $("b29_corr").textContent="Voir la correction";
+      $("b33_corr").textContent="Voir la correction";
+      $("b34_corr").textContent="Voir la correction";
+      $("b37_corr").textContent="Voir la correction";
+      $("b48_corr").textContent="Voir la correction";
+      $("b47_corr").textContent="Voir la correction";
+      $("b94_corr").textContent="Voir une proposition de solution";
+      // Score
+      updateGlobalScore(); // Maj
+      setMsg("🔄 Tout a été réinitialisé.","hint");
+    }; // Fin
+
+    // ======================================================
+    //  ÉCOUTEURS + INIT
+    // ======================================================
+    const bindInputsAutosave=()=>{ // Sauvegarde auto
+      document.querySelectorAll("input.inp, textarea").forEach(el=>{
+        el.addEventListener("input",()=>{saveAll();updateGlobalScore();}); // Sauver + maj
+      });
+      document.querySelectorAll('input[name="e86_b"]').forEach(el=>{
+        el.addEventListener("change",()=>{saveAll();updateGlobalScore();}); // Radios
+      });
+    }; // Fin
+
+    const init=()=>{ // Init
+      // Meta
+      loadMeta(); // Charger
+      $("nom").addEventListener("input",saveMeta); // Sauver
+      $("prenom").addEventListener("input",saveMeta); // Sauver
+      $("classe").addEventListener("input",saveMeta); // Sauver
+      // Tabs
+      document.querySelectorAll(".tabBtn").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.tab))); // Onglets
+      // Ex80
+      build80();load80(); // Construire + charger
+      // Charger autres champs
+      loadAll(); // Charger valeurs
+      // Autosave
+      bindInputsAutosave(); // Lier
+      // Boutons ex80
+      $("b80_check").addEventListener("click",()=>{clearMarks80();const r=check80();updateGlobalScore();setMsg("🔎 Ex 80 : "+r.ok+" / "+r.total+" cases correctes.","hint");});
+      $("b80_hint").addEventListener("click",hint80);
+      $("b80_corr").addEventListener("click",toggleCorr80);
+      $("b80_reset").addEventListener("click",reset80);
+      // Ex86
+      $("b86_check").addEventListener("click",check86Btn);
+      $("b86_hint").addEventListener("click",hint86);
+      $("b86_corr").addEventListener("click",toggleCorr86);
+      $("b86_reset").addEventListener("click",reset86);
+      // Ex87
+      $("b87_check").addEventListener("click",check87Btn);
+      $("b87_hint").addEventListener("click",hint87);
+      $("b87_corr").addEventListener("click",toggleCorr87);
+      $("b87_reset").addEventListener("click",reset87);
+      // Ex29
+      $("b29_check").addEventListener("click",check29Btn);
+      $("b29_hint").addEventListener("click",hint29);
+      $("b29_corr").addEventListener("click",toggleCorr29);
+      $("b29_reset").addEventListener("click",reset29);
+      // Ex33
+      $("b33_check").addEventListener("click",check33Btn);
+      $("b33_hint").addEventListener("click",hint33);
+      $("b33_corr").addEventListener("click",toggleCorr33);
+      $("b33_reset").addEventListener("click",reset33);
+      // Ex34
+      $("b34_check").addEventListener("click",check34Btn);
+      $("b34_hint").addEventListener("click",hint34);
+      $("b34_corr").addEventListener("click",toggleCorr34);
+      $("b34_reset").addEventListener("click",reset34);
+      // Ex37
+      $("b37_check").addEventListener("click",check37Btn);
+      $("b37_hint").addEventListener("click",hint37);
+      $("b37_corr").addEventListener("click",toggleCorr37);
+      $("b37_reset").addEventListener("click",reset37);
+      // Ex48
+      $("b48_check").addEventListener("click",check48Btn);
+      $("b48_hint").addEventListener("click",hint48);
+      $("b48_corr").addEventListener("click",toggleCorr48);
+      $("b48_reset").addEventListener("click",reset48);
+      // Ex47
+      $("b47_check").addEventListener("click",check47Btn);
+      $("b47_hint").addEventListener("click",hint47);
+      $("b47_corr").addEventListener("click",toggleCorr47);
+      $("b47_reset").addEventListener("click",reset47);
+      // Ex94
+      $("b94_hint").addEventListener("click",hint94);
+      $("b94_corr").addEventListener("click",toggleCorr94);
+      $("b94_reset").addEventListener("click",reset94);
+      // Global
+      $("bAll_check").addEventListener("click",checkAll);
+      $("bAll_corr").addEventListener("click",corrAll);
+      $("bAll_reset").addEventListener("click",resetAll);
+      // Score initial
+      updateGlobalScore(); // Maj
+    }; // Fin init
+
+    init(); // Lancer
+  </script>
+</body>
+</html>
