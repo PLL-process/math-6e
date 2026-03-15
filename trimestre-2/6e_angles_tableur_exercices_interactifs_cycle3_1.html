@@ -1,0 +1,1718 @@
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths 6e – Les angles et le tableur</title>
+    <style>
+        /* =========================
+           VARIABLES DE COULEURS
+           ========================= */
+        :root{
+            --bg:#0b132b;
+            --bg2:#1c2541;
+            --panel:#243b67;
+            --panel2:#334e7d;
+            --accent:#ffd166;
+            --accent2:#7bdff2;
+            --ok:#7ae582;
+            --bad:#ff7b7b;
+            --txt:#f5f7ff;
+            --muted:#d5def5;
+            --shadow:0 10px 30px rgba(0,0,0,0.25);
+            --radius:20px;
+        }
+
+        /* =========================
+           MISE EN PAGE GÉNÉRALE
+           ========================= */
+        *{
+            box-sizing:border-box;
+        }
+
+        body{
+            margin:0;
+            font-family:Verdana, Arial, sans-serif;
+            background:linear-gradient(160deg,var(--bg),var(--bg2));
+            color:var(--txt);
+            line-height:1.6;
+        }
+
+        header{
+            padding:28px 18px;
+            text-align:center;
+            background:linear-gradient(135deg,#112d4e,#1b4965,#2f6690);
+            box-shadow:var(--shadow);
+            position:sticky;
+            top:0;
+            z-index:10;
+        }
+
+        header h1{
+            margin:0;
+            font-size:clamp(1.6rem,3vw,2.6rem);
+        }
+
+        header p{
+            margin:8px auto 0 auto;
+            max-width:1000px;
+            color:#eef4ff;
+        }
+
+        main{
+            width:min(1200px,94%);
+            margin:24px auto 60px auto;
+        }
+
+        .hero{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+            gap:18px;
+            margin-bottom:22px;
+        }
+
+        .card{
+            background:rgba(255,255,255,0.06);
+            border:1px solid rgba(255,255,255,0.12);
+            border-radius:var(--radius);
+            padding:18px;
+            box-shadow:var(--shadow);
+            backdrop-filter:blur(6px);
+        }
+
+        h2{
+            margin-top:0;
+            color:var(--accent);
+        }
+
+        h3{
+            color:var(--accent2);
+        }
+
+        .badge{
+            display:inline-block;
+            padding:6px 12px;
+            border-radius:999px;
+            background:rgba(255,209,102,0.15);
+            border:1px solid rgba(255,209,102,0.35);
+            margin:4px 6px 4px 0;
+            font-size:0.92rem;
+        }
+
+        .section{
+            margin-top:24px;
+        }
+
+        .lesson-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+            gap:16px;
+        }
+
+        .lesson-box{
+            background:linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03));
+            border-radius:18px;
+            padding:16px;
+            border:1px solid rgba(255,255,255,0.08);
+        }
+
+        .exercise{
+            margin-top:18px;
+            padding:18px;
+            border-radius:18px;
+            background:rgba(255,255,255,0.05);
+            border:1px solid rgba(255,255,255,0.1);
+        }
+
+        .question{
+            font-weight:bold;
+            margin-bottom:10px;
+        }
+
+        label{
+            display:block;
+            margin:8px 0;
+        }
+
+        input[type="text"], input[type="number"], select{
+            width:100%;
+            max-width:320px;
+            padding:10px 12px;
+            border-radius:12px;
+            border:none;
+            outline:none;
+            background:#eef4ff;
+            color:#10213b;
+            font-weight:bold;
+        }
+
+        button{
+            border:none;
+            border-radius:14px;
+            padding:12px 18px;
+            font-weight:bold;
+            cursor:pointer;
+            margin:8px 8px 8px 0;
+            transition:transform 0.15s ease, opacity 0.15s ease;
+        }
+
+        button:hover{
+            transform:translateY(-2px);
+            opacity:0.96;
+        }
+
+        .primary{
+            background:var(--accent);
+            color:#16213e;
+        }
+
+        .secondary{
+            background:var(--accent2);
+            color:#082032;
+        }
+
+        .success{
+            background:var(--ok);
+            color:#0f2d17;
+        }
+
+        .danger{
+            background:var(--bad);
+            color:#3d0c0c;
+        }
+
+        .feedback{
+            margin-top:10px;
+            padding:12px;
+            border-radius:14px;
+            background:rgba(255,255,255,0.08);
+            display:none;
+        }
+
+        .ok{
+            border-left:6px solid var(--ok);
+        }
+
+        .ko{
+            border-left:6px solid var(--bad);
+        }
+
+        .score-box{
+            display:flex;
+            flex-wrap:wrap;
+            align-items:center;
+            justify-content:space-between;
+            gap:12px;
+            padding:18px;
+            margin:24px 0;
+            border-radius:18px;
+            background:linear-gradient(135deg,#1d3557,#274c77);
+            box-shadow:var(--shadow);
+        }
+
+        .score{
+            font-size:1.3rem;
+            font-weight:bold;
+            color:var(--accent);
+        }
+
+        .angle-visual{
+            margin:10px 0 16px 0;
+            background:#ffffff;
+            border-radius:18px;
+            padding:10px;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .angle-visual svg{
+            width:min(100%,320px);
+            height:auto;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            overflow:hidden;
+            border-radius:16px;
+            margin:10px 0;
+        }
+
+        th, td{
+            border:1px solid rgba(255,255,255,0.16);
+            padding:10px;
+            text-align:center;
+        }
+
+        th{
+            background:rgba(123,223,242,0.2);
+        }
+
+        td{
+            background:rgba(255,255,255,0.03);
+        }
+
+        .formula{
+            font-family:"Courier New", monospace;
+            background:rgba(255,209,102,0.15);
+            padding:2px 6px;
+            border-radius:8px;
+        }
+
+        .tips{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:14px;
+        }
+
+        .tip{
+            border-radius:16px;
+            padding:14px;
+            background:rgba(255,255,255,0.05);
+            border:1px solid rgba(255,255,255,0.08);
+        }
+
+        footer{
+            text-align:center;
+            color:var(--muted);
+            padding:20px;
+        }
+
+        .small{
+            font-size:0.95rem;
+            color:var(--muted);
+        }
+
+        .pill{
+            display:inline-block;
+            background:rgba(122,229,130,0.18);
+            color:#f4fff4;
+            padding:5px 10px;
+            border-radius:999px;
+            font-size:0.88rem;
+            margin:4px 6px 4px 0;
+        }
+
+        .hidden{
+            display:none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📐 Mathématiques 6e – Les angles + le tableur 📊</h1>
+        <p>
+            Une ressource interactive pensée pour des élèves de 6e : rappel de cours, exercices progressifs,
+            correction immédiate, score final et partie complémentaire sur le tableur.
+        </p>
+    </header>
+
+    <main>
+        <!-- =========================
+             INTRODUCTION
+             ========================= -->
+        <section class="hero">
+            <div class="card">
+                <h2>🎯 Objectifs</h2>
+                <span class="badge">Reconnaître les angles</span>
+                <span class="badge">Mesurer en degrés</span>
+                <span class="badge">Comparer des angles</span>
+                <span class="badge">Utiliser un tableur</span>
+                <span class="badge">Entrer des formules simples</span>
+                <p class="small">
+                    Le fichier propose une partie géométrie sur les angles et une partie « tableur » adaptée au niveau 6e.
+                </p>
+            </div>
+
+            <div class="card">
+                <h2>🧠 Conseils pour réussir</h2>
+                <p>Avant de répondre, pense à ces repères :</p>
+                <div class="pill">Angle aigu &lt; 90°</div>
+                <div class="pill">Angle droit = 90°</div>
+                <div class="pill">Angle obtus &gt; 90° et &lt; 180°</div>
+                <div class="pill">Angle plat = 180°</div>
+                <div class="pill">Une formule Excel commence par =</div>
+            </div>
+
+            <div class="card">
+                <h2>✨ Propositions complémentaires</h2>
+                <p>
+                    En prolongement, tu pourras aussi utiliser ce fichier comme :
+                </p>
+                <ul>
+                    <li>atelier d’autonomie en salle informatique ;</li>
+                    <li>révision avant évaluation ;</li>
+                    <li>support de vidéoprojection pour correction collective ;</li>
+                    <li>base pour un futur chapitre sur la symétrie, les triangles ou les données.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- =========================
+             RAPPEL DE COURS ANGLES
+             ========================= -->
+        <section class="section card">
+            <h2>📚 Rappel de cours – Les angles</h2>
+            <div class="lesson-grid">
+                <div class="lesson-box">
+                    <h3>1. Qu’est-ce qu’un angle ?</h3>
+                    <p>
+                        Un angle est une ouverture formée par deux demi-droites qui partent du même point.
+                        Ce point commun s’appelle le <strong>sommet</strong>.
+                    </p>
+                </div>
+
+                <div class="lesson-box">
+                    <h3>2. Les principaux types</h3>
+                    <p>
+                        <strong>Angle aigu</strong> : plus petit qu’un angle droit.<br>
+                        <strong>Angle droit</strong> : 90°.<br>
+                        <strong>Angle obtus</strong> : plus grand que 90° mais plus petit que 180°.<br>
+                        <strong>Angle plat</strong> : 180°.
+                    </p>
+                </div>
+
+                <div class="lesson-box">
+                    <h3>3. Le rapporteur</h3>
+                    <p>
+                        Pour mesurer un angle :
+                    </p>
+                    <ol>
+                        <li>placer le centre du rapporteur sur le sommet ;</li>
+                        <li>aligner le 0 sur un côté de l’angle ;</li>
+                        <li>lire la graduation à l’endroit où passe l’autre côté.</li>
+                    </ol>
+                </div>
+
+                <div class="lesson-box">
+                    <h3>4. Repères utiles</h3>
+                    <p>
+                        Un quart de tour correspond à <strong>90°</strong>.<br>
+                        Un demi-tour correspond à <strong>180°</strong>.<br>
+                        Un tour complet correspond à <strong>360°</strong>.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+
+<!-- =========================
+     EXERCICES ANGLES
+     ========================= -->
+<section class="section card">
+    <h2>📝 Exercices interactifs – Les angles</h2>
+    <p class="small">
+        Lis bien chaque consigne. Quand un schéma est présent, observe-le attentivement.
+        Parfois il faut reconnaître la nature d’un angle, parfois il faut calculer un angle inconnu
+        en utilisant une addition ou une soustraction.
+    </p>
+
+    <!-- Exercice 1 -->
+    <div class="exercise">
+        <div class="question">1. Un angle de 38° est un angle…</div>
+        <label><input type="radio" name="ang1" value="aigu"> angle aigu</label>
+        <label><input type="radio" name="ang1" value="droit"> angle droit</label>
+        <label><input type="radio" name="ang1" value="obtus"> angle obtus</label>
+        <div id="fb_ang1" class="feedback"></div>
+    </div>
+
+    <!-- Exercice 2 -->
+    <div class="exercise">
+        <div class="question">2. Combien mesure un angle droit ?</div>
+        <input id="ang2" type="number" placeholder="Écris la mesure en degrés">
+        <div id="fb_ang2" class="feedback"></div>
+    </div>
+
+    <!-- Exercice 3 -->
+    <div class="exercise">
+        <div class="question">3. Observe le schéma puis choisis la nature de l’angle représenté.</div>
+        <div class="angle-visual">
+            <svg viewBox="0 0 280 220" aria-label="Angle obtus à observer">
+                <!-- Fond -->
+                <rect x="0" y="0" width="280" height="220" fill="#ffffff"></rect>
+
+                <!-- Sommet -->
+                <circle cx="70" cy="170" r="4" fill="#0b132b"></circle>
+
+                <!-- Premier côté -->
+                <line x1="70" y1="170" x2="210" y2="170" stroke="#1d3557" stroke-width="6" stroke-linecap="round"></line>
+
+                <!-- Second côté -->
+                <line x1="70" y1="170" x2="125" y2="55" stroke="#1d3557" stroke-width="6" stroke-linecap="round"></line>
+
+                <!-- Arc -->
+                <path d="M125 170 A55 55 0 0 0 94 120" fill="none" stroke="#e63946" stroke-width="4"></path>
+
+                <!-- Texte -->
+                <text x="145" y="105" font-size="22" fill="#e63946" font-family="Verdana">?</text>
+            </svg>
+        </div>
+        <label><input type="radio" name="ang3" value="aigu"> angle aigu</label>
+        <label><input type="radio" name="ang3" value="obtus"> angle obtus</label>
+        <label><input type="radio" name="ang3" value="plat"> angle plat</label>
+        <div id="fb_ang3" class="feedback"></div>
+    </div>
+
+    <!-- Exercice 4 -->
+    <div class="exercise">
+        <div class="question">4. Un angle mesure 27°. Combien manque-t-il pour obtenir un angle droit ?</div>
+        <input id="ang4" type="number" placeholder="Ta réponse en degrés">
+        <div id="fb_ang4" class="feedback"></div>
+    </div>
+
+    <!-- Exercice 5 -->
+    <div class="exercise">
+        <div class="question">5. Combien mesure un angle plat ?</div>
+        <select id="ang5">
+            <option value="">-- Choisis une réponse --</option>
+            <option value="90">90°</option>
+            <option value="180">180°</option>
+            <option value="360">360°</option>
+        </select>
+        <div id="fb_ang5" class="feedback"></div>
+    </div>
+
+    <!-- Exercice 6 -->
+    <div class="exercise">
+        <div class="question">6. Un angle de 90° est un angle…</div>
+        <label><input type="radio" name="ang6" value="droit"> angle droit</label>
+        <label><input type="radio" name="ang6" value="aigu"> angle aigu</label>
+        <label><input type="radio" name="ang6" value="obtus"> angle obtus</label>
+        <div id="fb_ang6" class="feedback"></div>
+    </div>
+
+    <!-- Exercice 7 -->
+    <div class="exercise">
+        <div class="question">
+            7. Dans le schéma ci-dessous, les deux angles forment ensemble un angle droit.
+            L’un mesure 35°. Combien mesure l’angle inconnu ?
+        </div>
+        <div class="angle-visual">
+            <svg viewBox="0 0 300 220" aria-label="Angle droit partagé en deux angles">
+                <!-- Fond -->
+                <rect x="0" y="0" width="300" height="220" fill="#ffffff"></rect>
+
+                <!-- Sommet -->
+                <circle cx="80" cy="160" r="4" fill="#0b132b"></circle>
+
+                <!-- Côté horizontal -->
+                <line x1="80" y1="160" x2="220" y2="160" stroke="#1d3557" stroke-width="6" stroke-linecap="round"></line>
+
+                <!-- Côté vertical -->
+                <line x1="80" y1="160" x2="80" y2="35" stroke="#1d3557" stroke-width="6" stroke-linecap="round"></line>
+
+                <!-- Demi-droite intérieure -->
+                <line x1="80" y1="160" x2="150" y2="75" stroke="#457b9d" stroke-width="5" stroke-linecap="round"></line>
+
+                <!-- Petit carré angle droit -->
+                <path d="M80 160 L110 160 L110 130 L80 130 Z" fill="none" stroke="#2a9d8f" stroke-width="3"></path>
+
+                <!-- Arcs -->
+                <path d="M125 160 A45 45 0 0 0 116 132" fill="none" stroke="#e63946" stroke-width="4"></path>
+                <path d="M112 121 A58 58 0 0 0 80 102" fill="none" stroke="#f4a261" stroke-width="4"></path>
+
+                <!-- Textes -->
+                <text x="132" y="142" font-size="18" fill="#e63946" font-family="Verdana">35°</text>
+                <text x="95" y="100" font-size="20" fill="#f4a261" font-family="Verdana">?</text>
+            </svg>
+        </div>
+        <input id="ang7" type="number" placeholder="Ta réponse en degrés">
+        <div id="fb_ang7" class="feedback"></div>
+    </div>
+
+    <!-- Exercice 8 -->
+    <div class="exercise">
+        <div class="question">
+            8. Sur une même ligne droite, deux angles côte à côte mesurent ensemble 180°.
+            Si l’un mesure 130°, combien mesure l’autre ?
+        </div>
+        <div class="angle-visual">
+            <svg viewBox="0 0 320 220" aria-label="Angle plat partagé">
+                <!-- Fond -->
+                <rect x="0" y="0" width="320" height="220" fill="#ffffff"></rect>
+
+                <!-- Ligne droite -->
+                <line x1="40" y1="160" x2="280" y2="160" stroke="#1d3557" stroke-width="6" stroke-linecap="round"></line>
+
+                <!-- Rayon oblique -->
+                <line x1="160" y1="160" x2="105" y2="65" stroke="#457b9d" stroke-width="6" stroke-linecap="round"></line>
+
+                <!-- Sommet -->
+                <circle cx="160" cy="160" r="4" fill="#0b132b"></circle>
+
+                <!-- Arcs -->
+                <path d="M215 160 A55 55 0 0 0 133 112" fill="none" stroke="#e63946" stroke-width="4"></path>
+                <path d="M127 104 A70 70 0 0 0 90 160" fill="none" stroke="#f4a261" stroke-width="4"></path>
+
+                <!-- Textes -->
+                <text x="205" y="120" font-size="18" fill="#e63946" font-family="Verdana">130°</text>
+                <text x="92" y="128" font-size="20" fill="#f4a261" font-family="Verdana">?</text>
+            </svg>
+        </div>
+        <input id="ang8" type="number" placeholder="Ta réponse en degrés">
+        <div id="fb_ang8" class="feedback"></div>
+    </div>
+
+    <!-- Exercice 9 -->
+    <div class="exercise">
+        <div class="question">
+            9. Autour d’un même point, la somme des angles est 360°.
+            Si trois angles mesurent 120°, 90° et 80°, combien mesure l’angle restant ?
+        </div>
+        <input id="ang9" type="number" placeholder="Ta réponse en degrés">
+        <div id="fb_ang9" class="feedback"></div>
+    </div>
+
+    <!-- Exercice 10 -->
+    <div class="exercise">
+        <div class="question">
+            10. Hypothèse : dans ce triangle, la somme des trois angles est 180°.
+            Deux angles mesurent 40° et 60°. Combien mesure le troisième angle ?
+        </div>
+        <div class="angle-visual">
+            <svg viewBox="0 0 300 230" aria-label="Triangle avec angle manquant">
+                <!-- Fond -->
+                <rect x="0" y="0" width="300" height="230" fill="#ffffff"></rect>
+
+                <!-- Triangle -->
+                <polygon points="60,180 240,180 140,55" fill="none" stroke="#1d3557" stroke-width="6" stroke-linejoin="round"></polygon>
+
+                <!-- Sommets -->
+                <circle cx="60" cy="180" r="4" fill="#0b132b"></circle>
+                <circle cx="240" cy="180" r="4" fill="#0b132b"></circle>
+                <circle cx="140" cy="55" r="4" fill="#0b132b"></circle>
+
+                <!-- Textes -->
+                <text x="82" y="165" font-size="18" fill="#e63946" font-family="Verdana">40°</text>
+                <text x="196" y="165" font-size="18" fill="#2a9d8f" font-family="Verdana">60°</text>
+                <text x="132" y="95" font-size="20" fill="#f4a261" font-family="Verdana">?</text>
+            </svg>
+        </div>
+        <input id="ang10" type="number" placeholder="Ta réponse en degrés">
+        <div id="fb_ang10" class="feedback"></div>
+    </div>
+
+    <!-- Exercice 11 -->
+    <div class="exercise">
+        <div class="question">11. Parmi ces trois mesures, laquelle correspond à un angle obtus ?</div>
+        <label><input type="radio" name="ang11" value="45"> 45°</label>
+        <label><input type="radio" name="ang11" value="90"> 90°</label>
+        <label><input type="radio" name="ang11" value="125"> 125°</label>
+        <div id="fb_ang11" class="feedback"></div>
+    </div>
+
+    <!-- Exercice 12 -->
+    <div class="exercise">
+        <div class="question">
+            12. Les deux angles du schéma forment un angle droit.
+            L’un mesure 24°. Combien mesure l’autre ?
+        </div>
+        <div class="angle-visual">
+            <svg viewBox="0 0 300 220" aria-label="Angle droit partagé en 24° et un angle inconnu">
+                <!-- Fond -->
+                <rect x="0" y="0" width="300" height="220" fill="#ffffff"></rect>
+
+                <!-- Sommet -->
+                <circle cx="85" cy="160" r="4" fill="#0b132b"></circle>
+
+                <!-- Côtés du droit -->
+                <line x1="85" y1="160" x2="85" y2="40" stroke="#1d3557" stroke-width="6" stroke-linecap="round"></line>
+                <line x1="85" y1="160" x2="225" y2="160" stroke="#1d3557" stroke-width="6" stroke-linecap="round"></line>
+
+                <!-- Demi-droite intérieure -->
+                <line x1="85" y1="160" x2="185" y2="100" stroke="#457b9d" stroke-width="5" stroke-linecap="round"></line>
+
+                <!-- Carré angle droit -->
+                <path d="M85 160 L115 160 L115 130 L85 130 Z" fill="none" stroke="#2a9d8f" stroke-width="3"></path>
+
+                <!-- Arcs -->
+                <path d="M136 160 A51 51 0 0 0 131 132" fill="none" stroke="#e63946" stroke-width="4"></path>
+                <path d="M123 122 A65 65 0 0 0 85 95" fill="none" stroke="#f4a261" stroke-width="4"></path>
+
+                <!-- Textes -->
+                <text x="138" y="145" font-size="18" fill="#e63946" font-family="Verdana">24°</text>
+                <text x="100" y="98" font-size="20" fill="#f4a261" font-family="Verdana">?</text>
+            </svg>
+        </div>
+        <input id="ang12" type="number" placeholder="Ta réponse en degrés">
+        <div id="fb_ang12" class="feedback"></div>
+    </div>
+
+    <!-- Exercice 13 -->
+    <div class="exercise">
+        <div class="question">
+            13. Les deux angles du schéma sont sur une même ligne droite.
+            L’un mesure 72°. Combien mesure l’autre ?
+        </div>
+        <div class="angle-visual">
+            <svg viewBox="0 0 320 220" aria-label="Angle plat partagé en 72° et un angle inconnu">
+                <!-- Fond -->
+                <rect x="0" y="0" width="320" height="220" fill="#ffffff"></rect>
+
+                <!-- Ligne -->
+                <line x1="35" y1="165" x2="285" y2="165" stroke="#1d3557" stroke-width="6" stroke-linecap="round"></line>
+
+                <!-- Rayon oblique -->
+                <line x1="160" y1="165" x2="220" y2="82" stroke="#457b9d" stroke-width="6" stroke-linecap="round"></line>
+
+                <!-- Sommet -->
+                <circle cx="160" cy="165" r="4" fill="#0b132b"></circle>
+
+                <!-- Arcs -->
+                <path d="M210 165 A50 50 0 0 0 189 126" fill="none" stroke="#e63946" stroke-width="4"></path>
+                <path d="M182 118 A68 68 0 0 0 92 165" fill="none" stroke="#f4a261" stroke-width="4"></path>
+
+                <!-- Textes -->
+                <text x="208" y="134" font-size="18" fill="#e63946" font-family="Verdana">72°</text>
+                <text x="104" y="125" font-size="20" fill="#f4a261" font-family="Verdana">?</text>
+            </svg>
+        </div>
+        <input id="ang13" type="number" placeholder="Ta réponse en degrés">
+        <div id="fb_ang13" class="feedback"></div>
+    </div>
+
+    <!-- Exercice 14 -->
+    <div class="exercise">
+        <div class="question">
+            14. Un angle mesure 95°. Combien manque-t-il pour obtenir un angle plat ?
+        </div>
+        <input id="ang14" type="number" placeholder="Ta réponse en degrés">
+        <div id="fb_ang14" class="feedback"></div>
+    </div>
+
+    <!-- Exercice 15 -->
+    <div class="exercise">
+        <div class="question">15. Combien mesure un tour complet ?</div>
+        <label><input type="radio" name="ang15" value="180"> 180°</label>
+        <label><input type="radio" name="ang15" value="270"> 270°</label>
+        <label><input type="radio" name="ang15" value="360"> 360°</label>
+        <div id="fb_ang15" class="feedback"></div>
+    </div>
+
+    <!-- Score de la partie angles -->
+    <section class="score-box">
+        <div>
+            <div class="score">📐 Score – Partie angles : <span id="scoreAngles">0</span> / 15</div>
+            <div class="small">Clique sur le bouton pour obtenir la correction immédiate de cette partie.</div>
+        </div>
+        <div>
+            <button class="primary" onclick="corrigerAngles()">Corriger la partie angles</button>
+            <button class="secondary" onclick="reinitialiserAngles()">Réinitialiser la partie angles</button>
+        </div>
+    </section>
+</section>
+
+   <!-- =========================
+     RAPPEL DE COURS TABLEUR
+     ========================= -->
+<section class="section card">
+    <h2>📚 Rappel de cours – Le tableur en 6e</h2>
+
+    <p class="small">
+        En classe, nous pouvons utiliser <strong>Microsoft Excel 2007</strong>.
+        À la maison, tu peux aussi utiliser <strong>Microsoft Excel</strong> (version plus récente),
+        <strong>LibreOffice Calc</strong> ou <strong>OpenOffice Calc</strong>.
+        Le principe reste le même : on entre des données dans des cellules, puis on utilise des formules
+        pour calculer automatiquement.
+    </p>
+
+    <div class="lesson-grid">
+        <div class="lesson-box">
+            <h3>1. Qu’est-ce qu’un tableur ?</h3>
+            <p>
+                Un tableur est un logiciel qui permet :
+            </p>
+            <ul>
+                <li>de ranger des données dans un tableau ;</li>
+                <li>de faire des calculs automatiques ;</li>
+                <li>de trier les données ;</li>
+                <li>de comparer des résultats ;</li>
+                <li>d’organiser des informations clairement.</li>
+            </ul>
+            <p>
+                Exemples de logiciels :
+                <strong>Excel</strong>, <strong>LibreOffice Calc</strong>, <strong>OpenOffice Calc</strong>.
+            </p>
+        </div>
+
+        <div class="lesson-box">
+            <h3>2. Ligne, colonne, cellule</h3>
+            <p>
+                Dans un tableur :
+            </p>
+            <ul>
+                <li>les <strong>colonnes</strong> sont repérées par des lettres : A, B, C…</li>
+                <li>les <strong>lignes</strong> sont repérées par des nombres : 1, 2, 3…</li>
+                <li>une <strong>cellule</strong> est une case du tableau.</li>
+            </ul>
+            <p>
+                Exemples de cellules :
+                <span class="formula">A1</span>,
+                <span class="formula">B3</span>,
+                <span class="formula">D5</span>
+            </p>
+        </div>
+
+        <div class="lesson-box">
+            <h3>3. Saisir des données</h3>
+            <p>
+                On peut écrire dans une cellule :
+            </p>
+            <ul>
+                <li>un mot ;</li>
+                <li>un nombre ;</li>
+                <li>une date ;</li>
+                <li>une formule.</li>
+            </ul>
+            <p>
+                Exemple :
+            </p>
+            <table>
+                <tr><th>A</th><th>B</th><th>C</th></tr>
+                <tr><th>1</th><td>Objet</td><td>Angle</td></tr>
+                <tr><th>2</th><td>Figure 1</td><td>35</td></tr>
+                <tr><th>3</th><td>Figure 2</td><td>90</td></tr>
+            </table>
+        </div>
+
+        <div class="lesson-box">
+            <h3>4. Une formule commence par =</h3>
+            <p>
+                Pour que le tableur comprenne qu’il doit calculer, on commence toujours par :
+                <span class="formula">=</span>
+            </p>
+            <p>
+                Exemples :
+            </p>
+            <ul>
+                <li><span class="formula">=B2+C2</span></li>
+                <li><span class="formula">=C2-B2</span></li>
+                <li><span class="formula">=10+5</span></li>
+            </ul>
+        </div>
+
+        <div class="lesson-box">
+            <h3>5. Additionner deux cellules</h3>
+            <p>
+                Pour additionner deux cellules :
+                <span class="formula">=B2+C2</span>
+            </p>
+            <p>
+                Exemple concret :
+                si <span class="formula">B2 = 20</span> et <span class="formula">C2 = 35</span>,
+                alors <span class="formula">=B2+C2</span> donne <strong>55</strong>.
+            </p>
+        </div>
+
+        <div class="lesson-box">
+            <h3>6. Additionner plusieurs cellules</h3>
+            <p>
+                On peut aussi additionner plusieurs cellules :
+                <span class="formula">=B2+C2+D2</span>
+            </p>
+            <p>
+                Ou utiliser une formule plus pratique sur une plage de cellules :
+                <span class="formula">=SOMME(B2:D2)</span>
+            </p>
+            <p>
+                Cette formule additionne toutes les cellules de <span class="formula">B2</span> à <span class="formula">D2</span>.
+            </p>
+        </div>
+
+        <div class="lesson-box">
+            <h3>7. Additionner une plage de cellules</h3>
+            <p>
+                Une <strong>plage de cellules</strong> est un groupe de cellules voisines.
+            </p>
+            <p>
+                Exemple :
+                <span class="formula">B2:D2</span>
+                signifie :
+                <span class="formula">B2</span>,
+                <span class="formula">C2</span> et
+                <span class="formula">D2</span>.
+            </p>
+            <p>
+                Pour tout additionner :
+                <span class="formula">=SOMME(B2:D2)</span>
+            </p>
+        </div>
+
+        <div class="lesson-box">
+            <h3>8. Soustraire</h3>
+            <p>
+                Pour calculer une différence :
+                <span class="formula">=C2-B2</span>
+            </p>
+            <p>
+                Exemple :
+                pour savoir combien il manque à un angle de 20° pour faire 90° :
+                <span class="formula">=90-20</span>
+            </p>
+        </div>
+
+        <div class="lesson-box">
+            <h3>9. Calculer un angle automatiquement</h3>
+            <p>
+                Le tableur peut aider à calculer des angles.
+            </p>
+            <p>
+                Exemple :
+                si un angle droit mesure 90° et qu’un angle connu mesure 25°,
+                on peut calculer l’angle manquant avec :
+                <span class="formula">=90-B2</span>
+            </p>
+            <p>
+                Si <span class="formula">B2 = 25</span>, alors le résultat est <strong>65</strong>.
+            </p>
+        </div>
+
+        <div class="lesson-box">
+            <h3>10. Calculer la somme de plusieurs angles</h3>
+            <p>
+                Pour additionner plusieurs angles :
+                <span class="formula">=SOMME(B2:D2)</span>
+            </p>
+            <p>
+                Exemple :
+                si trois angles mesurent 20°, 30° et 40°,
+                leur somme est :
+                <span class="formula">=20+30+40</span>
+                ou
+                <span class="formula">=SOMME(B2:D2)</span>
+            </p>
+        </div>
+
+        <div class="lesson-box">
+            <h3>11. Trier des données</h3>
+            <p>
+                Trier signifie ranger des données dans un ordre.
+            </p>
+            <ul>
+                <li>du plus petit au plus grand ;</li>
+                <li>du plus grand au plus petit ;</li>
+                <li>par ordre alphabétique.</li>
+            </ul>
+            <p>
+                Exemple : ranger des angles de 15°, 90°, 40°, 120° du plus petit au plus grand.
+            </p>
+        </div>
+
+        <div class="lesson-box">
+            <h3>12. Comment trier selon le logiciel ?</h3>
+            <p><strong>Avec Excel 2007 :</strong></p>
+            <ul>
+                <li>sélectionner les cellules ;</li>
+                <li>aller dans l’onglet <strong>Données</strong> ;</li>
+                <li>cliquer sur <strong>Trier de A à Z</strong> ou <strong>Trier de Z à A</strong>.</li>
+            </ul>
+
+            <p><strong>Avec Excel plus récent :</strong></p>
+            <ul>
+                <li>sélectionner le tableau ;</li>
+                <li>aller dans <strong>Données</strong> ;</li>
+                <li>choisir <strong>Trier du plus petit au plus grand</strong> ou l’inverse.</li>
+            </ul>
+
+            <p><strong>Avec LibreOffice Calc / OpenOffice Calc :</strong></p>
+            <ul>
+                <li>sélectionner les cellules ;</li>
+                <li>cliquer sur <strong>Données</strong> ;</li>
+                <li>choisir <strong>Trier</strong> ;</li>
+                <li>indiquer l’ordre souhaité.</li>
+            </ul>
+        </div>
+
+        <div class="lesson-box">
+            <h3>13. Organiser ses données correctement</h3>
+            <p>
+                Pour bien travailler dans un tableur :
+            </p>
+            <ul>
+                <li>mettre un titre clair sur chaque colonne ;</li>
+                <li>écrire une seule information par cellule ;</li>
+                <li>éviter les lignes vides dans un tableau ;</li>
+                <li>vérifier les unités : °, cm, €…</li>
+            </ul>
+            <p>
+                Exemple :
+            </p>
+            <table>
+                <tr><th>Figure</th><th>Angle connu</th><th>Angle recherché</th></tr>
+                <tr><td>1</td><td>35°</td><td>=90-B2</td></tr>
+                <tr><td>2</td><td>120°</td><td>=180-B3</td></tr>
+            </table>
+        </div>
+
+        <div class="lesson-box">
+            <h3>14. Les compétences numériques travaillées</h3>
+            <p>
+                En utilisant un tableur, tu apprends à :
+            </p>
+            <ul>
+                <li>saisir et organiser des données ;</li>
+                <li>faire un calcul automatisé ;</li>
+                <li>trier des informations ;</li>
+                <li>vérifier un résultat.</li>
+            </ul>
+            <p>
+                Cela correspond à des compétences de travail sur les données, utiles en mathématiques
+                et dans les compétences numériques.
+            </p>
+        </div>
+
+        <div class="lesson-box">
+            <h3>15. À retenir</h3>
+            <ul>
+                <li>Une cellule = une lettre + un nombre.</li>
+                <li>Une formule commence par <span class="formula">=</span>.</li>
+                <li>Pour additionner : <span class="formula">=B2+C2</span> ou <span class="formula">=SOMME(B2:D2)</span>.</li>
+                <li>Pour soustraire : <span class="formula">=C2-B2</span>.</li>
+                <li>Le tableur peut calculer automatiquement un angle manquant.</li>
+                <li>On peut aussi trier des données pour mieux les lire.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<div class="tip">
+    <h3>🧩 Astuce organisation</h3>
+    <p>
+        Dans un tableur, range toujours tes données avec un titre par colonne.
+        Cela aide à mieux lire, trier et vérifier les résultats.
+    </p>
+</div>
+
+
+
+        <!-- =========================
+             EXERCICES TABLEUR
+             ========================= -->
+        <section class="section card">
+            <h2>🧮 5 exercices interactifs – Tableur</h2>
+
+            <div class="exercise">
+                <div class="question">7. Exercice tableur n°1 – Reconnaître une cellule</div>
+                <p>Dans un tableur, quelle écriture désigne bien une cellule ?</p>
+                <label><input type="radio" name="q7" value="B4"> B4</label>
+                <label><input type="radio" name="q7" value="4B"> 4B</label>
+                <label><input type="radio" name="q7" value="ligne4"> ligne4</label>
+                <div id="fb7" class="feedback"></div>
+            </div>
+
+            <div class="exercise">
+                <div class="question">8. Exercice tableur n°2 – Faire une addition</div>
+                <p>On veut additionner les valeurs des cellules <span class="formula">B2</span> et <span class="formula">C2</span>.</p>
+                <table>
+                    <tr><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+                    <tr><th>1</th><td>Objet</td><td>Prix 1</td><td>Prix 2</td></tr>
+                    <tr><th>2</th><td>Cahier</td><td>4</td><td>6</td></tr>
+                </table>
+                <p>Quelle formule faut-il écrire ?</p>
+                <input id="q8" type="text" placeholder="Exemple : =B2+C2">
+                <div id="fb8" class="feedback"></div>
+            </div>
+
+            <div class="exercise">
+                <div class="question">9. Exercice tableur n°3 – Faire une soustraction</div>
+                <p>On veut calculer <span class="formula">C2 - B2</span>.</p>
+                <table>
+                    <tr><th>A</th><th>B</th><th>C</th></tr>
+                    <tr><th>1</th><td>Avant</td><td>Après</td></tr>
+                    <tr><th>2</th><td>12</td><td>20</td></tr>
+                </table>
+                <p>Quelle formule écrire ?</p>
+                <input id="q9" type="text" placeholder="Exemple : =C2-B2">
+                <div id="fb9" class="feedback"></div>
+            </div>
+
+            <div class="exercise">
+                <div class="question">10. Exercice tableur n°4 – Faire une moyenne</div>
+                <p>On veut calculer la moyenne des notes en <span class="formula">B2</span>, <span class="formula">C2</span> et <span class="formula">D2</span>.</p>
+                <table>
+                    <tr><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+                    <tr><th>1</th><td>Note 1</td><td>Note 2</td><td>Note 3</td></tr>
+                    <tr><th>2</th><td>14</td><td>16</td><td>10</td></tr>
+                </table>
+                <p>Choisis la bonne formule :</p>
+                <label><input type="radio" name="q10" value="=MOYENNE(B2:D2)"> =MOYENNE(B2:D2)</label>
+                <label><input type="radio" name="q10" value="=B2-C2-D2"> =B2-C2-D2</label>
+                <label><input type="radio" name="q10" value="B2+D2"> B2+D2</label>
+                <div id="fb10" class="feedback"></div>
+            </div>
+
+            <div class="exercise">
+                <div class="question">11. Exercice tableur n°5 – Commencer une formule</div>
+                <p>Par quel signe commence une formule dans Excel ou dans un tableur ?</p>
+                <select id="q11">
+                    <option value="">-- Choisis --</option>
+                    <option value="+">+</option>
+                    <option value="=">=</option>
+                    <option value="#">#</option>
+                </select>
+                <div id="fb11" class="feedback"></div>
+            </div>
+        </section>
+
+        <!-- =========================
+             SCORE ET ACTIONS
+             ========================= -->
+        <section class="score-box">
+            <div>
+                <div class="score">🏁 Score : <span id="score">0</span> / 11</div>
+                <div class="small">Clique sur le bouton pour obtenir la correction immédiate.</div>
+            </div>
+            <div>
+                <button class="primary" onclick="corriger()">Corriger tout</button>
+                <button class="secondary" onclick="reinitialiser()">Réinitialiser</button>
+            </div>
+        </section>
+
+        <!-- =========================
+             ASTUCES FINALES
+             ========================= -->
+        <section class="section card">
+            <h2>💡 Astuces pour l’élève</h2>
+            <div class="tips">
+                <div class="tip">
+                    <h3>📐 Astuce angles</h3>
+                    <p>
+                        Si l’angle est plus petit que l’angle droit, il est aigu.
+                        S’il est plus grand que l’angle droit, il est obtus.
+                    </p>
+                </div>
+                <div class="tip">
+                    <h3>📊 Astuce tableur</h3>
+                    <p>
+                        Regarde toujours le nom de la cellule : une lettre pour la colonne, un nombre pour la ligne.
+                    </p>
+                </div>
+                <div class="tip">
+                    <h3>✅ Astuce formule</h3>
+                    <p>
+                        Si tu oublies le signe <span class="formula">=</span>, le tableur risque de ne pas comprendre ton calcul.
+                    </p>
+                </div>
+                <div class="tip">
+                    <h3>🚀 Pour aller plus loin</h3>
+                    <p>
+                        On pourra ensuite créer un second fichier sur les triangles, la symétrie ou un mini-défi Excel/LibreOffice Calc.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        Ressource HTML interactive – niveau 6e – angles et tableur
+    </footer>
+
+    <script>
+        /* =========================
+           FONCTIONS UTILITAIRES
+           ========================= */
+
+        // Fonction qui retire les espaces inutiles et met le texte en majuscule/minuscule cohérente
+        function nettoyerTexte(texte){
+            return texte.trim().replace(/\s+/g, '').toUpperCase();
+        }
+
+        // Fonction qui affiche un message de correction dans la zone demandée
+        function afficherFeedback(id, estJuste, message){
+            const bloc = document.getElementById(id);
+            bloc.style.display = 'block';
+            bloc.className = 'feedback ' + (estJuste ? 'ok' : 'ko');
+            bloc.innerHTML = message;
+        }
+
+        // Fonction qui lit la valeur choisie d'un groupe de boutons radio
+        function valeurRadio(nom){
+            const choix = document.querySelector('input[name="' + nom + '"]:checked');
+            return choix ? choix.value : '';
+        }
+
+        /* =========================
+           CORRECTION GLOBALE
+           ========================= */
+        function corriger(){
+            let score = 0;
+
+            /* --- Question 1 --- */
+            const q1 = valeurRadio('q1');
+            const ok1 = q1 === 'aigu';
+            if(ok1){ score++; }
+            afficherFeedback(
+                'fb1',
+                ok1,
+                ok1
+                ? '✅ Bravo ! 35° est plus petit que 90°, donc c’est un angle aigu.'
+                : '❌ 35° est inférieur à 90°. La bonne réponse est : angle aigu.'
+            );
+
+            /* --- Question 2 --- */
+            const q2 = Number(document.getElementById('q2').value);
+            const ok2 = q2 === 90;
+            if(ok2){ score++; }
+            afficherFeedback(
+                'fb2',
+                ok2,
+                ok2
+                ? '✅ Exact ! Un angle droit mesure 90°.'
+                : '❌ La bonne réponse est 90°.'
+            );
+
+            /* --- Question 3 --- */
+            const q3 = valeurRadio('q3');
+            const ok3 = q3 === 'obtus';
+            if(ok3){ score++; }
+            afficherFeedback(
+                'fb3',
+                ok3,
+                ok3
+                ? '✅ Très bien ! L’angle dessiné est plus grand que 90° et plus petit que 180° : il est obtus.'
+                : '❌ La bonne réponse est : angle obtus.'
+            );
+
+            /* --- Question 4 --- */
+            const q4 = Number(document.getElementById('q4').value);
+            const ok4 = q4 === 70;
+            if(ok4){ score++; }
+            afficherFeedback(
+                'fb4',
+                ok4,
+                ok4
+                ? '✅ Oui ! 90° - 20° = 70°.'
+                : '❌ Il faut compléter jusqu’à 90°. Donc 90° - 20° = 70°.'
+            );
+
+            /* --- Question 5 --- */
+            const q5 = document.getElementById('q5').value;
+            const ok5 = q5 === '180';
+            if(ok5){ score++; }
+            afficherFeedback(
+                'fb5',
+                ok5,
+                ok5
+                ? '✅ Parfait ! Un angle plat mesure 180°.'
+                : '❌ La bonne réponse est 180°.'
+            );
+
+            /* --- Question 6 --- */
+            const q6 = valeurRadio('q6');
+            const ok6 = q6 === 'droit';
+            if(ok6){ score++; }
+            afficherFeedback(
+                'fb6',
+                ok6,
+                ok6
+                ? '✅ Exact ! 90° correspond à un angle droit.'
+                : '❌ La bonne réponse est : angle droit.'
+            );
+
+            /* --- Question 7 --- */
+            const q7 = valeurRadio('q7');
+            const ok7 = q7 === 'B4';
+            if(ok7){ score++; }
+            afficherFeedback(
+                'fb7',
+                ok7,
+                ok7
+                ? '✅ Oui ! Une cellule s’écrit avec une lettre de colonne puis un numéro de ligne.'
+                : '❌ La bonne réponse est B4.'
+            );
+
+            /* --- Question 8 --- */
+            const q8 = nettoyerTexte(document.getElementById('q8').value);
+            const ok8 = q8 === '=B2+C2' || q8 === '=C2+B2';
+            if(ok8){ score++; }
+            afficherFeedback(
+                'fb8',
+                ok8,
+                ok8
+                ? '✅ Correct ! Pour additionner deux cellules, on peut écrire =B2+C2.'
+                : '❌ La formule attendue est =B2+C2 (ou =C2+B2).'
+            );
+
+            /* --- Question 9 --- */
+            const q9 = nettoyerTexte(document.getElementById('q9').value);
+            const ok9 = q9 === '=C2-B2';
+            if(ok9){ score++; }
+            afficherFeedback(
+                'fb9',
+                ok9,
+                ok9
+                ? '✅ Bien joué ! Une soustraction s’écrit ici =C2-B2.'
+                : '❌ La formule attendue est =C2-B2.'
+            );
+
+            /* --- Question 10 --- */
+            const q10 = valeurRadio('q10');
+            const ok10 = q10 === '=MOYENNE(B2:D2)';
+            if(ok10){ score++; }
+            afficherFeedback(
+                'fb10',
+                ok10,
+                ok10
+                ? '✅ Excellent ! Cette formule calcule la moyenne de B2 à D2.'
+                : '❌ La bonne réponse est =MOYENNE(B2:D2).'
+            );
+
+            /* --- Question 11 --- */
+            const q11 = document.getElementById('q11').value;
+            const ok11 = q11 === '=';
+            if(ok11){ score++; }
+            afficherFeedback(
+                'fb11',
+                ok11,
+                ok11
+                ? '✅ Exact ! Une formule commence par le signe ='
+                : '❌ La bonne réponse est : ='
+            );
+
+            // Affichage du score final
+            document.getElementById('score').textContent = score;
+        }
+
+        /* =========================
+           RÉINITIALISATION
+           ========================= */
+        function reinitialiser(){
+            // Réinitialise les zones texte et nombre
+            document.querySelectorAll('input[type="text"], input[type="number"]').forEach(function(champ){
+                champ.value = '';
+            });
+
+            // Réinitialise les listes déroulantes
+            document.querySelectorAll('select').forEach(function(liste){
+                liste.selectedIndex = 0;
+            });
+
+            // Décoche les boutons radio
+            document.querySelectorAll('input[type="radio"]').forEach(function(bouton){
+                bouton.checked = false;
+            });
+
+            // Cache les messages de correction
+            document.querySelectorAll('.feedback').forEach(function(bloc){
+                bloc.style.display = 'none';
+                bloc.innerHTML = '';
+                bloc.className = 'feedback';
+            });
+
+            // Remet le score à zéro
+            document.getElementById('score').textContent = '0';
+        }
+        /* =========================
+           CORRECTION - PARTIE ANGLES (15 EXERCICES)
+           ========================= */
+
+        // Fonction qui corrige uniquement la partie "Les angles"
+        function corrigerAngles(){
+
+            // Variable qui comptera le nombre de bonnes réponses
+            let scoreAngles = 0;
+
+            /* =========================
+               EXERCICE 1
+               ========================= */
+
+            // On récupère la réponse choisie pour la question 1
+            const ang1 = valeurRadio('ang1');
+
+            // La bonne réponse est "aigu"
+            const okAng1 = ang1 === 'aigu';
+
+            // Si la réponse est correcte, on ajoute 1 point
+            if(okAng1){ scoreAngles++; }
+
+            // On affiche le feedback
+            afficherFeedback(
+                'fb_ang1',
+                okAng1,
+                okAng1
+                ? '✅ Bravo ! 38° est plus petit que 90°, donc c’est un angle aigu.'
+                : '❌ 38° est inférieur à 90°. La bonne réponse était : angle aigu.'
+            );
+
+            /* =========================
+               EXERCICE 2
+               ========================= */
+
+            // On lit la valeur écrite dans le champ numérique
+            const ang2 = Number(document.getElementById('ang2').value);
+
+            // La bonne réponse est 90
+            const okAng2 = ang2 === 90;
+
+            // Si la réponse est correcte, on ajoute 1 point
+            if(okAng2){ scoreAngles++; }
+
+            // On affiche le feedback
+            afficherFeedback(
+                'fb_ang2',
+                okAng2,
+                okAng2
+                ? '✅ Exact ! Un angle droit mesure 90°.'
+                : '❌ La bonne réponse était 90°.'
+            );
+
+            /* =========================
+               EXERCICE 3
+               ========================= */
+
+            // On récupère la réponse choisie
+            const ang3 = valeurRadio('ang3');
+
+            // La bonne réponse est "obtus"
+            const okAng3 = ang3 === 'obtus';
+
+            // Si la réponse est correcte, on ajoute 1 point
+            if(okAng3){ scoreAngles++; }
+
+            // On affiche le feedback
+            afficherFeedback(
+                'fb_ang3',
+                okAng3,
+                okAng3
+                ? '✅ Très bien ! L’angle dessiné est plus grand que 90° et plus petit que 180° : il est obtus.'
+                : '❌ L’angle représenté est plus grand que 90° et plus petit que 180° : il est obtus.'
+            );
+
+            /* =========================
+               EXERCICE 4
+               ========================= */
+
+            // On lit la réponse numérique
+            const ang4 = Number(document.getElementById('ang4').value);
+
+            // On complète jusqu’à 90°
+            const okAng4 = ang4 === 63;
+
+            // Si la réponse est correcte, on ajoute 1 point
+            if(okAng4){ scoreAngles++; }
+
+            // On affiche le feedback
+            afficherFeedback(
+                'fb_ang4',
+                okAng4,
+                okAng4
+                ? '✅ Oui ! 90° - 27° = 63°.'
+                : '❌ Il fallait calculer 90° - 27° = 63°.'
+            );
+
+            /* =========================
+               EXERCICE 5
+               ========================= */
+
+            // On récupère la valeur choisie dans la liste
+            const ang5 = document.getElementById('ang5').value;
+
+            // La bonne réponse est 180
+            const okAng5 = ang5 === '180';
+
+            // Si la réponse est correcte, on ajoute 1 point
+            if(okAng5){ scoreAngles++; }
+
+            // On affiche le feedback
+            afficherFeedback(
+                'fb_ang5',
+                okAng5,
+                okAng5
+                ? '✅ Parfait ! Un angle plat mesure 180°.'
+                : '❌ La bonne réponse était 180°.'
+            );
+
+            /* =========================
+               EXERCICE 6
+               ========================= */
+
+            // On récupère la réponse choisie
+            const ang6 = valeurRadio('ang6');
+
+            // La bonne réponse est "droit"
+            const okAng6 = ang6 === 'droit';
+
+            // Si la réponse est correcte, on ajoute 1 point
+            if(okAng6){ scoreAngles++; }
+
+            // On affiche le feedback
+            afficherFeedback(
+                'fb_ang6',
+                okAng6,
+                okAng6
+                ? '✅ Exact ! 90° correspond à un angle droit.'
+                : '❌ La bonne réponse était : angle droit.'
+            );
+
+            /* =========================
+               EXERCICE 7
+               ========================= */
+
+            // On lit la réponse numérique
+            const ang7 = Number(document.getElementById('ang7').value);
+
+            // Les deux angles forment 90°, donc 90 - 35 = 55
+            const okAng7 = ang7 === 55;
+
+            // Si la réponse est correcte, on ajoute 1 point
+            if(okAng7){ scoreAngles++; }
+
+            // On affiche le feedback
+            afficherFeedback(
+                'fb_ang7',
+                okAng7,
+                okAng7
+                ? '✅ Très bien ! Les deux angles forment 90°, donc 90° - 35° = 55°.'
+                : '❌ Il fallait calculer 90° - 35° = 55°.'
+            );
+
+            /* =========================
+               EXERCICE 8
+               ========================= */
+
+            // On lit la réponse numérique
+            const ang8 = Number(document.getElementById('ang8').value);
+
+            // Les deux angles forment 180°, donc 180 - 130 = 50
+            const okAng8 = ang8 === 50;
+
+            // Si la réponse est correcte, on ajoute 1 point
+            if(okAng8){ scoreAngles++; }
+
+            // On affiche le feedback
+            afficherFeedback(
+                'fb_ang8',
+                okAng8,
+                okAng8
+                ? '✅ Oui ! Sur une ligne droite, 180° - 130° = 50°.'
+                : '❌ Il fallait calculer 180° - 130° = 50°.'
+            );
+
+            /* =========================
+               EXERCICE 9
+               ========================= */
+
+            // On lit la réponse numérique
+            const ang9 = Number(document.getElementById('ang9').value);
+
+            // On additionne d’abord 120 + 90 + 80 = 290, puis 360 - 290 = 70
+            const okAng9 = ang9 === 70;
+
+            // Si la réponse est correcte, on ajoute 1 point
+            if(okAng9){ scoreAngles++; }
+
+            // On affiche le feedback
+            afficherFeedback(
+                'fb_ang9',
+                okAng9,
+                okAng9
+                ? '✅ Bravo ! 120° + 90° + 80° = 290°, puis 360° - 290° = 70°.'
+                : '❌ Il fallait calculer 120° + 90° + 80° = 290°, puis 360° - 290° = 70°.'
+            );
+
+            /* =========================
+               EXERCICE 10
+               ========================= */
+
+            // On lit la réponse numérique
+            const ang10 = Number(document.getElementById('ang10').value);
+
+            // Dans le triangle proposé, 180 - (40 + 60) = 80
+            const okAng10 = ang10 === 80;
+
+            // Si la réponse est correcte, on ajoute 1 point
+            if(okAng10){ scoreAngles++; }
+
+            // On affiche le feedback
+            afficherFeedback(
+                'fb_ang10',
+                okAng10,
+                okAng10
+                ? '✅ Très bien ! 40° + 60° = 100°, puis 180° - 100° = 80°.'
+                : '❌ Il fallait calculer 40° + 60° = 100°, puis 180° - 100° = 80°.'
+            );
+
+            /* =========================
+               EXERCICE 11
+               ========================= */
+
+            // On récupère la réponse choisie
+            const ang11 = valeurRadio('ang11');
+
+            // L’angle obtus proposé est 125°
+            const okAng11 = ang11 === '125';
+
+            // Si la réponse est correcte, on ajoute 1 point
+            if(okAng11){ scoreAngles++; }
+
+            // On affiche le feedback
+            afficherFeedback(
+                'fb_ang11',
+                okAng11,
+                okAng11
+                ? '✅ Exact ! 125° est supérieur à 90° et inférieur à 180° : il est obtus.'
+                : '❌ La bonne réponse était 125°.'
+            );
+
+            /* =========================
+               EXERCICE 12
+               ========================= */
+
+            // On lit la réponse numérique
+            const ang12 = Number(document.getElementById('ang12').value);
+
+            // Les deux angles forment 90°, donc 90 - 24 = 66
+            const okAng12 = ang12 === 66;
+
+            // Si la réponse est correcte, on ajoute 1 point
+            if(okAng12){ scoreAngles++; }
+
+            // On affiche le feedback
+            afficherFeedback(
+                'fb_ang12',
+                okAng12,
+                okAng12
+                ? '✅ Oui ! 90° - 24° = 66°.'
+                : '❌ Il fallait calculer 90° - 24° = 66°.'
+            );
+
+            /* =========================
+               EXERCICE 13
+               ========================= */
+
+            // On lit la réponse numérique
+            const ang13 = Number(document.getElementById('ang13').value);
+
+            // Les deux angles sont sur une ligne droite, donc 180 - 72 = 108
+            const okAng13 = ang13 === 108;
+
+            // Si la réponse est correcte, on ajoute 1 point
+            if(okAng13){ scoreAngles++; }
+
+            // On affiche le feedback
+            afficherFeedback(
+                'fb_ang13',
+                okAng13,
+                okAng13
+                ? '✅ Très bien ! 180° - 72° = 108°.'
+                : '❌ Il fallait calculer 180° - 72° = 108°.'
+            );
+
+            /* =========================
+               EXERCICE 14
+               ========================= */
+
+            // On lit la réponse numérique
+            const ang14 = Number(document.getElementById('ang14').value);
+
+            // On complète jusqu’à 180°, donc 180 - 95 = 85
+            const okAng14 = ang14 === 85;
+
+            // Si la réponse est correcte, on ajoute 1 point
+            if(okAng14){ scoreAngles++; }
+
+            // On affiche le feedback
+            afficherFeedback(
+                'fb_ang14',
+                okAng14,
+                okAng14
+                ? '✅ Exact ! 180° - 95° = 85°.'
+                : '❌ Il fallait calculer 180° - 95° = 85°.'
+            );
+
+            /* =========================
+               EXERCICE 15
+               ========================= */
+
+            // On récupère la réponse choisie
+            const ang15 = valeurRadio('ang15');
+
+            // La bonne réponse est 360
+            const okAng15 = ang15 === '360';
+
+            // Si la réponse est correcte, on ajoute 1 point
+            if(okAng15){ scoreAngles++; }
+
+            // On affiche le feedback
+            afficherFeedback(
+                'fb_ang15',
+                okAng15,
+                okAng15
+                ? '✅ Parfait ! Un tour complet mesure 360°.'
+                : '❌ La bonne réponse était 360°.'
+            );
+
+            // On affiche le score final de la partie angles
+            document.getElementById('scoreAngles').textContent = scoreAngles;
+        }
+
+        /* =========================
+           RÉINITIALISATION - PARTIE ANGLES
+           ========================= */
+
+        // Fonction qui remet à zéro uniquement la partie "Les angles"
+        function reinitialiserAngles(){
+
+            // Tableau contenant les noms des groupes de boutons radio
+            const groupesRadio = ['ang1', 'ang3', 'ang6', 'ang11', 'ang15'];
+
+            // On parcourt chaque groupe radio
+            groupesRadio.forEach(function(nomGroupe){
+
+                // On récupère tous les boutons radio du groupe
+                const boutons = document.querySelectorAll('input[name="' + nomGroupe + '"]');
+
+                // On décoche chaque bouton
+                boutons.forEach(function(bouton){
+                    bouton.checked = false;
+                });
+            });
+
+            // On vide les champs numériques
+            document.getElementById('ang2').value = '';
+            document.getElementById('ang4').value = '';
+            document.getElementById('ang7').value = '';
+            document.getElementById('ang8').value = '';
+            document.getElementById('ang9').value = '';
+            document.getElementById('ang10').value = '';
+            document.getElementById('ang12').value = '';
+            document.getElementById('ang13').value = '';
+            document.getElementById('ang14').value = '';
+
+            // On remet la liste déroulante à son état initial
+            document.getElementById('ang5').value = '';
+
+            // Tableau contenant tous les blocs de feedback
+            const feedbacks = [
+                'fb_ang1',
+                'fb_ang2',
+                'fb_ang3',
+                'fb_ang4',
+                'fb_ang5',
+                'fb_ang6',
+                'fb_ang7',
+                'fb_ang8',
+                'fb_ang9',
+                'fb_ang10',
+                'fb_ang11',
+                'fb_ang12',
+                'fb_ang13',
+                'fb_ang14',
+                'fb_ang15'
+            ];
+
+            // On masque et vide chaque zone de feedback
+            feedbacks.forEach(function(idFeedback){
+                const bloc = document.getElementById(idFeedback);
+                bloc.style.display = 'none';
+                bloc.innerHTML = '';
+                bloc.className = 'feedback';
+            });
+
+            // On remet le score à zéro
+            document.getElementById('scoreAngles').textContent = '0';
+        }
+        
+    </script>
+</body>
+</html>

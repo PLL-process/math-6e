@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Maths 6e – Angles et Tableur (30 exercices interactifs)</title>
+<style>
+body{
+font-family:Verdana,Arial;
+background:#0b132b;
+color:white;
+margin:0;
+padding:0;
+}
+header{
+background:#1c2541;
+padding:20px;
+text-align:center;
+}
+h1{margin:0;}
+section{
+max-width:1100px;
+margin:auto;
+padding:20px;
+}
+.card{
+background:#243b67;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+}
+.question{
+margin-top:10px;
+margin-bottom:6px;
+font-weight:bold;
+}
+input,select{
+padding:6px;
+margin:5px 0;
+border-radius:6px;
+border:none;
+}
+button{
+padding:10px 16px;
+margin-top:10px;
+border:none;
+border-radius:8px;
+background:#ffd166;
+font-weight:bold;
+cursor:pointer;
+}
+.feedback{
+margin-top:5px;
+padding:6px;
+border-radius:6px;
+display:none;
+}
+.correct{background:#2ecc71;}
+.wrong{background:#e74c3c;}
+.score{
+font-size:20px;
+margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>📐 Maths 6e – Les angles et le tableur 📊</h1>
+<p>30 exercices interactifs (15 angles + 15 tableur)</p>
+</header>
+
+<section class="card">
+<h2>📚 Rappel rapide</h2>
+<ul>
+<li>Angle aigu : moins de 90°</li>
+<li>Angle droit : 90°</li>
+<li>Angle obtus : entre 90° et 180°</li>
+<li>Angle plat : 180°</li>
+<li>Dans un tableur une formule commence par =</li>
+</ul>
+</section>
+
+<section class="card">
+<h2>📐 Exercices sur les angles</h2>
+<div id="angles"></div>
+</section>
+
+<section class="card">
+<h2>📊 Exercices sur le tableur</h2>
+<div id="tableur"></div>
+</section>
+
+<section class="card">
+<button onclick="corriger()">Corriger</button>
+<div class="score">Score : <span id="score">0</span> / 30</div>
+</section>
+
+<script>
+
+let score=0;
+
+const anglesQuestions=[
+["35° est un angle ?",["aigu","droit","obtus"],"aigu"],
+["90° est un angle ?",["aigu","droit","plat"],"droit"],
+["120° est un angle ?",["aigu","obtus","droit"],"obtus"],
+["180° est un angle ?",["plat","droit","aigu"],"plat"],
+["45° est un angle ?",["aigu","plat","obtus"],"aigu"],
+["60° est un angle ?",["aigu","droit","obtus"],"aigu"],
+["150° est un angle ?",["aigu","obtus","plat"],"obtus"],
+["Un quart de tour correspond à ?",["90","180","360"],"90"],
+["Un demi tour correspond à ?",["180","90","45"],"180"],
+["Un tour complet correspond à ?",["360","180","90"],"360"],
+["Angle plus petit que 90° ?",["aigu","obtus","plat"],"aigu"],
+["Angle entre 90° et 180° ?",["obtus","aigu","droit"],"obtus"],
+["Angle de 90° ?",["droit","plat","obtus"],"droit"],
+["Angle de 180° ?",["plat","droit","aigu"],"plat"],
+["30° est plus petit que ?",["90","180","360"],"90"]
+];
+
+const tableurQuestions=[
+["Une cellule correcte ?",["B4","4B","ligne4"],"B4"],
+["Formule pour additionner B2 et C2 ?",["=B2+C2","B2+C2","=B2C2"],"=B2+C2"],
+["Formule pour soustraire ?",["=C2-B2","C2-B2","=C2/B2"],"=C2-B2"],
+["Une formule commence par ?",["+","=","#"],"="],
+["Moyenne B2 à D2 ?",["=MOYENNE(B2:D2)","=B2+D2","=SOMME"],"=MOYENNE(B2:D2)"],
+["Nom d'une cellule ?",["A1","1A","AA"],"A1"],
+["Colonne ?",["lettre","nombre","symbole"],"lettre"],
+["Ligne ?",["nombre","lettre","couleur"],"nombre"],
+["Addition ?",["=","-","/"],"="],
+["Calcul différence ?",["-","+","*"],"-"],
+["Excel sert à ?",["calculer","dessiner","filmer"],"calculer"],
+["=B2+B3 est ?",["addition","moyenne","texte"],"addition"],
+["MOYENNE signifie ?",["moyenne","addition","division"],"moyenne"],
+["Une cellule contient ?",["donnée","voiture","image"],"donnée"],
+["Tableur sert à traiter ?",["données","photos","vidéos"],"données"]
+];
+
+function creerQuestions(){
+let anglesDiv=document.getElementById("angles");
+let tableurDiv=document.getElementById("tableur");
+
+anglesQuestions.forEach((q,i)=>{
+let html="<div class='question'>"+(i+1)+". "+q[0]+"</div>";
+q[1].forEach(opt=>{
+html+=`<label><input type="radio" name="a${i}" value="${opt}">${opt}</label><br>`;
+});
+html+=`<div id="fa${i}" class="feedback"></div>`;
+anglesDiv.innerHTML+=html;
+});
+
+tableurQuestions.forEach((q,i)=>{
+let html="<div class='question'>"+(i+16)+". "+q[0]+"</div>";
+q[1].forEach(opt=>{
+html+=`<label><input type="radio" name="t${i}" value="${opt}">${opt}</label><br>`;
+});
+html+=`<div id="ft${i}" class="feedback"></div>`;
+tableurDiv.innerHTML+=html;
+});
+
+}
+
+function corriger(){
+score=0;
+
+anglesQuestions.forEach((q,i)=>{
+let r=document.querySelector('input[name="a'+i+'"]:checked');
+let fb=document.getElementById("fa"+i);
+if(r && r.value===q[2]){
+score++;
+fb.innerHTML="✅ Correct";
+fb.className="feedback correct";
+}else{
+fb.innerHTML="❌ Bonne réponse : "+q[2];
+fb.className="feedback wrong";
+}
+fb.style.display="block";
+});
+
+tableurQuestions.forEach((q,i)=>{
+let r=document.querySelector('input[name="t'+i+'"]:checked');
+let fb=document.getElementById("ft"+i);
+if(r && r.value===q[2]){
+score++;
+fb.innerHTML="✅ Correct";
+fb.className="feedback correct";
+}else{
+fb.innerHTML="❌ Bonne réponse : "+q[2];
+fb.className="feedback wrong";
+}
+fb.style.display="block";
+});
+
+document.getElementById("score").innerText=score;
+}
+
+creerQuestions();
+
+</script>
+
+</body>
+</html>

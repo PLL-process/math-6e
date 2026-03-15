@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths 6e – Angles, Tableur et Synthèse</title>
+    <!--
+        Cette page combine les rappels de cours et exercices issus des deux
+        fichiers fournis par l’enseignant.  Elle reprend l’esthétique du
+        premier fichier (variables de couleurs, disposition en cartes) et
+        ajoute les 15 questions supplémentaires sur les angles et 15 sur
+        l’utilisation du tableur.  Enfin, une section de synthèse propose
+        des situations où il faut utiliser un calcul d’angles via le
+        tableur.  L’ensemble des exercices est autocorrectif et un score
+        total est affiché à la fin.
+    -->
+    <style>
+        /* =========================
+           VARIABLES DE COULEURS
+           ========================= */
+        :root{
+            --bg:#0b132b;
+            --bg2:#1c2541;
+            --panel:#243b67;
+            --panel2:#334e7d;
+            --accent:#ffd166;
+            --accent2:#7bdff2;
+            --ok:#7ae582;
+            --bad:#ff7b7b;
+            --txt:#f5f7ff;
+            --muted:#d5def5;
+            --shadow:0 10px 30px rgba(0,0,0,0.25);
+            --radius:20px;
+        }
+
+        *{
+            box-sizing:border-box;
+        }
+
+        body{
+            margin:0;
+            font-family:Verdana, Arial, sans-serif;
+            background:linear-gradient(160deg,var(--bg),var(--bg2));
+            color:var(--txt);
+            line-height:1.6;
+        }
+
+        header{
+            padding:28px 18px;
+            text-align:center;
+            background:linear-gradient(135deg,#112d4e,#1b4965,#2f6690);
+            box-shadow:var(--shadow);
+            position:sticky;
+            top:0;
+            z-index:10;
+        }
+
+        header h1{
+            margin:0;
+            font-size:clamp(1.6rem,3vw,2.6rem);
+        }
+
+        header p{
+            margin:8px auto 0 auto;
+            max-width:1000px;
+            color:#eef4ff;
+        }
+
+        main{
+            width:min(1200px,94%);
+            margin:24px auto 60px auto;
+        }
+
+        .card{
+            background:rgba(255,255,255,0.06);
+            border:1px solid rgba(255,255,255,0.12);
+            border-radius:var(--radius);
+            padding:18px;
+            margin-bottom:22px;
+            box-shadow:var(--shadow);
+            backdrop-filter:blur(6px);
+        }
+
+        h2{
+            margin-top:0;
+            color:var(--accent);
+        }
+
+        h3{
+            color:var(--accent2);
+        }
+
+        .exercise{
+            margin-top:18px;
+            padding:18px;
+            border-radius:18px;
+            background:rgba(255,255,255,0.05);
+            border:1px solid rgba(255,255,255,0.1);
+        }
+
+        .question{
+            font-weight:bold;
+            margin-bottom:10px;
+        }
+
+        label{
+            display:block;
+            margin:6px 0;
+        }
+
+        input[type="text"], input[type="number"], select{
+            width:100%;
+            max-width:320px;
+            padding:10px 12px;
+            border-radius:12px;
+            border:none;
+            outline:none;
+            background:#eef4ff;
+            color:#10213b;
+            font-weight:bold;
+        }
+
+        button{
+            border:none;
+            border-radius:14px;
+            padding:12px 18px;
+            font-weight:bold;
+            cursor:pointer;
+            margin:8px 8px 8px 0;
+            transition:transform 0.15s ease, opacity 0.15s ease;
+        }
+
+        button:hover{
+            transform:translateY(-2px);
+            opacity:0.96;
+        }
+
+        .primary{
+            background:var(--accent);
+            color:#16213e;
+        }
+
+        .secondary{
+            background:var(--accent2);
+            color:#082032;
+        }
+
+        .feedback{
+            margin-top:10px;
+            padding:12px;
+            border-radius:14px;
+            background:rgba(255,255,255,0.08);
+            display:none;
+        }
+
+        .ok{
+            border-left:6px solid var(--ok);
+        }
+
+        .ko{
+            border-left:6px solid var(--bad);
+        }
+
+        .score-box{
+            display:flex;
+            flex-wrap:wrap;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .small{
+            font-size:0.85rem;
+            color:var(--muted);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📐 Maths 6e – Angles, Tableur et Synthèse 📊</h1>
+        <p>Rappels de cours et exercices interactifs combinés</p>
+    </header>
+    <main>
+        <!-- Objectifs, conseils et propositions complémentaires issus du premier fichier -->
+        <section class="card">
+            <h2>🎯 Objectifs</h2>
+            <p>Comprendre et identifier les différents types d’angles (aigu, droit, obtus, plat), savoir les mesurer et les tracer.  Utiliser un tableur pour effectuer des calculs (sommes, soustractions, moyennes) et organiser des données.  La dernière partie propose de combiner ces deux compétences en calculant des mesures d’angles à l’aide du tableur.</p>
+        </section>
+        <section class="card">
+            <h2>🧠 Conseils pour réussir</h2>
+            <ul>
+                <li>Lis attentivement l’énoncé de chaque exercice avant de répondre.</li>
+                <li>Pour les questions numériques, effectue les calculs sur une feuille de brouillon ou dans un tableur avant de répondre.</li>
+                <li>Prends ton temps : une réponse réfléchie vaut mieux qu’une réponse précipitée.</li>
+                <li>N’hésite pas à te référer au rappel de cours en cas de doute.</li>
+            </ul>
+        </section>
+        <section class="card">
+            <h2>✨ Propositions complémentaires</h2>
+            <p>Une fois ces exercices terminés, tu peux t’entraîner à tracer des angles au rapporteur, créer tes propres tableaux de calcul dans un tableur ou encore mesurer des angles dans ton environnement quotidien (tables, portes, etc.).</p>
+        </section>
+
+        <!-- Rappel de cours pour les angles -->
+        <section class="card">
+            <h2>📚 Rappel de cours – Les angles</h2>
+            <p>Un angle est formé par deux segments (ou demi-droites) qui se rencontrent en un point appelé <strong>sommet</strong>.  La mesure d’un angle se lit en degrés (°).  Voici les grandes familles :</p>
+            <ul>
+                <li><strong>Angle aigu :</strong> sa mesure est inférieure à 90°.</li>
+                <li><strong>Angle droit :</strong> sa mesure est exactement de 90°.</li>
+                <li><strong>Angle obtus :</strong> sa mesure est comprise entre 90° et 180°.</li>
+                <li><strong>Angle plat :</strong> sa mesure est exactement de 180°.</li>
+                <li><strong>Tour complet :</strong> il mesure 360°.</li>
+            </ul>
+        </section>
+
+        <!-- Exercices sur les angles -->
+        <section class="card">
+            <h2>📝 Exercices interactifs – Les angles</h2>
+            <!-- Questions issues du premier fichier -->
+            <div class="exercise" data-answer="AIGU">
+                <div class="question">1. Un angle de 35° est un angle…</div>
+                <label><input type="radio" name="q1" value="aigu"> Angle aigu</label>
+                <label><input type="radio" name="q1" value="droit"> Angle droit</label>
+                <label><input type="radio" name="q1" value="obtus"> Angle obtus</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="90">
+                <div class="question">2. Combien mesure un angle droit ?</div>
+                <input type="number" name="q2" placeholder="Écris la mesure en degrés">
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="OBTUS">
+                <div class="question">3. Observe l’angle dessiné ci‑dessous puis choisis sa nature.</div>
+                <div style="margin:12px 0;">
+                    <svg viewBox="0 0 260 220" aria-label="Angle à observer" width="260" height="220">
+                        <!-- Fond blanc pour bien voir la figure -->
+                        <rect x="0" y="0" width="260" height="220" fill="#ffffff"></rect>
+                        <!-- Sommet -->
+                        <circle cx="70" cy="170" r="4" fill="#0b132b"></circle>
+                        <!-- Premier côté -->
+                        <line x1="70" y1="170" x2="200" y2="170" stroke="#1d3557" stroke-width="6" stroke-linecap="round"></line>
+                        <!-- Deuxième côté -->
+                        <line x1="70" y1="170" x2="135" y2="55" stroke="#1d3557" stroke-width="6" stroke-linecap="round"></line>
+                        <!-- Arc d'angle -->
+                        <path d="M120 170 A50 50 0 0 0 95 127" fill="none" stroke="#e63946" stroke-width="4"></path>
+                        <!-- Texte -->
+                        <text x="150" y="110" font-size="20" fill="#e63946" font-family="Verdana">?</text>
+                    </svg>
+                </div>
+                <label><input type="radio" name="q3" value="aigu"> Angle aigu</label>
+                <label><input type="radio" name="q3" value="obtus"> Angle obtus</label>
+                <label><input type="radio" name="q3" value="plat"> Angle plat</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="70">
+                <div class="question">4. Un angle mesure 20°. Combien manque‑t‑il pour obtenir un angle droit ?</div>
+                <input type="number" name="q4" placeholder="Ta réponse en degrés">
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="180">
+                <div class="question">5. Combien mesure un angle plat ?</div>
+                <select name="q5">
+                    <option value="">-- Choisis une réponse --</option>
+                    <option value="90">90°</option>
+                    <option value="180">180°</option>
+                    <option value="360">360°</option>
+                </select>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="DROIT">
+                <div class="question">6. Un angle de 90° est un angle…</div>
+                <label><input type="radio" name="q6" value="droit"> Angle droit</label>
+                <label><input type="radio" name="q6" value="aigu"> Angle aigu</label>
+                <label><input type="radio" name="q6" value="obtus"> Angle obtus</label>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Questions issues du second fichier (15 questions sur les angles) -->
+            <div class="exercise" data-answer="AIGU">
+                <div class="question">7. 35° est un angle ?</div>
+                <label><input type="radio" name="q7" value="aigu"> Aigu</label>
+                <label><input type="radio" name="q7" value="droit"> Droit</label>
+                <label><input type="radio" name="q7" value="obtus"> Obtus</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="DROIT">
+                <div class="question">8. 90° est un angle ?</div>
+                <label><input type="radio" name="q8" value="aigu"> Aigu</label>
+                <label><input type="radio" name="q8" value="droit"> Droit</label>
+                <label><input type="radio" name="q8" value="plat"> Plat</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="OBTUS">
+                <div class="question">9. 120° est un angle ?</div>
+                <label><input type="radio" name="q9" value="aigu"> Aigu</label>
+                <label><input type="radio" name="q9" value="obtus"> Obtus</label>
+                <label><input type="radio" name="q9" value="droit"> Droit</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="PLAT">
+                <div class="question">10. 180° est un angle ?</div>
+                <label><input type="radio" name="q10" value="plat"> Plat</label>
+                <label><input type="radio" name="q10" value="droit"> Droit</label>
+                <label><input type="radio" name="q10" value="aigu"> Aigu</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="AIGU">
+                <div class="question">11. 45° est un angle ?</div>
+                <label><input type="radio" name="q11" value="aigu"> Aigu</label>
+                <label><input type="radio" name="q11" value="plat"> Plat</label>
+                <label><input type="radio" name="q11" value="obtus"> Obtus</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="AIGU">
+                <div class="question">12. 60° est un angle ?</div>
+                <label><input type="radio" name="q12" value="aigu"> Aigu</label>
+                <label><input type="radio" name="q12" value="droit"> Droit</label>
+                <label><input type="radio" name="q12" value="obtus"> Obtus</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="OBTUS">
+                <div class="question">13. 150° est un angle ?</div>
+                <label><input type="radio" name="q13" value="aigu"> Aigu</label>
+                <label><input type="radio" name="q13" value="obtus"> Obtus</label>
+                <label><input type="radio" name="q13" value="plat"> Plat</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="90">
+                <div class="question">14. Un quart de tour correspond à ?</div>
+                <label><input type="radio" name="q14" value="90"> 90°</label>
+                <label><input type="radio" name="q14" value="180"> 180°</label>
+                <label><input type="radio" name="q14" value="360"> 360°</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="180">
+                <div class="question">15. Un demi‑tour correspond à ?</div>
+                <label><input type="radio" name="q15" value="180"> 180°</label>
+                <label><input type="radio" name="q15" value="90"> 90°</label>
+                <label><input type="radio" name="q15" value="45"> 45°</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="360">
+                <div class="question">16. Un tour complet correspond à ?</div>
+                <label><input type="radio" name="q16" value="360"> 360°</label>
+                <label><input type="radio" name="q16" value="180"> 180°</label>
+                <label><input type="radio" name="q16" value="90"> 90°</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="AIGU">
+                <div class="question">17. Un angle plus petit que 90° est ?</div>
+                <label><input type="radio" name="q17" value="aigu"> Aigu</label>
+                <label><input type="radio" name="q17" value="obtus"> Obtus</label>
+                <label><input type="radio" name="q17" value="plat"> Plat</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="OBTUS">
+                <div class="question">18. Un angle entre 90° et 180° est ?</div>
+                <label><input type="radio" name="q18" value="obtus"> Obtus</label>
+                <label><input type="radio" name="q18" value="aigu"> Aigu</label>
+                <label><input type="radio" name="q18" value="droit"> Droit</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="DROIT">
+                <div class="question">19. Un angle de 90° est un angle…</div>
+                <label><input type="radio" name="q19" value="droit"> Droit</label>
+                <label><input type="radio" name="q19" value="plat"> Plat</label>
+                <label><input type="radio" name="q19" value="obtus"> Obtus</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="PLAT">
+                <div class="question">20. Un angle de 180° est…</div>
+                <label><input type="radio" name="q20" value="plat"> Plat</label>
+                <label><input type="radio" name="q20" value="droit"> Droit</label>
+                <label><input type="radio" name="q20" value="aigu"> Aigu</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="90">
+                <div class="question">21. 30° est plus petit que ?</div>
+                <label><input type="radio" name="q21" value="90"> 90°</label>
+                <label><input type="radio" name="q21" value="180"> 180°</label>
+                <label><input type="radio" name="q21" value="360"> 360°</label>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Exercice de classification (inspiré du PDF) -->
+            <div class="exercise" data-answer="B">
+                <div class="question">22. Dans le triangle ABC, quel est le sommet de l’angle ABC ?</div>
+                <label><input type="radio" name="q22" value="A"> A</label>
+                <label><input type="radio" name="q22" value="B"> B</label>
+                <label><input type="radio" name="q22" value="C"> C</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="AB-BC|BA-BC|BC-BA|AB/BC|BC/BA">
+                <div class="question">23. Dans le triangle ABC, nomme les deux côtés qui forment l’angle ABC (sépare tes réponses par un tiret ou un slash).</div>
+                <input type="text" name="q23" placeholder="Exemple : BA-BC">
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="AIGU,AIGU,DROIT">
+                <div class="question">24. Pour chaque angle ci‑dessous, indique sa nature (AIGU, DROIT ou OBTUS).  Réponds dans l’ordre indiqué et sépare les réponses par des virgules.</div>
+                <p>Angles : 60°, 30°, 90°</p>
+                <input type="text" name="q24" placeholder="Exemple : aigu, obtus, droit">
+                <div class="feedback"></div>
+            </div>
+        </section>
+
+        <!-- Rappel de cours pour le tableur -->
+        <section class="card">
+            <h2>📚 Rappel de cours – Le tableur en 6e</h2>
+            <p>Un tableur (comme Excel ou LibreOffice Calc) permet de réaliser des calculs et de traiter des données.  L’espace de travail est organisé en <strong>lignes</strong> et <strong>colonnes</strong>.  Une cellule est identifiée par une lettre (colonne) suivie d’un numéro (ligne).  Une formule commence toujours par le signe égal <code>=</code>.  On peut additionner, soustraire, multiplier ou calculer des moyennes en saisissant la formule adéquate.</p>
+        </section>
+
+        <!-- Exercices sur le tableur -->
+        <section class="card">
+            <h2>🧮 Exercices interactifs – Tableur</h2>
+            <!-- Exercices issus du premier fichier -->
+            <div class="exercise" data-answer="B4">
+                <div class="question">25. Exercice tableur n°1 – Reconnaître une cellule</div>
+                <p>Quelle notation est correcte pour nommer une cellule ?</p>
+                <label><input type="radio" name="q25" value="B4"> B4</label>
+                <label><input type="radio" name="q25" value="4B"> 4B</label>
+                <label><input type="radio" name="q25" value="ligne4"> ligne 4</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="=B2+C2|=C2+B2">
+                <div class="question">26. Exercice tableur n°2 – Faire une addition</div>
+                <p>On veut calculer la somme des cellules <span class="formula">B2</span> et <span class="formula">C2</span>.</p>
+                <table>
+                    <tr><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+                    <tr><th>1</th><td>Objet</td><td>Prix 1</td><td>Prix 2</td></tr>
+                    <tr><th>2</th><td>Cahier</td><td>4</td><td>6</td></tr>
+                </table>
+                <p>Quelle formule faut‑il écrire ?</p>
+                <input type="text" name="q26" placeholder="Exemple : =B2+C2">
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="=C2-B2">
+                <div class="question">27. Exercice tableur n°3 – Faire une soustraction</div>
+                <p>On veut calculer la différence entre <span class="formula">C2</span> et <span class="formula">B2</span>.</p>
+                <table>
+                    <tr><th>A</th><th>B</th><th>C</th></tr>
+                    <tr><th>1</th><td>Avant</td><td>Après</td></tr>
+                    <tr><th>2</th><td>12</td><td>20</td></tr>
+                </table>
+                <p>Quelle formule écrire ?</p>
+                <input type="text" name="q27" placeholder="Exemple : =C2-B2">
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="=MOYENNE(B2:D2)">
+                <div class="question">28. Exercice tableur n°4 – Faire une moyenne</div>
+                <p>On veut calculer la moyenne des notes en <span class="formula">B2</span>, <span class="formula">C2</span> et <span class="formula">D2</span>.</p>
+                <table>
+                    <tr><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+                    <tr><th>1</th><td>Note 1</td><td>Note 2</td><td>Note 3</td></tr>
+                    <tr><th>2</th><td>14</td><td>16</td><td>10</td></tr>
+                </table>
+                <p>Choisis la bonne formule :</p>
+                <label><input type="radio" name="q28" value="=MOYENNE(B2:D2)"> =MOYENNE(B2:D2)</label>
+                <label><input type="radio" name="q28" value="=B2-C2-D2"> =B2-C2-D2</label>
+                <label><input type="radio" name="q28" value="B2+D2"> B2+D2</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="=">
+                <div class="question">29. Exercice tableur n°5 – Commencer une formule</div>
+                <p>Par quel signe commence une formule dans un tableur ?</p>
+                <select name="q29">
+                    <option value="">-- Choisis --</option>
+                    <option value="+">+</option>
+                    <option value="=">=</option>
+                    <option value="#">#</option>
+                </select>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Exercices issus du second fichier (15 questions sur le tableur) -->
+            <div class="exercise" data-answer="B4">
+                <div class="question">30. Une cellule correcte ?</div>
+                <label><input type="radio" name="q30" value="B4"> B4</label>
+                <label><input type="radio" name="q30" value="4B"> 4B</label>
+                <label><input type="radio" name="q30" value="ligne4"> ligne 4</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="=B2+C2">
+                <div class="question">31. Formule pour additionner B2 et C2 ?</div>
+                <label><input type="radio" name="q31" value="=B2+C2"> =B2+C2</label>
+                <label><input type="radio" name="q31" value="B2+C2"> B2+C2</label>
+                <label><input type="radio" name="q31" value="=B2C2"> =B2C2</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="=C2-B2">
+                <div class="question">32. Formule pour soustraire ?</div>
+                <label><input type="radio" name="q32" value="=C2-B2"> =C2-B2</label>
+                <label><input type="radio" name="q32" value="C2-B2"> C2-B2</label>
+                <label><input type="radio" name="q32" value="=C2/B2"> =C2/B2</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="=">
+                <div class="question">33. Une formule commence par ?</div>
+                <label><input type="radio" name="q33" value="+"> +</label>
+                <label><input type="radio" name="q33" value="="> =</label>
+                <label><input type="radio" name="q33" value="#"> #</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="=MOYENNE(B2:D2)">
+                <div class="question">34. Moyenne B2 à D2 ?</div>
+                <label><input type="radio" name="q34" value="=MOYENNE(B2:D2)"> =MOYENNE(B2:D2)</label>
+                <label><input type="radio" name="q34" value="=B2+D2"> =B2+D2</label>
+                <label><input type="radio" name="q34" value="=SOMME"> =SOMME</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="A1">
+                <div class="question">35. Nom d’une cellule ?</div>
+                <label><input type="radio" name="q35" value="A1"> A1</label>
+                <label><input type="radio" name="q35" value="1A"> 1A</label>
+                <label><input type="radio" name="q35" value="AA"> AA</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="LETTRE">
+                <div class="question">36. Une colonne est identifiée par ?</div>
+                <label><input type="radio" name="q36" value="lettre"> Lettre</label>
+                <label><input type="radio" name="q36" value="nombre"> Nombre</label>
+                <label><input type="radio" name="q36" value="symbole"> Symbole</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="NOMBRE">
+                <div class="question">37. Une ligne est identifiée par ?</div>
+                <label><input type="radio" name="q37" value="nombre"> Nombre</label>
+                <label><input type="radio" name="q37" value="lettre"> Lettre</label>
+                <label><input type="radio" name="q37" value="couleur"> Couleur</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="=">
+                <div class="question">38. Addition ?</div>
+                <label><input type="radio" name="q38" value="="> =</label>
+                <label><input type="radio" name="q38" value="-"> -</label>
+                <label><input type="radio" name="q38" value="/"> /</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="-">
+                <div class="question">39. Calcul de différence ?</div>
+                <label><input type="radio" name="q39" value="-"> -</label>
+                <label><input type="radio" name="q39" value="+"> +</label>
+                <label><input type="radio" name="q39" value="*"> *</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="CALCULER">
+                <div class="question">40. Excel sert à ?</div>
+                <label><input type="radio" name="q40" value="calculer"> Calculer</label>
+                <label><input type="radio" name="q40" value="dessiner"> Dessiner</label>
+                <label><input type="radio" name="q40" value="filmer"> Filmer</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="ADDITION">
+                <div class="question">41. =B2+B3 est ?</div>
+                <label><input type="radio" name="q41" value="addition"> Addition</label>
+                <label><input type="radio" name="q41" value="moyenne"> Moyenne</label>
+                <label><input type="radio" name="q41" value="texte"> Texte</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="MOYENNE">
+                <div class="question">42. MOYENNE signifie ?</div>
+                <label><input type="radio" name="q42" value="moyenne"> Moyenne</label>
+                <label><input type="radio" name="q42" value="addition"> Addition</label>
+                <label><input type="radio" name="q42" value="division"> Division</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="DONNÉE">
+                <div class="question">43. Une cellule contient ?</div>
+                <label><input type="radio" name="q43" value="donnée"> Donnée</label>
+                <label><input type="radio" name="q43" value="voiture"> Voiture</label>
+                <label><input type="radio" name="q43" value="image"> Image</label>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="DONNÉES">
+                <div class="question">44. Un tableur sert à traiter ?</div>
+                <label><input type="radio" name="q44" value="données"> Données</label>
+                <label><input type="radio" name="q44" value="photos"> Photos</label>
+                <label><input type="radio" name="q44" value="vidéos"> Vidéos</label>
+                <div class="feedback"></div>
+            </div>
+        </section>
+
+        <!-- Synthèse : combiner angles et tableur -->
+        <section class="card">
+            <h2>🔧 Synthèse – Calculer des angles avec le tableur</h2>
+            <p>Dans cette section, plusieurs situations te demandent de calculer une mesure d’angle.  Tu peux réaliser tes calculs dans un tableur puis entrer soit le résultat, soit la formule proposée.</p>
+            <div class="exercise" data-answer="120">
+                <div class="question">45. On a deux angles : 50° et 70°. Calcule la somme.</div>
+                <input type="number" name="q45" placeholder="Ta réponse en degrés">
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="115">
+                <div class="question">46. Un angle plat mesure 180°. Si on retire un angle de 65°, quelle est la mesure du reste ?</div>
+                <input type="number" name="q46" placeholder="Ta réponse en degrés">
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="125">
+                <div class="question">47. Un angle droit mesure 90°. Si on ajoute un angle de 35°, quelle est la mesure totale ?</div>
+                <input type="number" name="q47" placeholder="Ta réponse en degrés">
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="80">
+                <div class="question">48. Calcule la moyenne des angles suivants : 60°, 100° et 80°.</div>
+                <input type="number" name="q48" placeholder="Ta réponse en degrés">
+                <div class="feedback"></div>
+            </div>
+
+            <div class="exercise" data-answer="=180-30">
+                <div class="question">49. Quelle formule de tableur permet de calculer l’angle restant si on retire 30° à un angle plat ?</div>
+                <label><input type="radio" name="q49" value="=180-30"> =180-30</label>
+                <label><input type="radio" name="q49" value="=B2+C2"> =B2+C2</label>
+                <label><input type="radio" name="q49" value="=MOYENNE(B2:D2)"> =MOYENNE(B2:D2)</label>
+                <div class="feedback"></div>
+            </div>
+        </section>
+
+        <!-- Score et actions -->
+        <section class="card score-box">
+            <div>
+                <div class="score">🏁 Score : <span id="score">0</span> / <span id="totalQuestions">0</span></div>
+                <div class="small">Clique sur le bouton pour obtenir la correction immédiate.</div>
+            </div>
+            <div>
+                <button class="primary" onclick="corriger()">Corriger tout</button>
+                <button class="secondary" onclick="reinitialiser()">Réinitialiser</button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Normalise une valeur saisie ou sélectionnée : supprime les espaces et met en majuscules
+        function normalize(val){
+            return String(val).trim().replace(/\s+/g,'').toUpperCase();
+        }
+
+        // Corrige l’ensemble des exercices
+        function corriger(){
+            const exercises = document.querySelectorAll('.exercise');
+            let score = 0;
+            exercises.forEach((ex) => {
+                const answerAttr = ex.dataset.answer;
+                if(!answerAttr){ return; }
+                // Réponses acceptées séparées par |
+                const answers = answerAttr.split('|').map(a => normalize(a));
+                let userVal = '';
+                // Cherche l’input sélectionné ou saisi
+                const selectedRadio = ex.querySelector('input[type="radio"]:checked');
+                const selectInput = ex.querySelector('select');
+                const textInput = ex.querySelector('input[type="text"]');
+                const numberInput = ex.querySelector('input[type="number"]');
+                if(selectedRadio){
+                    userVal = selectedRadio.value;
+                } else if(selectInput){
+                    userVal = selectInput.value;
+                } else if(textInput){
+                    userVal = textInput.value;
+                } else if(numberInput){
+                    userVal = numberInput.value;
+                }
+                const userNorm = normalize(userVal);
+                let isCorrect = false;
+                if(userNorm !== ''){
+                    // Lorsque plusieurs réponses sont attendues (q24), on compare la liste telle quelle
+                    if(answers.length > 1 && userNorm.includes(',')){
+                        // On normalise la chaîne entière (majuscule et sans espaces)
+                        isCorrect = answers.includes(userNorm);
+                    } else {
+                        isCorrect = answers.includes(userNorm);
+                    }
+                }
+                const fb = ex.querySelector('.feedback');
+                if(fb){
+                    fb.style.display = 'block';
+                    if(isCorrect){
+                        score++;
+                        fb.className = 'feedback ok';
+                        fb.innerHTML = '✅ Correct';
+                    } else {
+                        fb.className = 'feedback ko';
+                        fb.innerHTML = '❌ Bonne réponse : ' + answers[0];
+                    }
+                }
+            });
+            document.getElementById('score').textContent = score;
+            document.getElementById('totalQuestions').textContent = exercises.length;
+        }
+
+        // Réinitialise les réponses et les feedback
+        function reinitialiser(){
+            const exercises = document.querySelectorAll('.exercise');
+            exercises.forEach((ex) => {
+                // Deselect radios
+                const radios = ex.querySelectorAll('input[type="radio"]');
+                radios.forEach(r => r.checked = false);
+                // Clear text/number inputs
+                const texts = ex.querySelectorAll('input[type="text"], input[type="number"]');
+                texts.forEach(t => t.value = '');
+                // Reset selects
+                const selects = ex.querySelectorAll('select');
+                selects.forEach(s => s.value = '');
+                // Hide feedback
+                const fb = ex.querySelector('.feedback');
+                if(fb){
+                    fb.style.display = 'none';
+                    fb.innerHTML = '';
+                    fb.className = 'feedback';
+                }
+            });
+            document.getElementById('score').textContent = '0';
+        }
+
+        // Initialise le nombre total de questions au chargement
+        document.addEventListener('DOMContentLoaded', () => {
+            const exercises = document.querySelectorAll('.exercise');
+            document.getElementById('totalQuestions').textContent = exercises.length;
+        });
+    </script>
+</body>
+</html>
