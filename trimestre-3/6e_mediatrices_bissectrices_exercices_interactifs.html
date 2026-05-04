@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>6e — Médiatrices & Bissectrices : Cours + 30 exercices corrigés</title>
+  <style>
+    :root{--bg:#f7fafc;--card:#fff;--ink:#1f2937;--muted:#4b5563;--accent:#2563eb;--ok:#047857;--warn:#b45309}
+    body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink);margin:0;line-height:1.45}
+    .container{max-width:1100px;margin:0 auto;padding:20px}
+    h1,h2,h3{color:#0f172a}
+    .card{background:var(--card);border-radius:14px;padding:16px 18px;margin:14px 0;box-shadow:0 3px 10px rgba(0,0,0,.08)}
+    .tag{display:inline-block;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:999px;font-size:.8rem;margin-right:6px}
+    .small{font-size:.94rem;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+    .ex{border-left:5px solid var(--accent)}
+    details{margin-top:8px;background:#f8fafc;border-radius:10px;padding:8px 10px}
+    summary{cursor:pointer;font-weight:700}
+    .method{background:#ecfeff;border:1px solid #a5f3fc;border-radius:10px;padding:10px}
+    svg{max-width:100%;height:auto;background:#ffffff;border:1px solid #e5e7eb;border-radius:10px}
+    .footer{font-size:.9rem;color:var(--muted);margin-top:24px}
+    .ok{color:var(--ok);font-weight:700}.warn{color:var(--warn);font-weight:700}
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Mathématiques 6e — Médiatrices et Bissectrices</h1>
+  <p class="small">Rappel de cours + méthodes de construction (règle, équerre, rapporteur, compas) + <strong>30 exercices</strong> avec <strong>indice</strong> et <strong>correction progressive</strong>.</p>
+
+  <section class="card">
+    <h2>1) Rappels de cours</h2>
+    <div class="grid">
+      <div>
+        <h3>Médiatrice d'un segment [AB]</h3>
+        <ul>
+          <li>Droite <strong>perpendiculaire</strong> à (AB).</li>
+          <li>Passe par le <strong>milieu</strong> de [AB].</li>
+          <li>Tout point de la médiatrice est à égale distance de A et B.</li>
+        </ul>
+        <div class="method"><strong>Propriété réciproque :</strong> si un point M vérifie MA = MB, alors M est sur la médiatrice de [AB].</div>
+      </div>
+      <div>
+        <h3>Bissectrice d'un angle \(\widehat{xOy}\)</h3>
+        <ul>
+          <li>Demi-droite issue de O qui partage l'angle en <strong>deux angles égaux</strong>.</li>
+          <li>Tout point de la bissectrice est à égale distance des deux côtés de l'angle.</li>
+        </ul>
+        <div class="method"><strong>Propriété réciproque :</strong> si un point est à égale distance des deux côtés d'un angle, alors il est sur sa bissectrice.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>2) Constructions à connaître</h2>
+    <h3>Médiatrice au compas</h3>
+    <ol>
+      <li>Tracer le segment [AB].</li>
+      <li>Ouvrir le compas à plus de la moitié de AB.</li>
+      <li>Avec centre A puis B, tracer deux arcs qui se coupent en P et Q.</li>
+      <li>Tracer la droite (PQ) : c'est la médiatrice de [AB].</li>
+    </ol>
+    <h3>Bissectrice au compas</h3>
+    <ol>
+      <li>Tracer l'angle \(\widehat{xOy}\).</li>
+      <li>Centre O : arc coupant les côtés en A et B.</li>
+      <li>Centres A et B, même ouverture : arcs se coupant en M.</li>
+      <li>Tracer [OM) : c'est la bissectrice.</li>
+    </ol>
+    <h3>Bissectrice au rapporteur</h3>
+    <ol>
+      <li>Mesurer l'angle total.</li>
+      <li>Diviser la mesure par 2.</li>
+      <li>Reporter cette demi-mesure à partir d'un côté.</li>
+      <li>Tracer la demi-droite obtenue.</li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2>3) Schémas SVG (modèles)</h2>
+    <div class="grid">
+      <div>
+        <p><strong>Médiatrice de [AB]</strong></p>
+        <svg viewBox="0 0 360 220" aria-label="Mediatrice">
+          <line x1="50" y1="170" x2="310" y2="170" stroke="#111" stroke-width="2"/>
+          <line x1="180" y1="30" x2="180" y2="210" stroke="#2563eb" stroke-width="2"/>
+          <circle cx="50" cy="170" r="3" fill="#111"/><circle cx="310" cy="170" r="3" fill="#111"/>
+          <text x="42" y="188">A</text><text x="314" y="188">B</text><text x="186" y="104" fill="#2563eb">médiatrice</text>
+        </svg>
+      </div>
+      <div>
+        <p><strong>Bissectrice d'un angle</strong></p>
+        <svg viewBox="0 0 360 220" aria-label="Bissectrice">
+          <line x1="70" y1="180" x2="320" y2="180" stroke="#111" stroke-width="2"/>
+          <line x1="70" y1="180" x2="270" y2="70" stroke="#111" stroke-width="2"/>
+          <line x1="70" y1="180" x2="250" y2="120" stroke="#dc2626" stroke-width="2"/>
+          <text x="76" y="194">O</text><text x="252" y="116" fill="#dc2626">bissectrice</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>4) 30 exercices progressifs (avec indice + correction)</h2>
+    <p class="small">Consigne : essaie d'abord seul(e), puis ouvre <em>Indice</em>, puis <em>Correction</em>.</p>
+    <div id="exos"></div>
+  </section>
+
+  <section class="card">
+    <h2>5) Complément géométrie (même thème)</h2>
+    <ul>
+      <li>Triangle isocèle et médiatrice de la base.</li>
+      <li>Lieu géométrique des points équidistants de deux points.</li>
+      <li>Lieu géométrique des points équidistants de deux droites sécantes.</li>
+      <li>Programme de construction : figure codée + justification.</li>
+    </ul>
+  </section>
+
+  <p class="footer"><span class="ok">Astuce prof :</span> projeter ce fichier en classe, puis donner les exercices en devoir avec les indices fermés. <span class="warn">Important :</span> pour publier en ligne, déposer ce fichier sur GitHub Pages.</p>
+</div>
+
+<script>
+const exercices = [
+  ["Tracer un segment [AB] de 8 cm puis construire sa médiatrice.","Pense aux deux arcs de même rayon (> 4 cm).","Les points d'intersection des arcs définissent une droite perpendiculaire à AB et passant par son milieu."],
+  ["Placer un point M sur la médiatrice de [AB]. Que vaut MA par rapport à MB ?","Utilise la propriété fondamentale.","MA = MB car M appartient à la médiatrice de [AB]."],
+  ["A(1,2) et B(7,2). Où se situe la médiatrice ?","AB est horizontal.","Le milieu est (4,2) et la médiatrice est la droite verticale x=4."],
+  ["Construire la bissectrice d'un angle de 60° au rapporteur.","Combien vaut la moitié de 60 ?","La bissectrice coupe l'angle en deux angles de 30°."],
+  ["Construire la bissectrice au compas d'un angle quelconque.","Arc depuis le sommet, puis deux arcs depuis les points obtenus.","Le point d'intersection des deux arcs donne la direction de la bissectrice."],
+  ["Vrai/Faux : tout point équidistant de A et B est sur la médiatrice de [AB].","C'est une réciproque.","Vrai."],
+  ["Vrai/Faux : la médiatrice passe toujours par A.","Elle passe par le milieu, pas par les extrémités (sauf cas particulier).","Faux."],
+  ["Un angle mesure 86°. Mesurer chaque demi-angle après bissectrice.","Divise par 2.","Chaque angle mesure 43°."],
+  ["Construire un triangle ABC puis les médiatrices des 3 côtés.","Elles sont concourantes.","Elles se coupent en un point O : centre du cercle circonscrit."],
+  ["Dans un angle, placer P sur la bissectrice. Que peut-on dire des distances de P aux côtés ?","Distance à une droite = longueur du segment perpendiculaire.","Les deux distances sont égales."],
+  ["Construire le milieu de [AB] en utilisant seulement la médiatrice.","Intersection médiatrice/segment.","Le milieu est le point I = médiatrice \cap [AB]."],
+  ["Angle de 124° : construire la bissectrice au rapporteur.","124/2.","Chaque demi-angle vaut 62°."],
+  ["A et B distants de 10 cm. Quel rayon minimal pour les arcs ?","Il faut dépasser la moitié.","Rayon strictement supérieur à 5 cm."],
+  ["Compléter : la médiatrice est ... à (AB) et passe par ... de [AB].","Deux mots attendus.","Perpendiculaire ; le milieu."],
+  ["Compléter : la bissectrice partage un angle en ...","Définition directe.","Deux angles de même mesure."],
+  ["Construire deux points M et N sur la médiatrice de [AB] et vérifier MA=MB puis NA=NB.","Mesure à la règle.","Les deux égalités sont vérifiées expérimentalement."],
+  ["Dans un triangle isocèle en A, que représente la médiatrice de [BC] ?","Pense axe de symétrie.","Elle passe par A et coïncide avec la hauteur/médiane issue de A."],
+  ["Tracer un angle de 40° puis sa bissectrice. Donner les mesures.","Moitié de 40.","Deux angles de 20°."],
+  ["Peut-on tracer une médiatrice sans compas ?","Cherche un autre outil.","Oui, avec règle + équerre si le milieu est connu."],
+  ["Peut-on tracer une bissectrice sans rapporteur ?","Méthode classique ?","Oui, au compas."],
+  ["Construire la médiatrice de [CD] avec C(2,1), D(2,9).","CD est vertical.","Milieu (2,5), médiatrice horizontale y=5."],
+  ["Le point P vérifie PA=PB. Citer un lieu possible pour P.","Un lieu géométrique.","P appartient à la médiatrice de [AB]."],
+  ["Le point Q est à égale distance des côtés d'un angle xOy. Où est Q ?","Réciproque bissectrice.","Q appartient à la bissectrice de l'angle xOy."],
+  ["Construire un losange et ses diagonales. Lien avec médiatrices ?","Diagonales perpendiculaires et se coupent en leur milieu.","Chaque diagonale est médiatrice de l'autre."],
+  ["Écrire un programme de construction d'une médiatrice.","4 étapes max.","Segment, arcs centres A/B, intersections P/Q, droite (PQ)."],
+  ["Écrire un programme de construction d'une bissectrice au compas.","4 étapes aussi.","Angle, arc centre O, arcs centres A/B, demi-droite issue de O."],
+  ["Construire la figure : AB=6 cm, médiatrice de [AB], point M dessus tel que MI=3 cm (I milieu).","Construis d'abord I.","I est milieu; cercle de centre I rayon 3 coupe la médiatrice en 2 positions possibles pour M."],
+  ["Défi : tracer un triangle puis son cercle circonscrit via les médiatrices.","Il faut le centre O d'abord.","Intersection de deux médiatrices = O; cercle de centre O passant par un sommet."],
+  ["Défi : angle de 98°, bissectrice puis bisser encore un demi-angle.","98/2 puis /2.","49° puis 24,5° pour chaque quart d'angle."],
+  ["Problème : A et B sont deux villes. Où placer un relais équidistant ?","Lieu de points.","N'importe quel point de la médiatrice de [AB], puis contraintes réelles (terrain) pour choisir."],
+];
+const zone = document.getElementById('exos');
+exercices.forEach((e,i)=>{
+  const bloc = document.createElement('div');
+  bloc.className = 'card ex';
+  bloc.innerHTML = `<span class="tag">Exercice ${i+1}</span><p>${e[0]}</p>
+  <details><summary>Indice</summary><p>${e[1]}</p></details>
+  <details><summary>Correction</summary><p>${e[2]}</p></details>`;
+  zone.appendChild(bloc);
+});
+</script>
+</body>
+</html>
